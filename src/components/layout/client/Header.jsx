@@ -1,9 +1,14 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
 export function Header() {
+  const [isAuth, setIsAuth] = useState(false);
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-[#e7ebf3] dark:border-slate-800 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md">
       <div className="max-w-[1200px] mx-auto flex items-center justify-between px-6 py-4">
         <div className="flex items-center gap-3">
-          <div className="text-primary">
+          <div className="text-blue-700">
             <svg
               className="w-8 h-8"
               fill="none"
@@ -16,39 +21,39 @@ export function Header() {
               ></path>
             </svg>
           </div>
-          <h2 className="text-[#0d121b] dark:text-white text-xl font-extrabold tracking-tight">
-            Vietnam Law Portal
+          <h2 className="text-blue-700 dark:text-white text-xl font-extrabold tracking-tight">
+            LawBox
           </h2>
         </div>
         <nav className="hidden md:flex flex-1 justify-center gap-10">
-          <a
-            className="text-[#0d121b] dark:text-slate-200 text-sm font-semibold hover:underline hover:decoration-blue-700"
-            href="#"
+          <Link
+            className="text-blue-700 dark:text-slate-200 text-sm font-semibold hover:underline hover:decoration-blue-700"
           >
             Tra cứu
-          </a>
-            <a
-            className="text-[#0d121b] dark:text-slate-200 text-sm font-semibold hover:underline hover:decoration-blue-700"
-            href="#"
+          </Link>
+          <Link
+            to="/chat"
+            className="text-blue-700 dark:text-slate-200 text-sm font-semibold hover:underline hover:decoration-blue-700"
           >
             Hỏi đáp AI
-          </a>
-          <a
-            className="text-[#0d121b] dark:text-slate-200 text-sm font-semibold hover:underline hover:decoration-blue-700"
-            href="#"
+          </Link>
+          <Link
+            className="text-blue-700 dark:text-slate-200 text-sm font-semibold hover:underline hover:decoration-blue-700"
           >
             Tin tức pháp luật
-          </a>
+          </Link>
         </nav>
         <div className="flex items-center gap-4">
-          <button className="flex min-w-[100px] cursor-pointer items-center justify-center rounded-lg h-10 px-5 bg-primary text-white text-sm font-bold shadow-md bg-blue-700 hover:bg-blue-800 transition-all">
+          <button className="flex min-w-[100px] cursor-pointer items-center justify-center rounded-lg h-10 px-5 bg-blue-700 text-white text-sm font-bold shadow-md hover:bg-blue-800 transition-all">
             <span>Đăng nhập</span>
           </button>
-          <div
-            className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border border-slate-200 dark:border-slate-700"
-            data-alt="Default user avatar placeholder"
-            style={{backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuD731eEIId2YWPofRNuCJb0geizNZnIUsGg04RYApIO81VwCrcf5oR4Vsnl5XHETXKXEG-sl-5W7_F_sJLLFsOf9tPKd1oZj4yC0LEccTIbMOKmotUKWQC_y5WBj8XcF2zdlH3DCbXBqEomESFJQ27VixUSLRAVo6bHDIUiYCVxyf-1FWh1TTbPdTA_fsLHsBrh77zZrKJCPoWY0I2CRkSjRZDXjX-yuLrSL6RM_5IXQ1NrPLPvegL0GNcLbKiOEmYC1U6BsGRRrDw5")'}}
-          ></div>
+          {isAuth && (
+            <div
+              className="w-10 h-10"
+            >
+              <img src="images/default-avatar.jpg" alt="" className="w-full h-full rounded-full hover:scale-105 cursor-pointer transition-all" />
+            </div>
+          )}
         </div>
       </div>
     </header>
