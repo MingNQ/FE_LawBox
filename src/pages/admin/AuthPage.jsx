@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { OtpInput } from "../../components/auth/OtpInput";
 import { PasswordInput } from "../../components/auth/PasswordInput";
+import EmailInput from "../../components/auth/EmailInput";
 
 export function AuthPage() {
   const [email, setEmail] = useState("");
@@ -29,11 +30,10 @@ export function AuthPage() {
           {!showOtp ? (
             <>
               <form onSubmit={() => {console.log("LogIn")}} className="space-y-4">
-                <input
+                <EmailInput
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full border px-3 py-2 rounded"
                 />
 
                 <PasswordInput

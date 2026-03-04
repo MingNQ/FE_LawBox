@@ -6,11 +6,12 @@ export function HeroSection() {
       <div className="max-w-[1200px] mx-auto px-6 text-center">
         <div className="mb-8 @container">
           <h1 className="text-[#0d121b] dark:text-white text-4xl font-black leading-tight tracking-[-0.033em] md:text-6xl mb-4">
-            Hệ thống hỏi đáp, tra cứu <br className="hidden md:block" /> Luật lao động
-            Việt Nam
+            Hệ thống hỏi đáp, tra cứu <br className="hidden md:block" /> Luật
+            lao động Việt Nam
           </h1>
           <p className="text-[#4c669a] dark:text-slate-400 text-base md:text-lg mx-auto">
-            Truy cập kho dữ liệu văn bản pháp luật chính thống, cập nhật hàng ngày với công cụ tìm kiếm thông minh và tư vấn AI.
+            Truy cập kho dữ liệu văn bản pháp luật chính thống, cập nhật hàng
+            ngày với công cụ tìm kiếm thông minh và tư vấn AI.
           </p>
         </div>
         <div className="max-w-[800px] mx-auto">

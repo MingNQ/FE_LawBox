@@ -23,9 +23,9 @@ export function NewDocumentsSection() {
               </span>
             </div>
             <h3 className="text-base font-bold text-slate-800 dark:text-slate-200 line-clamp-2">
-              Nghị định 48/2024/NĐ-CP sửa đổi Nghị định 130/2018/NĐ-CP
-              hướng dẫn Luật Giao dịch điện tử về chữ ký số và dịch vụ
-              chứng thực chữ ký số
+              Nghị định 48/2024/NĐ-CP sửa đổi Nghị định 130/2018/NĐ-CP hướng dẫn
+              Luật Giao dịch điện tử về chữ ký số và dịch vụ chứng thực chữ ký
+              số
             </h3>
           </div>
           <div className="mt-4 md:mt-0 md:ml-6 flex items-center gap-4">
@@ -49,8 +49,8 @@ export function NewDocumentsSection() {
               </span>
             </div>
             <h3 className="text-base font-bold text-slate-800 dark:text-slate-200 line-clamp-2">
-              Thông tư 05/2024/TT-BXD quy định về quản lý và sử dụng kinh
-              phí bảo trì phần sở hữu chung nhà chung cư
+              Thông tư 05/2024/TT-BXD quy định về quản lý và sử dụng kinh phí
+              bảo trì phần sở hữu chung nhà chung cư
             </h3>
           </div>
           <div className="mt-4 md:mt-0 md:ml-6 flex items-center gap-4">

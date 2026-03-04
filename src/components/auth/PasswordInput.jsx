@@ -1,3 +1,4 @@
+import { Eye, EyeClosed } from "lucide-react";
 import { useState } from "react";
 
 export function PasswordInput({ value, onChange, placeholder, name }) {
@@ -17,9 +18,9 @@ export function PasswordInput({ value, onChange, placeholder, name }) {
       <button
         type="button"
         onClick={() => setShow(!show)}
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm"
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94a3b8] text-sm"
       >
-        {show ? "🙈" : "👁️"}
+        {show ? <EyeClosed /> : <Eye />}
       </button>
     </div>
   );

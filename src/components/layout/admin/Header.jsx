@@ -7,7 +7,10 @@ export default function Header() {
 
       <div className="flex items-center gap-6">
         <div className="relative">
-          <Search size={18} className="absolute inset-y-0 left-0 mt-2.5 ml-3 text-gray-400"/>
+          <Search
+            size={18}
+            className="absolute inset-y-0 left-0 mt-2.5 ml-3 text-gray-400"
+          />
           <input
             type="text"
             placeholder="Tìm kiếm văn bản pháp luật..."

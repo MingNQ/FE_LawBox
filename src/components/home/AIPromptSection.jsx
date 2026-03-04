@@ -10,8 +10,8 @@ export function AIPromptSection() {
               Bạn có câu hỏi pháp lý khó?
             </h2>
             <p className="text-lg">
-              Thử ngay trợ lý AI chuyên nghiệp của chúng tôi để được giải
-              đáp tức thì dựa trên cơ sở pháp luật hiện hành.
+              Thử ngay trợ lý AI chuyên nghiệp của chúng tôi để được giải đáp
+              tức thì dựa trên cơ sở pháp luật hiện hành.
             </p>
           </div>
           <button className="flex min-w-[200px] items-center justify-center gap-2 rounded-xl h-14 px-8 bg-white text-primary text-base font-black shadow-xl hover:bg-slate-100 transition-all">

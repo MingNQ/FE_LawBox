@@ -20,8 +20,8 @@ export function FeaturesSection() {
             Tìm kiếm Đa năng
           </h3>
           <p className="text-[#4c669a] dark:text-slate-400 text-sm leading-relaxed">
-            Tìm kiếm chính xác theo số hiệu, trích yếu, người ký hoặc toàn
-            văn nội dung trong hàng triệu văn bản.
+            Tìm kiếm chính xác theo số hiệu, trích yếu, người ký hoặc toàn văn
+            nội dung trong hàng triệu văn bản.
           </p>
         </div>
         <div className="group p-8 rounded-xl border border-[#cfd7e7] dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-primary/50 hover:shadow-lg transition-all">
@@ -32,8 +32,8 @@ export function FeaturesSection() {
             Tư vấn Pháp luật AI
           </h3>
           <p className="text-[#4c669a] dark:text-slate-400 text-sm leading-relaxed">
-            Hỏi đáp các tình huống pháp lý trực tiếp với AI. Nhận câu trả
-            lời kèm trích dẫn nguồn văn bản chính thống.
+            Hỏi đáp các tình huống pháp lý trực tiếp với AI. Nhận câu trả lời
+            kèm trích dẫn nguồn văn bản chính thống.
           </p>
         </div>
         <div className="group p-8 rounded-xl border border-[#cfd7e7] dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-primary/50 hover:shadow-lg transition-all">
@@ -44,8 +44,8 @@ export function FeaturesSection() {
             Dữ liệu Thời gian thực
           </h3>
           <p className="text-[#4c669a] dark:text-slate-400 text-sm leading-relaxed">
-            Cập nhật các văn bản mới nhất ngay khi được ban hành. Theo dõi
-            lược đồ quan hệ và tình trạng hiệu lực.
+            Cập nhật các văn bản mới nhất ngay khi được ban hành. Theo dõi lược
+            đồ quan hệ và tình trạng hiệu lực.
           </p>
         </div>
       </div>
