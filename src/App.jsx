@@ -4,8 +4,8 @@ import { AuthPage } from "./pages/admin/AuthPage";
 import { HomePage } from "./pages/client/HomePage";
 import Dashboard from "./pages/admin/Dashboard";
 import ConversationPage from "./pages/client/chat/ConversationPage";
-import SignInPage from "./pages/client/Auth/SignInPage";
-import SignUpPage from "./pages/client/Auth/SignUpPage";
+import SignInPage from "./pages/client/auth/SignInPage";
+import SignUpPage from "./pages/client/auth/SignUpPage";
 
 function App() {
   return (
