@@ -1,1 +1,1 @@
-export const RESEND_OTP_SECONDS = 60 * 10;
+export const RESEND_OTP_SECONDS = 60 * 3;

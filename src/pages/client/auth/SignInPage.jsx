@@ -1,14 +1,17 @@
-import { Gavel, ShieldCheck, User } from "lucide-react";
+import { Gavel, User } from "lucide-react";
 import { PasswordInput } from "../../../components/auth/PasswordInput";
 import EmailInput from "../../../components/auth/EmailInput";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { initiateSignIn, verifySignIn } from "../../../api/authApi";
-import { OtpInput } from "../../../components/auth/OtpInput";
+import { useState } from "react";
+import {
+  initiateSignIn,
+  verifySignIn,
+  resendSignInOtp,
+} from "../../../api/authApi";
+import OtpVerificationStep from "../../../components/auth/OtpVerificationStep";
 import { useAuth } from "../../../hooks/useAuth";
 import { ROUTES } from "../../../constants/routes";
 import { authStorage } from "../../../stores/authStore";
-import { RESEND_OTP_SECONDS } from "../../../constants/appConst";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
@@ -20,25 +23,6 @@ export default function SignInPage() {
   const [error, setError] = useState("");
   const [showOtp, setShowOtp] = useState(false);
   const { login } = useAuth();
-  const [secondsLeft, setSecondsLeft] = useState(RESEND_OTP_SECONDS);
-  const [canResend, setCanResend] = useState(false);
-
-  useEffect(() => {
-    if (showOtp) {
-      setSecondsLeft(RESEND_OTP_SECONDS);
-      setCanResend(false);
-    }
-  }, [showOtp]);
-
-  useEffect(() => {
-    if (!showOtp || secondsLeft <= 0) return;
-
-    const timer = setInterval(() => {
-      setSecondsLeft((prev) => prev - 1);
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [secondsLeft, showOtp]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -54,9 +38,11 @@ export default function SignInPage() {
       if (data.success) {
         setVerificationId(data.result.verificationId);
         setShowOtp(true);
+      } else {
+        setError(data.result.message);
       }
     } catch (e) {
-      console.log(e.message);
+      setError(e.message);
     } finally {
       setIsLoading(false);
     }
@@ -92,8 +78,6 @@ export default function SignInPage() {
   };
 
   const handleResendOtp = async () => {
-    if (!canResend) return;
-
     try {
       const data = await resendSignInOtp({
         contact: email,
@@ -101,20 +85,14 @@ export default function SignInPage() {
       });
 
       if (data.success == true) {
-        toast.success(data.result.message);
+        console.log("Resend OTP success");
       } else {
         setError(data.result.message);
       }
     } catch (e) {
-      setError(e);
+      setError(e.message);
     }
-
-    setSecondsLeft(RESEND_OTP_SECONDS);
-    setCanResend(false);
   };
-
-  const minutes = String(Math.floor(secondsLeft / 60)).padStart(2, "0");
-  const seconds = String(secondsLeft % 60).padStart(2, "0");
 
   return (
     <>
@@ -175,81 +153,18 @@ export default function SignInPage() {
           </div>
           <div className="w-full lg:w-1/2 flex flex-col justify-center px-6 py-12 md:px-12 lg:px-20 bg-white dark:bg-[#1a2131]">
             {showOtp ? (
-              <>
-                <div className="mb-10">
-                  <ShieldCheck className="w-full size-12 text-center mb-6" />
-
-                  <h2 className="text-[#0d121b] text-center dark:text-white text-3xl font-bold mb-2">
-                    Xác thực mã OTP
-                  </h2>
-                  <p className="text-slate-500 text-center dark:text-slate-400 text-sm">
-                    Vui lòng nhập mã đã được gửi đến email của bạn.
-                  </p>
-                </div>
-                <div className="space-y-4">
-                  <OtpInput value={otp} onChange={setOtp} />
-
-                  {isLoading && (
-                    <div className="flex justify-center">
-                      <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
-                    </div>
-                  )}
-
-                  <button
-                    disabled={isLoading}
-                    onClick={handleVerifyOtp}
-                    className={`w-full text-white py-2 rounded
-                    ${isLoading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600"}`}
-                  >
-                    {isLoading ? "Đang tải" : "Xác nhận"}
-                  </button>
-                </div>
-
-                <div class="flex flex-col items-center gap-4 w-full mt-4">
-                  <div class="flex items-center gap-2 text-[#4f5b72] dark:text-gray-400">
-                    <span class="text-sm">Gửi lại mã sau</span>
-                    <div class="flex gap-1 items-center">
-                      <div class="flex h-8 w-10 items-center justify-center rounded bg-[#e7ebf3] dark:bg-[#2d3648]">
-                        <p class="text-primary text-sm font-bold">{minutes}</p>
-                      </div>
-                      <span class="text-xs">:</span>
-                      <div class="flex h-8 w-10 items-center justify-center rounded bg-[#e7ebf3] dark:bg-[#2d3648]">
-                        <p class="text-primary text-sm font-bold">{seconds}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    className={`text-sm font-medium flex items-center gap-1 transition
-                    ${
-                      canResend
-                        ? "text-blue-600 hover:text-blue-700 cursor-pointer"
-                        : "text-gray-400 dark:text-gray-600 cursor-not-allowed"
-                    }`}
-                    disabled={!canResend}
-                    onClick={handleResendOtp}
-                  >
-                    <span class="material-symbols-outlined text-base">
-                      refresh
-                    </span>
-                    Gửi lại mã
-                  </button>
-                </div>
-
-                <div
-                  onClick={() => {
-                    setOtp("");
-                    setShowOtp(false);
-                    setSecondsLeft(RESEND_OTP_SECONDS);
-                    setCanResend(false);
-                  }}
-                  className="mt-6 text-[#4f5b72] dark:text-gray-400 text-sm font-medium hover:text-blue-700 transition-colors flex items-center gap-1 justify-center cursor-pointer"
-                >
-                  <span className="material-symbols-outlined text-base">
-                    arrow_back
-                  </span>
-                  Quay lại bước trước
-                </div>
-              </>
+              <OtpVerificationStep
+                otp={otp}
+                onOtpChange={setOtp}
+                isLoading={isLoading}
+                error={error}
+                onVerify={handleVerifyOtp}
+                onResend={handleResendOtp}
+                onBack={() => {
+                  setOtp("");
+                  setShowOtp(false);
+                }}
+              />
             ) : (
               <>
                 <div className="max-w-[420px] mx-auto w-full">
@@ -288,6 +203,11 @@ export default function SignInPage() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                       />
+                      {error && (
+                        <p className="text-red-500 text-sm text-center">
+                          {error}
+                        </p>
+                      )}
                     </div>
                     <div className="flex items-center justify-between py-1">
                       <label className="flex items-center gap-2 cursor-pointer group">
