@@ -1,6 +1,7 @@
 export default function EmailInput({ placeholder, value, onEmailChange }) {
   return (
     <input
+      name="email"
       placeholder={placeholder}
       value={value}
       onChange={onEmailChange}

@@ -2,8 +2,38 @@ import { Gavel, User } from "lucide-react";
 import EmailInput from "../../../components/auth/EmailInput";
 import { PasswordInput } from "../../../components/auth/PasswordInput";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { ROUTES } from "../../../constants/routes";
+import { initiateSignUp } from "../../../api/authApi";
 
 export default function SignUpPage() {
+  const [form, setForm] = useState({});
+  const [showOtp, setShowOtp] = useState(false);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    try {
+      const data = await initiateSignUp({
+        firstName: form.firstName,
+        lastName: form.lastName,
+        contact: form.email,
+        password: form.password,
+        confirmPassword: form.confirmPassword,
+      });
+
+      if (data.success) {
+        console.log(data);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <>
       <title>Đăng ký</title>
@@ -65,7 +95,7 @@ export default function SignUpPage() {
                   Vui lòng nhập thông tin để bắt đầu sử dụng dịch vụ.
                 </p>
               </div>
-              <div className="space-y-5">
+              <form onSubmit={handleRegister} className="space-y-5">
                 <div className="flex">
                   <div className="w-1/2 flex flex-col gap-2">
                     <label className="text-[#0d121b] dark:text-white text-sm font-semibold">
@@ -74,6 +104,7 @@ export default function SignUpPage() {
                     <input
                       name="firstName"
                       placeholder="Tên"
+                      onChange={handleChange}
                       className="border px-3 py-2 rounded mr-2"
                     />
                   </div>
@@ -84,6 +115,7 @@ export default function SignUpPage() {
                     <input
                       name="lastName"
                       placeholder="Họ"
+                      onChange={handleChange}
                       className="border px-3 py-2 rounded"
                     />
                   </div>
@@ -94,7 +126,11 @@ export default function SignUpPage() {
                     Email
                   </label>
                   <div className="relative flex items-center">
-                    <EmailInput />
+                    <EmailInput
+                      value={form.email || ""}
+                      placeholder={"Email"}
+                      onEmailChange={handleChange}
+                    />
                     <User className="material-symbols-outlined absolute right-4 text-[#94a3b8]" />
                   </div>
                 </div>
@@ -102,13 +138,25 @@ export default function SignUpPage() {
                   <label className="text-[#0d121b] dark:text-white text-sm font-semibold">
                     Mật khẩu
                   </label>
-                  <PasswordInput />
+                  <PasswordInput
+                    key={0}
+                    name="password"
+                    value={form.password || ""}
+                    placeholder={"Mật khẩu"}
+                    onChange={handleChange}
+                  />
                 </div>
                 <div className="flex flex-col gap-2">
                   <label className="text-[#0d121b] dark:text-white text-sm font-semibold">
                     Xác nhận mật khẩu
                   </label>
-                  <PasswordInput />
+                  <PasswordInput
+                    key={1}
+                    name="confirmPassword"
+                    value={form.confirmPassword || ""}
+                    placeholder={"Nhập lại mật khẩu"}
+                    onChange={handleChange}
+                  />
                 </div>
                 <div className="flex items-center justify-between py-1">
                   <label className="flex items-center gap-2 cursor-pointer group">
@@ -119,14 +167,14 @@ export default function SignUpPage() {
                     <span className="text-sm text-slate-600 dark:text-slate-400 font-medium group-hover:text-blue-700 transition-colors">
                       Tôi đồng ý với{" "}
                       <a
-                        class="font-semibold text-blue-700 hover:underline"
+                        className="font-semibold text-blue-700 hover:underline"
                         href="#"
                       >
                         Điều khoản
                       </a>{" "}
                       và{" "}
                       <a
-                        class="font-semibold text-blue-700 hover:underline"
+                        className="font-semibold text-blue-700 hover:underline"
                         href="#"
                       >
                         Chính sách bảo mật
@@ -141,7 +189,7 @@ export default function SignUpPage() {
                 >
                   Đăng ký
                 </button>
-              </div>
+              </form>
               <div className="relative my-8">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-slate-200 dark:border-slate-800"></div>
@@ -163,7 +211,7 @@ export default function SignUpPage() {
                 <p className="text-slate-500 dark:text-slate-400 text-sm">
                   Bạn đã có tài khoản?
                   <Link
-                    to="/auth/sign-in"
+                    to={ROUTES.AUTH.SIGN_IN}
                     className="text-blue-700 font-bold hover:underline ml-1"
                   >
                     Đăng nhập ngay

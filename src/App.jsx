@@ -6,16 +6,25 @@ import Dashboard from "./pages/admin/Dashboard";
 import ConversationPage from "./pages/client/chat/ConversationPage";
 import SignInPage from "./pages/client/auth/SignInPage";
 import SignUpPage from "./pages/client/auth/SignUpPage";
+import { ROUTES } from "./constants/routes";
+import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 
 function App() {
   return (
     <Routes>
-      <Route index element={<HomePage />} />
-      <Route path="auth/sign-in" element={<SignInPage />} />
-      <Route path="auth/sign-up" element={<SignUpPage />} />
-      <Route path="chat" element={<ConversationPage />} />
-      <Route path="admin/auth" element={<AuthPage />} />
-      <Route path="admin/dashboard" element={<Dashboard />} />
+      <Route path={ROUTES.HOME} element={<HomePage />} />
+      <Route path={ROUTES.AUTH.SIGN_IN} element={<SignInPage />} />
+      <Route path={ROUTES.AUTH.SIGN_UP} element={<SignUpPage />} />
+      <Route
+        path={ROUTES.CHAT}
+        element={
+          <ProtectedRoute>
+            <ConversationPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route path={ROUTES.ADMIN.AUTH} element={<AuthPage />} />
+      <Route path={ROUTES.ADMIN.DASHBOARD} element={<Dashboard />} />
     </Routes>
   );
 }

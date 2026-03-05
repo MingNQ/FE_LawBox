@@ -1,6 +1,7 @@
 import { Gavel } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { ROUTES } from "../../../constants/routes";
 
 export function Header() {
   const [isAuth, setIsAuth] = useState(false);
@@ -21,7 +22,7 @@ export function Header() {
             Tra cứu
           </Link>
           <Link
-            to="/chat"
+            to={ROUTES.CHAT}
             className="text-blue-700 dark:text-slate-200 text-sm font-semibold hover:underline hover:decoration-blue-700"
           >
             Hỏi đáp AI
@@ -32,7 +33,7 @@ export function Header() {
         </nav>
         <div className="flex items-center gap-4">
           <Link
-            to={"auth/sign-in"}
+            to={ROUTES.AUTH.SIGN_IN}
             className="flex min-w-[100px] cursor-pointer items-center justify-center rounded-lg h-10 px-5 bg-blue-700 text-white text-sm font-bold shadow-md hover:bg-blue-800 transition-all"
           >
             <span>Đăng nhập</span>

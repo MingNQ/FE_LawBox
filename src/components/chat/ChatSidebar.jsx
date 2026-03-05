@@ -1,12 +1,13 @@
 import { Gavel, Plus, Settings, HelpCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import ConversationItem from "./ConversationItem";
+import { ROUTES } from "../../constants/routes";
 
 export function ChatSidebar() {
   return (
     <aside className="w-72 flex flex-col border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-[#161b22] h-full">
       <Link
-        to="/"
+        to={ROUTES.HOME}
         className="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center gap-3"
       >
         <div className="size-8 rounded-lg flex items-center justify-center text-white bg-blue-700">

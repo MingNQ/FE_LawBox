@@ -65,13 +65,6 @@ export function AuthPage() {
                   {isLoading ? "Đang tải" : "Đăng nhập"}
                 </button>
               </form>
-
-              {/* <p className="text-sm text-center mt-4">
-                Chưa có tà{" "}
-                <Link to="/sign-up" className="text-blue-600">
-                  {t("auth.signUp")}
-                </Link>
-              </p> */}
             </>
           ) : (
             <>
