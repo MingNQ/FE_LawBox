@@ -3,7 +3,11 @@ import { Link } from "react-router-dom";
 import ConversationItem from "./ConversationItem";
 import { ROUTES } from "../../constants/routes";
 
-export function ChatSidebar() {
+export function ChatSidebar({
+  conversations,
+  currentConversationId,
+  onSelectConversation,
+}) {
   return (
     <aside className="w-72 flex flex-col border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-[#161b22] h-full">
       <Link
@@ -29,8 +33,14 @@ export function ChatSidebar() {
         <h3 className="text-sm font-bold text-slate-700 dark:text-slate-200 px-3 py-3">
           Lịch sử trò chuyện
         </h3>
-        <ConversationItem title="Tư vấn hợp đồng thuê nhà" current={true} />
-        <ConversationItem title="Thủ tục sang tên sổ đỏ" />
+        {conversations?.map((conversation) => (
+          <ConversationItem
+            key={conversation.id}
+            title={conversation.title}
+            current={conversation.id === currentConversationId}
+            onClick={() => onSelectConversation?.(conversation)}
+          />
+        ))}
       </nav>
 
       <div className="p-4 border-t border-slate-100 dark:border-slate-800 space-y-1">

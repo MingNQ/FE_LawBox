@@ -16,7 +16,6 @@ export function AIMessage({ children, time }) {
       </div>
       <div className="flex flex-col gap-2 flex-1">
         <div className="bg-white dark:bg-slate-800 p-5 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 dark:border-slate-700">
-          <p className="text-sm font-bold text-blue-700 mb-2">AI Luật Sư</p>
           <div className="space-y-4 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
             {children}
           </div>
