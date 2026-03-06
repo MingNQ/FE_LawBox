@@ -1,7 +1,7 @@
 import { Gavel, User } from "lucide-react";
 import { PasswordInput } from "../../../components/auth/PasswordInput";
 import EmailInput from "../../../components/auth/EmailInput";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import {
   initiateSignIn,
@@ -11,7 +11,6 @@ import {
 import OtpVerificationStep from "../../../components/auth/OtpVerificationStep";
 import { useAuth } from "../../../hooks/useAuth";
 import { ROUTES } from "../../../constants/routes";
-import { authStorage } from "../../../stores/authStore";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
@@ -23,6 +22,9 @@ export default function SignInPage() {
   const [error, setError] = useState("");
   const [showOtp, setShowOtp] = useState(false);
   const { login } = useAuth();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirectUrl = searchParams.get("redirect") || ROUTES.HOME;
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -59,14 +61,8 @@ export default function SignInPage() {
       });
 
       if (data.success == true) {
-        await login(data.result.accessToken, data.result.refreshToken);
-        authStorage.setTokens(
-          data.result.accessToken,
-          data.result.refreshToken,
-          remember,
-        );
-
-        window.location.href = ROUTES.HOME;
+        await login(data.result.accessToken, data.result.refreshToken, remember);
+        navigate(redirectUrl);
       } else {
         setError(data.result.message);
       }

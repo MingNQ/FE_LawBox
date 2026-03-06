@@ -1,7 +1,7 @@
 import { Gavel, User } from "lucide-react";
 import EmailInput from "../../../components/auth/EmailInput";
 import { PasswordInput } from "../../../components/auth/PasswordInput";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import { ROUTES } from "../../../constants/routes";
 import {
@@ -18,6 +18,9 @@ export default function SignUpPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [verificationId, setVerificationId] = useState(0);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirectUrl = searchParams.get("redirect") || ROUTES.AUTH.SIGN_IN;
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -59,7 +62,7 @@ export default function SignUpPage() {
       });
 
       if (data.success == true) {
-        window.location.href = ROUTES.HOME;
+        navigate(redirectUrl);
       } else {
         setError(data.result.message);
       }

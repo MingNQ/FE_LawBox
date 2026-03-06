@@ -16,7 +16,6 @@ export function setAuthToken(token) {
 export function clearAuth() {
   delete http.defaults.headers.common["Authorization"];
   authStorage.clear();
-  window.location.href = "auth/sign-in";
 }
 
 export function initAuth() {
@@ -60,7 +59,7 @@ http.interceptors.response.use(
           return Promise.reject(error);
         }
 
-        const res = await axios.post(apiBaseUrl + "/tokens/refresh", {
+        const res = await axios.post(baseApiUrl + "/tokens/refresh", {
           token: authStorage.getToken(),
           refreshToken: refreshToken,
         });

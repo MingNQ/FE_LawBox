@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { authStorage } from "../stores/authStore";
-import { setCurrentUser, setToken } from "../api/authApi";
-import { clearAuth } from "../api/http";
+import { setCurrentUser } from "../api/authApi";
+import { setAuthToken, clearAuth } from "../api/http";
 import { AuthContext } from "./AuthContext";
 
 export function AuthProvider({ children }) {
@@ -10,13 +10,14 @@ export function AuthProvider({ children }) {
     return storedUser ? JSON.parse(storedUser) : null;
   });
 
-  const [token, setAuthToken] = useState(() => {
+  const [token, setTokenState] = useState(() => {
     return authStorage.getToken();
   });
 
-  const login = async (accessToken, refreshToken) => {
+  const login = async (accessToken, refreshToken, rememberMe = true) => {
+    authStorage.setTokens(accessToken, refreshToken, rememberMe);
     setAuthToken(accessToken);
-    setToken({ accessToken, refreshToken });
+    setTokenState(accessToken);
     setCurrentUser().then((res) => {
       setUser(res);
     });
@@ -25,6 +26,7 @@ export function AuthProvider({ children }) {
   const logout = () => {
     clearAuth();
     setUser(null);
+    setTokenState(null);
   };
 
   return (
@@ -32,4 +34,4 @@ export function AuthProvider({ children }) {
       {children}
     </AuthContext.Provider>
   );
-}   
+}

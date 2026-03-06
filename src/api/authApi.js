@@ -1,7 +1,7 @@
-import { http, setAuthToken } from "./http";
+import { http } from "./http";
 
 export async function initiateSignIn(request) {
-  const res = await http.post("auth/sign-in/initiate", {
+  const res = await http.post("/auth/sign-in/initiate", {
     contact: request.contact,
     password: request.password,
     rememberMe: request.rememberMe,
@@ -11,7 +11,7 @@ export async function initiateSignIn(request) {
 }
 
 export async function verifySignIn(request) {
-  const res = await http.post("auth/sign-in/verify-otp", {
+  const res = await http.post("/auth/sign-in/verify-otp", {
     contact: request.contact,
     verificationCode: request.verificationCode,
     rememberMe: request.rememberMe,
@@ -20,7 +20,7 @@ export async function verifySignIn(request) {
 }
 
 export async function resendSignInOtp(request) {
-  const res = await http.post("auth/sign-in/resend-otp", {
+  const res = await http.post("/auth/sign-in/resend-otp", {
     contact: request.contact,
     verificationId: request.verificationId,
   });
@@ -28,7 +28,7 @@ export async function resendSignInOtp(request) {
 }
 
 export async function initiateSignUp(request) {
-  const res = await http.post("auth/sign-up/initiate", {
+  const res = await http.post("/auth/sign-up/initiate", {
     firstName: request.firstName,
     lastName: request.lastName,
     contact: request.contact,
@@ -56,15 +56,9 @@ export async function resendSignUpOtp(request) {
   return res.data;
 }
 
-export async function setToken(request) {
-  localStorage.setItem("token", request.accessToken);
-  localStorage.setItem("refreshToken", request.refreshToken);
-
-  setAuthToken(request.accessToken);
-}
-
 export async function setCurrentUser() {
-  const token = localStorage.getItem("token");
+  const token =
+    localStorage.getItem("token") || sessionStorage.getItem("token");
 
   if (token == null || token == "") {
     return;
