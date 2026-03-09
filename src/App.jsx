@@ -15,6 +15,7 @@ function App() {
       <Route path={ROUTES.AUTH.SIGN_IN} element={<SignInPage />} />
       <Route path={ROUTES.AUTH.SIGN_UP} element={<SignUpPage />} />
       <Route path={ROUTES.CHAT} element={<ConversationPage />} />
+      <Route path={ROUTES.CHAT_DETAIL} element={<ConversationPage />} />
       <Route path={ROUTES.ADMIN.AUTH} element={<AuthPage />} />
       <Route path={ROUTES.ADMIN.DASHBOARD} element={<Dashboard />} />
     </Routes>

@@ -1,4 +1,4 @@
-import { Search, Bell } from "lucide-react";
+import { Search } from "lucide-react";
 
 export function ChatHeader({ title }) {
   return (
@@ -16,19 +16,6 @@ export function ChatHeader({ title }) {
             type="text"
           />
           <Search className="absolute left-3 top-2.5 text-slate-400 w-4 h-4" />
-        </div>
-        <button className="size-9 rounded-lg border border-slate-200 dark:border-slate-700 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300">
-          <Bell className="w-5 h-5" />
-        </button>
-        <div className="h-8 w-[1px] bg-slate-200 dark:bg-slate-800 mx-1"></div>
-        <div className="flex items-center gap-3 cursor-pointer pl-1">
-          <div className="size-8 rounded-full bg-slate-300 overflow-hidden">
-            <img
-              src="images/default-avatar.jpg"
-              alt="Avatar"
-              className="w-full h-full object-cover"
-            />
-          </div>
         </div>
       </div>
     </header>

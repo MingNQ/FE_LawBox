@@ -7,6 +7,7 @@ export const ROUTES = {
   },
 
   CHAT: "/chat",
+  CHAT_DETAIL: "/chat/:conversationId",
 
   ADMIN: {
     AUTH: "/admin/auth",

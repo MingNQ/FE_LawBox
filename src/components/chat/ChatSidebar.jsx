@@ -1,13 +1,30 @@
-import { Gavel, Plus, Settings, HelpCircle } from "lucide-react";
+import { Gavel, Plus, Settings, HelpCircle, ChevronUp } from "lucide-react";
 import { Link } from "react-router-dom";
 import ConversationItem from "./ConversationItem";
 import { ROUTES } from "../../constants/routes";
+import { useAuth } from "../../hooks/useAuth";
+import { useState, useRef, useEffect } from "react";
 
 export function ChatSidebar({
   conversations,
   currentConversationId,
   onSelectConversation,
+  onNewConversation,
 }) {
+  const { user } = useAuth();
+  const [showPopup, setShowPopup] = useState(false);
+  const popupRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (popupRef.current && !popupRef.current.contains(e.target)) {
+        setShowPopup(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
     <aside className="w-72 flex flex-col border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-[#161b22] h-full">
       <Link
@@ -23,7 +40,10 @@ export function ChatSidebar({
       </Link>
 
       <div className="p-4">
-        <button className="w-full flex items-center justify-center gap-2 bg-blue-700 hover:bg-blue-700/90 text-white font-bold py-2.5 px-4 rounded-xl transition-all shadow-sm">
+        <button
+          onClick={onNewConversation}
+          className="w-full flex items-center justify-center gap-2 bg-blue-700 hover:bg-blue-700/90 text-white font-bold py-2.5 px-4 rounded-xl transition-all shadow-sm"
+        >
           <Plus className="w-5 h-5" />
           <span className="text-sm">Cuộc trò chuyện mới</span>
         </button>
@@ -43,14 +63,48 @@ export function ChatSidebar({
         ))}
       </nav>
 
-      <div className="p-4 border-t border-slate-100 dark:border-slate-800 space-y-1">
-        <div className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 cursor-pointer transition-colors">
-          <Settings className="w-5 h-5" />
-          <p className="text-sm font-medium">Cài đặt</p>
-        </div>
-        <div className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 cursor-pointer transition-colors">
-          <HelpCircle className="w-5 h-5" />
-          <p className="text-sm font-medium">Trợ giúp</p>
+      <div
+        className="relative p-4 border-t border-slate-100 dark:border-slate-800"
+        ref={popupRef}
+      >
+        {showPopup && (
+          <div className="absolute bottom-full left-3 right-3 mb-2 bg-white dark:bg-[#1c2333] border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg overflow-hidden animate-fade-in">
+            <div
+              onClick={() => setShowPopup(false)}
+              className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 cursor-pointer transition-colors"
+            >
+              <Settings className="w-4 h-4" />
+              <p className="text-sm font-medium">Cài đặt</p>
+            </div>
+            <div className="h-px bg-slate-100 dark:bg-slate-700/50" />
+            <div
+              onClick={() => setShowPopup(false)}
+              className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 cursor-pointer transition-colors"
+            >
+              <HelpCircle className="w-4 h-4" />
+              <p className="text-sm font-medium">Trợ giúp</p>
+            </div>
+          </div>
+        )}
+
+        <div
+          onClick={() => setShowPopup((prev) => !prev)}
+          className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer transition-colors"
+        >
+          <div className="size-8 rounded-full bg-slate-300 overflow-hidden shrink-0">
+            <img
+              src="images/default-avatar.jpg"
+              alt="Avatar"
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <p className="text-sm font-medium text-slate-700 dark:text-slate-300 flex-1 truncate">
+            {user?.fullName}
+          </p>
+          <ChevronUp
+            className={`w-4 h-4 text-slate-400 transition-transform ${showPopup ? "rotate-0" : "rotate-180"
+              }`}
+          />
         </div>
       </div>
     </aside>
