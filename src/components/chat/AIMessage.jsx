@@ -3,7 +3,6 @@ import {
   FileText,
   FileCheck,
   Copy,
-  Share2,
   ThumbsUp,
   ThumbsDown,
 } from "lucide-react";

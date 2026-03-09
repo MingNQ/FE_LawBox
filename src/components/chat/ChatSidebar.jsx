@@ -93,7 +93,7 @@ export function ChatSidebar({
         >
           <div className="size-8 rounded-full bg-slate-300 overflow-hidden shrink-0">
             <img
-              src="images/default-avatar.jpg"
+              src="../images/default-avatar.jpg"
               alt="Avatar"
               className="w-full h-full object-cover"
             />
@@ -102,8 +102,9 @@ export function ChatSidebar({
             {user?.fullName}
           </p>
           <ChevronUp
-            className={`w-4 h-4 text-slate-400 transition-transform ${showPopup ? "rotate-0" : "rotate-180"
-              }`}
+            className={`w-4 h-4 text-slate-400 transition-transform ${
+              showPopup ? "rotate-0" : "rotate-180"
+            }`}
           />
         </div>
       </div>

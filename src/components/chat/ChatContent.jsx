@@ -37,17 +37,12 @@ export default function ChatContent({ messages, pendingMessage, isThinking }) {
             key={message.id}
             content={message.content}
             time={message.time}
-            avatarUrl="images/default-avatar.jpg"
           />
         ),
       )}
 
       {pendingMessage && (
-        <UserMessage
-          content={pendingMessage}
-          time="Vừa xong"
-          avatarUrl="images/default-avatar.jpg"
-        />
+        <UserMessage content={pendingMessage} time="Vừa xong" />
       )}
 
       {isThinking && <AIThinking />}
