@@ -25,10 +25,6 @@ export function AIMessage({ children, time }) {
               Sao chép
             </button>
             <button className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-blue-700 transition-colors">
-              <Share2 className="w-3.5 h-3.5" />
-              Chia sẻ
-            </button>
-            <button className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-blue-700 transition-colors">
               <ThumbsUp className="w-3.5 h-3.5" />
             </button>
             <button className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-blue-700 transition-colors">

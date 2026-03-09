@@ -8,10 +8,13 @@ export function UserMessage({ content, time, avatarUrl }) {
         <span className="text-[10px] text-slate-400 font-medium">{time}</span>
       </div>
       {avatarUrl && (
-        <div
-          className="size-8 rounded-full bg-slate-200 shrink-0 bg-cover bg-center"
-          style={{ backgroundImage: `url('${avatarUrl}')` }}
-        ></div>
+        <div className="size-8 rounded-full bg-slate-300 overflow-hidden">
+          <img
+            src="images/default-avatar.jpg"
+            alt="Avatar"
+            className="w-full h-full object-cover"
+          />
+        </div>
       )}
     </div>
   );
