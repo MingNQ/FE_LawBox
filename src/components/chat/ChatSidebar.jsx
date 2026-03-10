@@ -10,6 +10,7 @@ export function ChatSidebar({
   currentConversationId,
   onSelectConversation,
   onNewConversation,
+  onDeleteConversation
 }) {
   const { user } = useAuth();
   const [showPopup, setShowPopup] = useState(false);
@@ -56,9 +57,10 @@ export function ChatSidebar({
         {conversations?.map((conversation) => (
           <ConversationItem
             key={conversation.id}
-            title={conversation.title}
+            conversation={conversation}
             current={conversation.id === currentConversationId}
             onClick={() => onSelectConversation?.(conversation)}
+            onDeleteConversation={onDeleteConversation}
           />
         ))}
       </nav>

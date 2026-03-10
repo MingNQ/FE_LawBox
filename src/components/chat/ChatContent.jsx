@@ -1,6 +1,7 @@
 import { UserMessage } from "./UserMessage";
 import { AIMessage } from "./AIMessage";
 import { AIThinking } from "./AIThinking";
+import MarkdownRenderer from "./MarkdownRenderer";
 import { MessageSquare } from "lucide-react";
 import { useEffect, useRef } from "react";
 
@@ -29,8 +30,8 @@ export default function ChatContent({ messages, pendingMessage, isThinking }) {
     <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-8">
       {messages?.map((message) =>
         message.role === 2 ? (
-          <AIMessage key={message.id} time={message.time}>
-            <p>{message.content}</p>
+          <AIMessage key={message.id} content={message.content} time={message.time}>
+            <MarkdownRenderer content={message.content} />
           </AIMessage>
         ) : (
           <UserMessage

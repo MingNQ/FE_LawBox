@@ -5,10 +5,11 @@ import { ChatWelcome } from "../../../components/chat/ChatWelcome";
 import { useAuth } from "../../../hooks/useAuth";
 import AuthModal from "../../../components/auth/AuthModal";
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, data } from "react-router-dom";
 import {
   getMyConversation,
   getConversationById,
+  deleteConversation,
 } from "../../../api/conversationApi";
 import ChatContent from "../../../components/chat/ChatContent";
 import { sendMessage } from "../../../api/chatApi";
@@ -93,6 +94,8 @@ export default function ConversationPage() {
           setConversations((prev) =>
             prev ? [...prev, data.result] : [data.result],
           );
+        } else {
+          setCurrentConversation(data.result);
         }
 
         if (data.result?.id) {
@@ -109,6 +112,25 @@ export default function ConversationPage() {
     }
   };
 
+  const handleDeleteConversation = async (id) => {
+    try {
+      const data = await deleteConversation(id);
+
+      if (data.success) {
+        setConversations((prev) => prev.filter((c) => c.id !== id));
+
+        if (currentConversation?.id === id) {
+          setCurrentConversation(null);
+          navigate(ROUTES.CHAT);
+        }
+      } else {
+        alert(data.result.message);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
   const isNewChat = !conversationId && !pendingMessage && !isThinking;
 
   return (
@@ -120,6 +142,7 @@ export default function ConversationPage() {
         currentConversationId={currentConversation?.id}
         onSelectConversation={handleSelectConversation}
         onNewConversation={handleNewConversation}
+        onDeleteConversation={handleDeleteConversation}
       >
         {isNewChat ? (
           <>

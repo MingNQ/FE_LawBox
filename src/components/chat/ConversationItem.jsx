@@ -1,7 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import { MessageSquare, MoreHorizontal, Pin, Trash2 } from "lucide-react";
 
-export default function ConversationItem({ title, current, onClick }) {
+export default function ConversationItem({
+  conversation,
+  current,
+  onClick,
+  onDeleteConversation,
+}) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
@@ -28,7 +33,7 @@ export default function ConversationItem({ title, current, onClick }) {
       <p
         className={`text-sm font-medium truncate flex-1 ${current ? "text-blue-700" : ""}`}
       >
-        {title}
+        {conversation?.title}
       </p>
 
       <button
@@ -59,6 +64,7 @@ export default function ConversationItem({ title, current, onClick }) {
           <button
             onClick={(e) => {
               e.stopPropagation();
+              onDeleteConversation(conversation?.id);
               setMenuOpen(false);
             }}
             className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"

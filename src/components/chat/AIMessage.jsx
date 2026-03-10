@@ -3,11 +3,22 @@ import {
   FileText,
   FileCheck,
   Copy,
+  Check,
   ThumbsUp,
   ThumbsDown,
 } from "lucide-react";
+import { useState } from "react";
 
-export function AIMessage({ children, time }) {
+export function AIMessage({ children, content, time }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    if (!content) return;
+    navigator.clipboard.writeText(content);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
     <div className="flex gap-3 max-w-4xl mr-auto">
       <div className="size-9 rounded-xl bg-blue-700 flex items-center justify-center text-white shrink-0 shadow-lg">
@@ -19,9 +30,24 @@ export function AIMessage({ children, time }) {
             {children}
           </div>
           <div className="mt-4 flex items-center gap-4 pt-3 border-t border-slate-50 dark:border-slate-700/50">
-            <button className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-blue-700 transition-colors">
-              <Copy className="w-3.5 h-3.5" />
-              Sao chép
+            <button
+              onClick={handleCopy}
+              className={`flex items-center gap-1.5 text-xs transition-colors ${copied
+                  ? "text-green-500"
+                  : "text-slate-400 hover:text-blue-700"
+                }`}
+            >
+              {copied ? (
+                <>
+                  <Check className="w-3.5 h-3.5" />
+                  Đã chép
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3.5 h-3.5" />
+                  Sao chép
+                </>
+              )}
             </button>
             <button className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-blue-700 transition-colors">
               <ThumbsUp className="w-3.5 h-3.5" />
