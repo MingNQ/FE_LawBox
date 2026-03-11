@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-export function AIMessage({ children, content, time }) {
+export function AIMessage({ children, message, onMessageReaction }) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -18,6 +18,9 @@ export function AIMessage({ children, content, time }) {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
+
+  const isLike = message?.reaction === 2;
+  const isDislike = message?.reaction === 3;
 
   return (
     <div className="flex gap-3 max-w-4xl mr-auto">
@@ -32,9 +35,11 @@ export function AIMessage({ children, content, time }) {
           <div className="mt-4 flex items-center gap-4 pt-3 border-t border-slate-50 dark:border-slate-700/50">
             <button
               onClick={handleCopy}
-              className={`flex items-center gap-1.5 text-xs transition-colors ${copied
-                  ? "text-green-500"
-                  : "text-slate-400 hover:text-blue-700"
+              className={`flex items-center gap-1.5 text-xs transition-colors 
+                ${
+                  copied
+                    ? "text-green-500"
+                    : "text-slate-400 hover:text-blue-700"
                 }`}
             >
               {copied ? (
@@ -49,15 +54,37 @@ export function AIMessage({ children, content, time }) {
                 </>
               )}
             </button>
-            <button className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-blue-700 transition-colors">
+            <button
+              onClick={() => {
+                onMessageReaction(message?.conversationId, message?.id, 2);
+              }}
+              className={`flex items-center gap-1.5 text-xs transition-colors 
+                ${
+                  isLike
+                    ? "text-blue-700"
+                    : "text-slate-400 hover:text-blue-700"
+                }`}
+            >
               <ThumbsUp className="w-3.5 h-3.5" />
             </button>
-            <button className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-blue-700 transition-colors">
+            <button
+              onClick={() => {
+                onMessageReaction(message?.conversationId, message?.id, 3);
+              }}
+              className={`flex items-center gap-1.5 text-xs transition-colors 
+                ${
+                  isDislike
+                    ? "text-blue-700"
+                    : "text-slate-400 hover:text-blue-700"
+                }`}
+            >
               <ThumbsDown className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
-        <span className="text-[10px] text-slate-400 font-medium">{time}</span>
+        <span className="text-[10px] text-slate-400 font-medium">
+          {message?.time}
+        </span>
       </div>
     </div>
   );

@@ -6,7 +6,9 @@ export function ConversationLayout({
   currentConversationId,
   onSelectConversation,
   onNewConversation,
-  onDeleteConversation
+  onDeleteConversation,
+  onPinConversation,
+  onRenameConversation,
 }) {
   return (
     <div className="bg-background-light dark:bg-background-dark text-[#0d121b] dark:text-slate-200">
@@ -17,6 +19,8 @@ export function ConversationLayout({
           onSelectConversation={onSelectConversation}
           onNewConversation={onNewConversation}
           onDeleteConversation={onDeleteConversation}
+          onPinConversation={onPinConversation}
+          onRenameConversation={onRenameConversation}
         />
         <main className="flex-1 flex flex-col bg-background-light dark:bg-background-dark relative">
           {children}

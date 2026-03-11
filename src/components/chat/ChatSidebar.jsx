@@ -1,4 +1,11 @@
-import { Gavel, Plus, Settings, HelpCircle, ChevronUp } from "lucide-react";
+import {
+  Gavel,
+  Plus,
+  Settings,
+  HelpCircle,
+  ChevronUp,
+  LogOut,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import ConversationItem from "./ConversationItem";
 import { ROUTES } from "../../constants/routes";
@@ -10,9 +17,11 @@ export function ChatSidebar({
   currentConversationId,
   onSelectConversation,
   onNewConversation,
-  onDeleteConversation
+  onDeleteConversation,
+  onPinConversation,
+  onRenameConversation,
 }) {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [showPopup, setShowPopup] = useState(false);
   const popupRef = useRef(null);
 
@@ -54,15 +63,20 @@ export function ChatSidebar({
         <h3 className="text-sm font-bold text-slate-700 dark:text-slate-200 px-3 py-3">
           Lịch sử trò chuyện
         </h3>
-        {conversations?.map((conversation) => (
-          <ConversationItem
-            key={conversation.id}
-            conversation={conversation}
-            current={conversation.id === currentConversationId}
-            onClick={() => onSelectConversation?.(conversation)}
-            onDeleteConversation={onDeleteConversation}
-          />
-        ))}
+        {conversations
+          ?.slice()
+          .sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0))
+          .map((conversation) => (
+            <ConversationItem
+              key={conversation.id}
+              conversation={conversation}
+              current={conversation.id === currentConversationId}
+              onClick={() => onSelectConversation?.(conversation)}
+              onDeleteConversation={onDeleteConversation}
+              onPinConversation={onPinConversation}
+              onRenameConversation={onRenameConversation}
+            />
+          ))}
       </nav>
 
       <div
@@ -85,6 +99,14 @@ export function ChatSidebar({
             >
               <HelpCircle className="w-4 h-4" />
               <p className="text-sm font-medium">Trợ giúp</p>
+            </div>
+            <div className="h-px bg-slate-100 dark:bg-slate-700/50" />
+            <div
+              onClick={logout}
+              className="flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 cursor-pointer transition-colors"
+            >
+              <LogOut className="w-4 h-4" />
+              <p className="text-sm font-medium">Đăng xuất</p>
             </div>
           </div>
         )}

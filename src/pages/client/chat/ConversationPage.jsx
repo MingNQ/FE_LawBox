@@ -10,6 +10,9 @@ import {
   getMyConversation,
   getConversationById,
   deleteConversation,
+  updatePinnedConversation,
+  updateConversation,
+  reactionMessage,
 } from "../../../api/conversationApi";
 import ChatContent from "../../../components/chat/ChatContent";
 import { sendMessage } from "../../../api/chatApi";
@@ -131,6 +134,49 @@ export default function ConversationPage() {
     }
   };
 
+  const handlePinConversation = async (id, pinned) => {
+    try {
+      const data = await updatePinnedConversation(id, { pinned: pinned });
+
+      if (data.success) {
+        setConversations((prev) =>
+          prev?.map((c) => (c.id === id ? { ...c, pinned: pinned } : c)),
+        );
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  const handleRenameConversation = async (id, title) => {
+    try {
+      const data = await updateConversation(id, { title });
+
+      if (data.success) {
+        setConversations((prev) =>
+          prev?.map((c) => (c.id === id ? { ...c, title } : c)),
+        );
+
+        if (currentConversation?.id === id) {
+          setCurrentConversation((prev) => ({ ...prev, title }));
+        }
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  const handleMessageReaction = async (id, messageId, reaction) => {
+    try {
+      const data = await reactionMessage(id, messageId, { reaction: reaction });
+      if (data.success) {
+        setCurrentConversation(data.result);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
   const isNewChat = !conversationId && !pendingMessage && !isThinking;
 
   return (
@@ -143,6 +189,8 @@ export default function ConversationPage() {
         onSelectConversation={handleSelectConversation}
         onNewConversation={handleNewConversation}
         onDeleteConversation={handleDeleteConversation}
+        onPinConversation={handlePinConversation}
+        onRenameConversation={handleRenameConversation}
       >
         {isNewChat ? (
           <>
@@ -158,6 +206,7 @@ export default function ConversationPage() {
               messages={currentConversation?.messages}
               pendingMessage={pendingMessage}
               isThinking={isThinking}
+              onMessageReaction={handleMessageReaction}
             />
             <ChatInput
               onSendMessage={handleSendMessage}

@@ -29,16 +29,7 @@ export function Header({ user }) {
           </Link>
         </nav>
         <div className="flex items-center gap-4">
-          {!user ? (
-            <Link
-              to={ROUTES.AUTH.SIGN_IN}
-              className="flex min-w-[100px] cursor-pointer items-center justify-center rounded-lg h-10 px-5 bg-blue-700 text-white text-sm font-bold shadow-md hover:bg-blue-800 transition-all"
-            >
-              <span>Đăng nhập</span>
-            </Link>
-          ) : (
-            <p>Chào, {user.fullName}</p>
-          )}
+          {!user ? <></> : <p>Chào, {user.fullName}</p>}
         </div>
       </div>
     </header>

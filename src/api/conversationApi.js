@@ -37,3 +37,13 @@ export async function updatePinnedConversation(id, request) {
   });
   return result.data;
 }
+
+export async function reactionMessage(id, messageId, request) {
+  const result = await http.post(
+    baseUrl + `${id}/messages/${messageId}/reaction`,
+    {
+      reaction: request.reaction,
+    },
+  );
+  return result.data;
+}

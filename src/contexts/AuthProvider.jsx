@@ -3,6 +3,7 @@ import { authStorage } from "../stores/authStore";
 import { setCurrentUser } from "../api/authApi";
 import { setAuthToken, clearAuth } from "../api/http";
 import { AuthContext } from "./AuthContext";
+import { ROUTES } from "../constants/routes";
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
@@ -24,6 +25,7 @@ export function AuthProvider({ children }) {
   };
 
   const logout = () => {
+    window.location.href = ROUTES.AUTH.SIGN_IN;
     clearAuth();
     setUser(null);
     setTokenState(null);
