@@ -1,0 +1,137 @@
+import {
+  Gavel,
+  Plus,
+  Settings,
+  HelpCircle,
+  ChevronUp,
+  LogOut,
+} from "lucide-react";
+import { Link } from "react-router-dom";
+import ConversationItem from "./ConversationItem";
+import { ROUTES } from "@shared/constants/routes";
+import { useAuth } from "@shared/hooks/useAuth";
+import { useState, useRef, useEffect } from "react";
+
+export function ChatSidebar({
+  conversations,
+  currentConversationId,
+  onSelectConversation,
+  onNewConversation,
+  onDeleteConversation,
+  onPinConversation,
+  onRenameConversation,
+}) {
+  const { user, logout } = useAuth();
+  const [showPopup, setShowPopup] = useState(false);
+  const popupRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (popupRef.current && !popupRef.current.contains(e.target)) {
+        setShowPopup(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <aside className="w-72 flex flex-col border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-[#161b22] h-full">
+      <Link
+        to={ROUTES.HOME}
+        className="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center gap-3"
+      >
+        <div className="size-8 rounded-lg flex items-center justify-center text-white bg-blue-700">
+          <Gavel className="w-4 h-4" />
+        </div>
+        <h2 className="text-lg font-bold tracking-tight text-blue-700">
+          AI Luật Sư
+        </h2>
+      </Link>
+
+      <div className="p-4">
+        <button
+          onClick={onNewConversation}
+          className="w-full flex items-center justify-center gap-2 bg-blue-700 hover:bg-blue-700/90 text-white font-bold py-2.5 px-4 rounded-xl transition-all shadow-sm"
+        >
+          <Plus className="w-5 h-5" />
+          <span className="text-sm">Cuộc trò chuyện mới</span>
+        </button>
+      </div>
+
+      <nav className="flex-1 overflow-y-auto custom-scrollbar px-3">
+        <h3 className="text-sm font-bold text-slate-700 dark:text-slate-200 px-3 py-3">
+          Lịch sử trò chuyện
+        </h3>
+        {conversations
+          ?.slice()
+          .sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0))
+          .map((conversation) => (
+            <ConversationItem
+              key={conversation.id}
+              conversation={conversation}
+              current={conversation.id === currentConversationId}
+              onClick={() => onSelectConversation?.(conversation)}
+              onDeleteConversation={onDeleteConversation}
+              onPinConversation={onPinConversation}
+              onRenameConversation={onRenameConversation}
+            />
+          ))}
+      </nav>
+
+      <div
+        className="relative p-4 border-t border-slate-100 dark:border-slate-800"
+        ref={popupRef}
+      >
+        {showPopup && (
+          <div className="absolute bottom-full left-3 right-3 mb-2 bg-white dark:bg-[#1c2333] border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg overflow-hidden animate-fade-in">
+            <div
+              onClick={() => setShowPopup(false)}
+              className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 cursor-pointer transition-colors"
+            >
+              <Settings className="w-4 h-4" />
+              <p className="text-sm font-medium">Cài đặt</p>
+            </div>
+            <div className="h-px bg-slate-100 dark:bg-slate-700/50" />
+            <div
+              onClick={() => setShowPopup(false)}
+              className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 cursor-pointer transition-colors"
+            >
+              <HelpCircle className="w-4 h-4" />
+              <p className="text-sm font-medium">Trợ giúp</p>
+            </div>
+            <div className="h-px bg-slate-100 dark:bg-slate-700/50" />
+            <div
+              onClick={logout}
+              className="flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 cursor-pointer transition-colors"
+            >
+              <LogOut className="w-4 h-4" />
+              <p className="text-sm font-medium">Đăng xuất</p>
+            </div>
+          </div>
+        )}
+
+        <div
+          onClick={() => setShowPopup((prev) => !prev)}
+          className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer transition-colors"
+        >
+          <div className="size-8 rounded-full bg-slate-300 overflow-hidden shrink-0">
+            <img
+              src="../images/default-avatar.jpg"
+              alt="Avatar"
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <p className="text-sm font-medium text-slate-700 dark:text-slate-300 flex-1 truncate">
+            {user?.fullName}
+          </p>
+          <ChevronUp
+            className={`w-4 h-4 text-slate-400 transition-transform ${
+              showPopup ? "rotate-0" : "rotate-180"
+            }`}
+          />
+        </div>
+      </div>
+    </aside>
+  );
+}
