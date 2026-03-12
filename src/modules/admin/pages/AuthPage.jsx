@@ -2,8 +2,13 @@ import { useState } from "react";
 import { OtpInput } from "@client/components/auth/OtpInput";
 import { PasswordInput } from "@client/components/auth/PasswordInput";
 import EmailInput from "@client/components/auth/EmailInput";
+import { initiateSignIn } from "@shared/api/authApi";
+import { verifySignIn } from "../../../shared/api/authApi";
+import { ROUTES } from "@shared/constants/routes";
+import { useAuth } from "@shared/hooks/useAuth";
 
 export function AuthPage() {
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
@@ -11,6 +16,7 @@ export function AuthPage() {
   const [showOtp, setShowOtp] = useState(false);
   const [otp, setOtp] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [verificationId, setVerificationId] = useState(0);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -18,12 +24,67 @@ export function AuthPage() {
     setIsLoading(true);
 
     try {
-      // TODO: Implement admin login API call
-      console.log("Login", { email, password });
+      const data = await initiateSignIn({
+        contact: email,
+        password,
+        rememberMe: remember,
+      });
+
+      if (data.success) {
+        setVerificationId(data.result.verificationId);
+        setShowOtp(true);
+      } else {
+        setError(data.result.message);
+      }
     } catch (e) {
-      console.log(e);
+      setError(e.message);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    setError("");
+    setIsLoading(true);
+
+    try {
+      const data = await verifySignIn({
+        contact: email,
+        verificationCode: otp,
+        rememberMe: remember,
+      });
+
+      if (data.success) {
+        await login(
+          data.result.accessToken,
+          data.result.refreshToken,
+          remember,
+        );
+        window.location.href = ROUTES.ADMIN.DASHBOARD;
+      } else {
+        setError(data.result.message);
+      }
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    try {
+      const data = await resendSignInOtp({
+        contact: email,
+        verificationId: verificationId,
+      });
+
+      if (data.success == true) {
+        console.log("Resend OTP success");
+      } else {
+        setError(data.result.message);
+      }
+    } catch (e) {
+      setError(e.message);
     }
   };
 
@@ -42,7 +103,7 @@ export function AuthPage() {
 
           {!showOtp ? (
             <>
-              <form onSubmit={() => {console.log("LogIn")}} className="space-y-4">
+              <form onSubmit={handleLogin} className="space-y-4">
                 <EmailInput
                   placeholder="Email"
                   value={email}

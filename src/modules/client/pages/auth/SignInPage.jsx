@@ -61,7 +61,11 @@ export default function SignInPage() {
       });
 
       if (data.success == true) {
-        await login(data.result.accessToken, data.result.refreshToken, remember);
+        await login(
+          data.result.accessToken,
+          data.result.refreshToken,
+          remember,
+        );
         navigate(redirectUrl);
       } else {
         setError(data.result.message);

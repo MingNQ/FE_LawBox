@@ -1,4 +1,5 @@
 import { Bot } from "lucide-react";
+import { ROUTES } from "@shared/constants/routes";
 
 export function AIPromptSection() {
   return (
@@ -14,7 +15,12 @@ export function AIPromptSection() {
               tức thì dựa trên cơ sở pháp luật hiện hành.
             </p>
           </div>
-          <button className="flex min-w-[200px] items-center justify-center gap-2 rounded-xl h-14 px-8 bg-white text-primary text-base font-black shadow-xl hover:bg-slate-100 transition-all">
+          <button
+            onClick={() => {
+              window.location.href = ROUTES.CHAT;
+            }}
+            className="flex min-w-[200px] items-center justify-center gap-2 rounded-xl h-14 px-8 bg-white text-primary text-base font-black shadow-xl hover:bg-slate-100 transition-all"
+          >
             <Bot className="w-5 h-5" />
             Hỏi đáp AI ngay
           </button>
