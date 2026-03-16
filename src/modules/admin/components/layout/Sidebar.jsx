@@ -1,6 +1,10 @@
 import { LayoutDashboard, FileText, Folder, Upload, Users } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { ROUTES } from "@shared/constants/routes";
 
 export default function Sidebar() {
+  const location = useLocation();
+
   return (
     <aside className="w-64 bg-white border-r border-r-gray-200 flex flex-col justify-between">
       <div>
@@ -10,15 +14,26 @@ export default function Sidebar() {
         </div>
 
         <nav className="p-4 space-y-2">
-          <SidebarItem icon={<LayoutDashboard size={18} />} active>
+          <SidebarItem
+            to={ROUTES.ADMIN.DASHBOARD}
+            icon={<LayoutDashboard size={18} />}
+            active={location.pathname === ROUTES.ADMIN.DASHBOARD}
+          >
             Thống kê
           </SidebarItem>
-          <SidebarItem icon={<FileText size={18} />}>
-            Quản lý tài liệu
+          <SidebarItem
+            to={ROUTES.ADMIN.FOLDERS}
+            icon={<Folder size={18} />}
+            active={
+              location.pathname === ROUTES.ADMIN.FOLDERS ||
+              location.pathname.startsWith("/admin/folders/")
+            }
+          >
+            Thư mục
           </SidebarItem>
-          <SidebarItem icon={<Folder size={18} />}>Danh mục</SidebarItem>
-          <SidebarItem icon={<Upload size={18} />}>Tải lên</SidebarItem>
-          <SidebarItem icon={<Users size={18} />}>Người dùng</SidebarItem>
+          <SidebarItem to="#" icon={<Users size={18} />}>
+            Người dùng
+          </SidebarItem>
         </nav>
       </div>
 
@@ -31,15 +46,16 @@ export default function Sidebar() {
   );
 }
 
-function SidebarItem({ icon, children, active }) {
+function SidebarItem({ icon, children, active, to }) {
   return (
-    <div
+    <Link
+      to={to}
       className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer text-sm
         ${active ? "bg-blue-50 text-blue-600" : "hover:bg-gray-100 text-gray-700"}
       `}
     >
       {icon}
       {children}
-    </div>
+    </Link>
   );
 }

@@ -2,6 +2,8 @@ import { Route } from "react-router-dom";
 import { ROUTES } from "@shared/constants/routes";
 import { AuthPage } from "./pages/AuthPage";
 import Dashboard from "./pages/Dashboard";
+import DocumentPage from "./pages/DocumentPage";
+import FolderPage from "./pages/FolderPage";
 import RoleGuard from "@shared/components/auth/RoleGuard";
 import { ROLES } from "@shared/constants/appConst";
 
@@ -13,6 +15,22 @@ export const adminRoutes = (
       element={
         <RoleGuard roles={[ROLES.Admin]}>
           <Dashboard />
+        </RoleGuard>
+      }
+    />
+    <Route
+      path={ROUTES.ADMIN.FOLDERS}
+      element={
+        <RoleGuard roles={[ROLES.Admin]}>
+          <FolderPage />
+        </RoleGuard>
+      }
+    />
+    <Route
+      path={ROUTES.ADMIN.DOCUMENTS}
+      element={
+        <RoleGuard roles={[ROLES.Admin]}>
+          <DocumentPage />
         </RoleGuard>
       }
     />

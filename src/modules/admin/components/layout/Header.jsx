@@ -6,18 +6,6 @@ export default function Header() {
       <h2 className="font-semibold text-gray-700">Tổng quan hệ thống</h2>
 
       <div className="flex items-center gap-6">
-        <div className="relative">
-          <Search
-            size={18}
-            className="absolute inset-y-0 left-0 mt-2.5 ml-3 text-gray-400"
-          />
-          <input
-            type="text"
-            placeholder="Tìm kiếm văn bản pháp luật..."
-            className="rounded-lg px-4 py-2 text-sm text-gray-400 w-80 h-10 pl-10 pr-3 border-none bg-gray-100"
-          />
-        </div>
-
         <Bell size={20} className="text-gray-600 cursor-pointer" />
         <Settings size={20} className="text-gray-600 cursor-pointer" />
 

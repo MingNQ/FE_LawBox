@@ -12,5 +12,7 @@ export const ROUTES = {
   ADMIN: {
     AUTH: "/admin/auth",
     DASHBOARD: "/admin/dashboard",
+    FOLDERS: "/admin/folders",
+    DOCUMENTS: "/admin/folders/:folderId/documents",
   },
 };
