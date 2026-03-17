@@ -14,5 +14,6 @@ export const ROUTES = {
     DASHBOARD: "/admin/dashboard",
     FOLDERS: "/admin/folders",
     DOCUMENTS: "/admin/folders/:folderId/documents",
+    USERS: "/admin/users",
   },
 };

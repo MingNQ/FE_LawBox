@@ -31,7 +31,11 @@ export default function Sidebar() {
           >
             Thư mục
           </SidebarItem>
-          <SidebarItem to="#" icon={<Users size={18} />}>
+          <SidebarItem
+            to={ROUTES.ADMIN.USERS}
+            icon={<Users size={18} />}
+            active={location.pathname === ROUTES.ADMIN.USERS}
+          >
             Người dùng
           </SidebarItem>
         </nav>

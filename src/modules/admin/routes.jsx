@@ -4,6 +4,7 @@ import { AuthPage } from "./pages/AuthPage";
 import Dashboard from "./pages/Dashboard";
 import DocumentPage from "./pages/DocumentPage";
 import FolderPage from "./pages/FolderPage";
+import UserPage from "./pages/UserPage";
 import RoleGuard from "@shared/components/auth/RoleGuard";
 import { ROLES } from "@shared/constants/appConst";
 
@@ -23,6 +24,14 @@ export const adminRoutes = (
       element={
         <RoleGuard roles={[ROLES.Admin]}>
           <FolderPage />
+        </RoleGuard>
+      }
+    />
+    <Route
+      path={ROUTES.ADMIN.USERS}
+      element={
+        <RoleGuard roles={[ROLES.Admin]}>
+          <UserPage />
         </RoleGuard>
       }
     />
