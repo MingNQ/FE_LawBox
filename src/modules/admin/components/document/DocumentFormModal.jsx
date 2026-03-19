@@ -6,6 +6,8 @@ export default function DocumentFormModal({
   onClose,
   onSubmit,
   initialData,
+  isUploading,
+  uploadProgress,
 }) {
   const [formData, setFormData] = useState({
     name: "",
@@ -18,7 +20,7 @@ export default function DocumentFormModal({
       setFormData({
         name: initialData.name || "",
         type: initialData.type || "",
-        file: null, 
+        file: null,
       });
     } else {
       setFormData({
@@ -62,10 +64,11 @@ export default function DocumentFormModal({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              File tài liệu
+              File tài liệu <span className="text-gray-400 font-normal">(Chỉ nhận .pdf, .doc, .docx, .txt)</span>
             </label>
             <input
               type="file"
+              accept=".pdf,.doc,.docx,.txt"
               onChange={handleFileChange}
               className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-gray-200 rounded-lg"
             />
@@ -102,19 +105,40 @@ export default function DocumentFormModal({
             </select>
           </div>
 
+          {isUploading && uploadProgress !== undefined && !initialData && (
+            <div className="mt-4">
+              <div className="flex justify-between text-sm text-gray-600 mb-1">
+                <span>Đang tải lên...</span>
+                <span>{uploadProgress}%</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${uploadProgress}%` }}
+                ></div>
+              </div>
+            </div>
+          )}
+
           <div className="flex justify-end gap-3 mt-6">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition"
+              disabled={isUploading}
+              className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition disabled:opacity-50"
             >
               Hủy
             </button>
             <button
               type="submit"
-              className="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition"
+              disabled={isUploading}
+              className="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition disabled:opacity-50 min-w-[100px]"
             >
-              {initialData ? "Lưu thay đổi" : "Tải lên"}
+              {isUploading
+                ? "Đang xử lý..."
+                : initialData
+                  ? "Lưu thay đổi"
+                  : "Tải lên"}
             </button>
           </div>
         </form>

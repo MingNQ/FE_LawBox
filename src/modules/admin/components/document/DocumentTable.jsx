@@ -16,7 +16,6 @@ export default function DocumentTable({ documents, onEdit, onDelete }) {
           <tr>
             <th className="px-6 py-4">Tên tài liệu</th>
             <th className="px-6 py-4">Định Dạng</th>
-            <th className="px-6 py-4">Trạng thái</th>
             <th className="px-6 py-4">Ngày tải lên</th>
             <th className="px-6 py-4 border-l border-gray-100 text-center">
               Hành động
@@ -33,17 +32,6 @@ export default function DocumentTable({ documents, onEdit, onDelete }) {
                 {doc.name || "Không có tiêu đề"}
               </td>
               <td className="px-6 py-4">{doc.type == 1 ? "File" : "Text"}</td>
-              <td className="px-6 py-4">
-                <span
-                  className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    doc.status === "active"
-                      ? "bg-green-50 text-green-600"
-                      : "bg-gray-100 text-gray-600"
-                  }`}
-                >
-                  {doc.status === "active" ? "Đã duyệt" : "Chưa duyệt"}
-                </span>
-              </td>
               <td className="px-6 py-4">
                 {doc.createdOn
                   ? new Date(doc.createdOn).toLocaleDateString("vi-VN")

@@ -43,6 +43,7 @@ export default function SignInPage() {
       } else {
         setError(data.result.message);
       }
+      setError("");
     } catch (e) {
       setError(e.message);
     } finally {
@@ -70,6 +71,7 @@ export default function SignInPage() {
       } else {
         setError(data.result.message);
       }
+      setError("");
     } catch (e) {
       setError(e.message);
     } finally {
@@ -89,6 +91,8 @@ export default function SignInPage() {
       } else {
         setError(data.result.message);
       }
+
+      setError("");
     } catch (e) {
       setError(e.message);
     }

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { authStorage } from "@shared/stores/authStore";
 import { setCurrentUser } from "@shared/api/authApi";
 import { setAuthToken, clearAuth } from "@shared/api/http";
-import { AuthContext } from "./AuthContext";
+import { AuthContext } from "@shared/contexts/AuthContext";
 import { ROUTES } from "@shared/constants/routes";
 
 export function AuthProvider({ children }) {
@@ -19,7 +19,7 @@ export function AuthProvider({ children }) {
     authStorage.setTokens(accessToken, refreshToken, rememberMe);
     setAuthToken(accessToken);
     setTokenState(accessToken);
-    setCurrentUser().then((res) => {
+    await setCurrentUser().then((res) => {
       setUser(res);
     });
   };

@@ -9,9 +9,11 @@ import {
   updateDocument,
   deleteDocument,
 } from "@admin/api/documentApi";
-import { getDocuments } from "../api/folderApi";
+import { getDocuments } from "@admin/api/folderApi";
+import { useToast } from "@shared/hooks/useToast";
 
 export default function DocumentPage() {
+  const { toast } = useToast();
   const { folderId } = useParams();
   const navigate = useNavigate();
 
@@ -20,6 +22,8 @@ export default function DocumentPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingDoc, setEditingDoc] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   useEffect(() => {
     if (folderId) {
@@ -37,7 +41,7 @@ export default function DocumentPage() {
         setDocuments(data.result || []);
       }
     } catch (error) {
-      console.error("Lỗi khi tải danh sách tài liệu:", error);
+      toast.error("Lỗi khi tải danh sách tài liệu!");
     } finally {
       setIsLoading(false);
     }
@@ -56,10 +60,10 @@ export default function DocumentPage() {
         if (data.result == true) {
           fetchDocuments();
         } else {
-          alert("Không thể xóa tài liệu này!");          
+          toast.error("Không thể xóa tài liệu này!");
         }
       } catch (error) {
-        console.error("Lỗi khi xóa tài liệu:", error);
+        toast.error("Lỗi khi xóa tài liệu!");
       }
     }
   };
@@ -71,28 +75,39 @@ export default function DocumentPage() {
 
   const handleModalSubmit = async (formData) => {
     try {
+      setIsUploading(true);
+      setUploadProgress(0);
       const apiData = new FormData();
-      apiData.append("name", formData.name);
       apiData.append("folderId", folderId);
+      apiData.append("name", formData.name);
+      apiData.append("type", formData.type);
       if (formData.file) {
         apiData.append("file", formData.file);
       }
 
       if (editingDoc) {
         await updateDocument(editingDoc.id, {
-          title: formData.title,
-          category: formData.category,
-          description: formData.description,
-          folderId: folderId,
+          name: formData.name,
+          type: formData.type,
         });
       } else {
-        await uploadDocument(apiData);
+        await uploadDocument(apiData, (progressEvent) => {
+          if (progressEvent.total) {
+            const percentCompleted = Math.round(
+              (progressEvent.loaded * 99) / progressEvent.total,
+            );
+            setUploadProgress(percentCompleted);
+          }
+        });
       }
-      
-      handleModalClose();
+
       fetchDocuments();
     } catch (error) {
-      console.error("Lỗi khi lưu tài liệu:", error);
+      toast.error("Lỗi khi lưu tài liệu!");
+    } finally {
+      setIsUploading(false);
+      setUploadProgress(0);
+      handleModalClose();
     }
   };
 
@@ -106,9 +121,7 @@ export default function DocumentPage() {
           <ArrowLeft size={20} />
         </button>
         <div>
-          <h1 className="text-xl font-bold text-gray-800">
-            Tài liệu thư mục
-          </h1>
+          <h1 className="text-xl font-bold text-gray-800">Tài liệu thư mục</h1>
           <p className="text-sm text-gray-500">
             Quản lý tài liệu thuộc thư mục này.
           </p>
@@ -117,7 +130,9 @@ export default function DocumentPage() {
 
       <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-6">
         <div>
-          <h2 className="text-lg font-bold text-gray-800">Danh sách tài liệu</h2>
+          <h2 className="text-lg font-bold text-gray-800">
+            Danh sách tài liệu
+          </h2>
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
@@ -142,18 +157,6 @@ export default function DocumentPage() {
             className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        <select className="border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
-          <option value="">Tất cả danh mục</option>
-          <option value="civil">Dân sự</option>
-          <option value="criminal">Hình sự</option>
-          <option value="business">Doanh nghiệp</option>
-          <option value="tax">Thuế</option>
-        </select>
-        <select className="border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
-          <option value="">Tất cả trạng thái</option>
-          <option value="active">Đã duyệt</option>
-          <option value="pending">Chưa duyệt</option>
-        </select>
       </div>
 
       {isLoading ? (
@@ -173,6 +176,8 @@ export default function DocumentPage() {
         onClose={handleModalClose}
         onSubmit={handleModalSubmit}
         initialData={editingDoc}
+        isUploading={isUploading}
+        uploadProgress={uploadProgress}
       />
     </AdminLayout>
   );

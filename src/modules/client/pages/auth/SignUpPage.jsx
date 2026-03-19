@@ -45,6 +45,8 @@ export default function SignUpPage() {
       } else {
         setError(data.result.message);
       }
+
+      setError("");
     } catch (e) {
       setError(e.message);
     } finally {
@@ -66,6 +68,7 @@ export default function SignUpPage() {
       } else {
         setError(data.result.message);
       }
+      setError("");
     } catch (e) {
       setError(e.message);
     } finally {
@@ -83,6 +86,7 @@ export default function SignUpPage() {
       if (data.success != true) {
         setError(data.result.message);
       }
+      setError("");
     } catch (e) {
       setError(e.message);
     }

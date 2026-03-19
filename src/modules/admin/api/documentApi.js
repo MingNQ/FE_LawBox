@@ -7,11 +7,12 @@ export async function getDocumentStat() {
   return result.data;
 }
 
-export async function uploadDocument(data) {
+export async function uploadDocument(data, onUploadProgress) {
   const result = await http.post(baseUrl + "/upload", data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
+    onUploadProgress,
   });
   return result.data;
 }
