@@ -10,6 +10,7 @@ export default function ChatContent({
   pendingMessage,
   isThinking,
   onMessageReaction,
+  onMessageComment,
 }) {
   const bottomRef = useRef(null);
 
@@ -39,6 +40,7 @@ export default function ChatContent({
             key={message.id}
             message={message}
             onMessageReaction={onMessageReaction}
+            onMessageComment={onMessageComment}
           >
             <MarkdownRenderer content={message.content} />
           </AIMessage>

@@ -6,11 +6,14 @@ import {
   Check,
   ThumbsUp,
   ThumbsDown,
+  MessageCircle,
 } from "lucide-react";
 import { useState } from "react";
+import MessageCommentModal from "./MessageCommentModal";
 
-export function AIMessage({ children, message, onMessageReaction }) {
+export function AIMessage({ children, message, onMessageReaction, onMessageComment }) {
   const [copied, setCopied] = useState(false);
+  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
 
   const handleCopy = () => {
     if (!content) return;
@@ -80,12 +83,27 @@ export function AIMessage({ children, message, onMessageReaction }) {
             >
               <ThumbsDown className="w-3.5 h-3.5" />
             </button>
+            <button
+              onClick={() => setIsCommentModalOpen(true)}
+              className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-blue-700 transition-colors"
+            >
+              <MessageCircle className="w-3.5 h-3.5" />
+            </button>
           </div>
         </div>
         <span className="text-[10px] text-slate-400 font-medium">
           {message?.time}
         </span>
       </div>
+      
+      <MessageCommentModal 
+        isOpen={isCommentModalOpen}
+        onClose={() => setIsCommentModalOpen(false)}
+        onSubmit={(comment) => {
+          onMessageComment?.(message?.conversationId, message?.id, comment);
+          setIsCommentModalOpen(false);
+        }}
+      />
     </div>
   );
 }

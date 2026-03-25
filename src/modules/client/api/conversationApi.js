@@ -47,3 +47,11 @@ export async function reactionMessage(id, messageId, request) {
   );
   return result.data;
 }
+
+export async function commentMessage(id, messageId, data) {
+  const result = await http.post(
+    baseUrl + `${id}/messages/${messageId}/comment`,
+    data,
+  );
+  return result.data;
+}

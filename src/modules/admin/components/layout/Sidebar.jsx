@@ -22,6 +22,13 @@ export default function Sidebar() {
             Thống kê
           </SidebarItem>
           <SidebarItem
+            to={ROUTES.ADMIN.ALL_DOCUMENTS}
+            icon={<FileText size={18} />}
+            active={location.pathname === ROUTES.ADMIN.ALL_DOCUMENTS}
+          >
+            Tài liệu
+          </SidebarItem>
+          <SidebarItem
             to={ROUTES.ADMIN.FOLDERS}
             icon={<Folder size={18} />}
             active={

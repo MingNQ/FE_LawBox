@@ -7,11 +7,12 @@ export async function getUserStat() {
   return result.data;
 }
 
-export async function getUsers(params) {
+export async function getUsers(params = {}) {
   const result = await http.post(baseUrl + "/search", {
     pageNumber: 0,
-    pageSize: 10,
-    ignorePagination: false,
+    pageSize: 50,
+    ignorePagination: true,
+    ...params
   });
   return result.data;
 }
@@ -38,5 +39,20 @@ export async function updateUserStatus(id, isActive) {
 
 export async function resetPasswordUser(id) {
   const result = await http.put(`${baseUrl}/${id}/reset-password`);
+  return result.data;
+}
+
+export async function getUserById(id) {
+  const result = await http.get(`${baseUrl}/${id}`);
+  return result.data;
+}
+
+export async function changePassword(id, data) {
+  const result = await http.post(`${baseUrl}/${id}/change-password`, data);
+  return result.data;
+}
+
+export async function changeCurrentAdminPassword(data) {
+  const result = await http.post(`${baseUrl}/change-password`, data);
   return result.data;
 }

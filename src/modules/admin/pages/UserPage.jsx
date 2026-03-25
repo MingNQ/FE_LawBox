@@ -3,6 +3,8 @@ import { Plus, Search, Edit, Trash2, Eye, Shield, User } from "lucide-react";
 import AdminLayout from "@admin/components/layout/AdminLayout";
 import UserFormModal from "@admin/components/user/UserFormModal";
 import UserDetailModal from "@admin/components/user/UserDetailModal";
+import ChangePasswordModal from "@admin/components/user/ChangePasswordModal";
+import AdvancedSearchFilter from "@shared/components/filters/AdvancedSearchFilter";
 import { ROLES } from "@shared/constants/appConst";
 import {
   getUsers,
@@ -19,20 +21,30 @@ export default function UserPage() {
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
   const [viewingUser, setViewingUser] = useState(null);
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
+  const [passwordUser, setPasswordUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchPayload, setSearchPayload] = useState({
+    pageNumber: 0,
+    pageSize: 50,
+    ignorePagination: true,
+  });
 
   useEffect(() => {
     fetchUsers();
-  }, [searchQuery]);
+  }, [searchPayload]);
 
   const fetchUsers = async () => {
     try {
       setIsLoading(true);
-      const data = await getUsers({ search: searchQuery });
+      const data = await getUsers(searchPayload);
       if (data && data.success) {
-        setUsers(data.result.data);
+        const fetchedUsers = Array.isArray(data.result)
+          ? data.result
+          : data.result?.data || [];
+        setUsers(fetchedUsers);
       } else {
-        setUsers(data?.result.data || []);
+        setUsers(data.result?.data || data.result || []);
       }
     } catch (error) {
       console.error("Lỗi khi tải danh sách người dùng:", error);
@@ -52,15 +64,8 @@ export default function UserPage() {
   };
 
   const handleResetPassword = async (user) => {
-    if (window.confirm(`Bạn có chắc chắn muốn đặt lại mật khẩu cho người dùng ${user.fullName || user.email}?`)) {
-      try {
-        await resetPasswordUser(user.id);
-        alert("Đã đặt lại mật khẩu thành công. Mật khẩu mặc định có thể đã được gửi qua email.");
-      } catch (error) {
-        console.error("Lỗi khi đặt lại mật khẩu:", error);
-        alert("Đã gửi yêu cầu đặt lại mật khẩu.");
-      }
-    }
+    setPasswordUser(user);
+    setIsChangePasswordOpen(true);
   };
 
   const handleToggleStatus = async (user) => {
@@ -130,23 +135,20 @@ export default function UserPage() {
           Thêm người dùng
         </button>
       </div>
-
-      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-6">
-        <div className="relative max-w-md">
-          <Search
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-            size={18}
-          />
-          <input
-            type="text"
-            placeholder="Tìm kiếm theo tên, email..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition"
-          />
-        </div>
-      </div>
-
+      <AdvancedSearchFilter
+        onSearch={(payload) => setSearchPayload(payload)}
+        filterFields={[
+          { label: "Email", value: "email" },
+          { label: "Họ", value: "lastName" },
+          { label: "Tên", value: "firstName" },
+        ]}
+        searchFields={["email", "lastName", "firstName"]}
+        sortFields={[
+          { label: "Tên người dùng", value: "userName" },
+          { label: "Email", value: "email" },
+          { label: "Ngày tạo", value: "createdOn" },
+        ]}
+      />
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         {isLoading ? (
           <div className="flex justify-center items-center py-20 text-gray-500">
@@ -274,7 +276,26 @@ export default function UserPage() {
                           className="p-1.5 text-gray-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition"
                           title="Đặt lại mật khẩu"
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-key-round"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></svg>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="lucide lucide-key-round"
+                          >
+                            <path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z" />
+                            <circle
+                              cx="16.5"
+                              cy="7.5"
+                              r=".5"
+                              fill="currentColor"
+                            />
+                          </svg>
                         </button>
                       </div>
                     </td>
@@ -297,6 +318,12 @@ export default function UserPage() {
         isOpen={isDetailModalOpen}
         onClose={handleDetailModalClose}
         user={viewingUser}
+      />
+
+      <ChangePasswordModal
+        isOpen={isChangePasswordOpen}
+        onClose={() => setIsChangePasswordOpen(false)}
+        user={passwordUser}
       />
     </AdminLayout>
   );

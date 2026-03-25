@@ -13,6 +13,7 @@ import {
   updatePinnedConversation,
   updateConversation,
   reactionMessage,
+  commentMessage,
 } from "@client/api/conversationApi";
 import ChatContent from "@client/components/chat/ChatContent";
 import { sendMessage } from "@client/api/chatApi";
@@ -95,7 +96,7 @@ export default function ConversationPage() {
       if (data.success) {
         if (data.result?.id != currentConversation?.id) {
           setConversations((prev) =>
-            prev ? [...prev, data.result] : [data.result],
+            prev ? [data.result, ...prev] : [data.result],
           );
         } else {
           setCurrentConversation(data.result);
@@ -177,6 +178,17 @@ export default function ConversationPage() {
     }
   };
 
+  const handleMessageComment = async (id, messageId, comment) => {
+    try {
+      const data = await commentMessage(id, messageId, { comment });
+      if (data.success) {
+        // Optionally update the conversation if the comment triggers any reaction update
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
   const isNewChat = !conversationId && !pendingMessage && !isThinking;
 
   return (
@@ -207,6 +219,7 @@ export default function ConversationPage() {
               pendingMessage={pendingMessage}
               isThinking={isThinking}
               onMessageReaction={handleMessageReaction}
+              onMessageComment={handleMessageComment}
             />
             <ChatInput
               onSendMessage={handleSendMessage}

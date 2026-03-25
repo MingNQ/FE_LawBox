@@ -26,3 +26,13 @@ export async function deleteDocument(id) {
   const result = await http.delete(`${baseUrl}/${id}`);
   return result.data;
 }
+
+export async function getDocumentById(id) {
+  const result = await http.get(`${baseUrl}/${id}`);
+  return result.data;
+}
+
+export async function searchDocuments(data) {
+  const result = await http.post(`${baseUrl}/search`, data);
+  return result.data;
+}

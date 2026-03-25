@@ -36,6 +36,14 @@ export const adminRoutes = (
       }
     />
     <Route
+      path={ROUTES.ADMIN.ALL_DOCUMENTS}
+      element={
+        <RoleGuard roles={[ROLES.Admin]}>
+          <DocumentPage />
+        </RoleGuard>
+      }
+    />
+    <Route
       path={ROUTES.ADMIN.DOCUMENTS}
       element={
         <RoleGuard roles={[ROLES.Admin]}>

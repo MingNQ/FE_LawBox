@@ -4,12 +4,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import AdminLayout from "@admin/components/layout/AdminLayout";
 import DocumentTable from "@admin/components/document/DocumentTable";
 import DocumentFormModal from "@admin/components/document/DocumentFormModal";
+import DocumentDetailModal from "@admin/components/document/DocumentDetailModal";
+import AdvancedSearchFilter from "@shared/components/filters/AdvancedSearchFilter";
 import {
   uploadDocument,
   updateDocument,
   deleteDocument,
+  searchDocuments,
 } from "@admin/api/documentApi";
-import { getDocuments } from "@admin/api/folderApi";
 import { useToast } from "@shared/hooks/useToast";
 
 export default function DocumentPage() {
@@ -18,27 +20,57 @@ export default function DocumentPage() {
   const navigate = useNavigate();
 
   const [documents, setDocuments] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchPayload, setSearchPayload] = useState({
+    pageNumber: 0,
+    pageSize: 50,
+    ignorePagination: true,
+  });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [editingDoc, setEditingDoc] = useState(null);
+  const [viewingDoc, setViewingDoc] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
   useEffect(() => {
-    if (folderId) {
-      fetchDocuments();
-    }
-  }, [searchQuery, folderId]);
+    fetchDocuments();
+  }, [searchPayload, folderId]);
 
   const fetchDocuments = async () => {
     try {
       setIsLoading(true);
-      const data = await getDocuments(folderId);
+      let data;
+
+      const currentPayload = { ...searchPayload };
+
+      if (folderId) {
+        if (currentPayload.advancedFilter) {
+          currentPayload.advancedFilter = {
+            logic: "and",
+            filters: [
+              currentPayload.advancedFilter,
+              { field: "folderId", operator: "eq", value: Number(folderId) },
+            ],
+          };
+        } else {
+          currentPayload.advancedFilter = {
+            field: "folderId",
+            operator: "eq",
+            value: Number(folderId),
+          };
+        }
+      }
+
+      data = await searchDocuments(currentPayload);
+
       if (data && data.success) {
-        setDocuments(data.result);
+        const fetchedDocs = Array.isArray(data.result)
+          ? data.result
+          : data.result?.data || [];
+        setDocuments(fetchedDocs);
       } else {
-        setDocuments(data.result || []);
+        setDocuments(data.result?.data || data.result || []);
       }
     } catch (error) {
       toast.error("Lỗi khi tải danh sách tài liệu!");
@@ -50,6 +82,11 @@ export default function DocumentPage() {
   const handleOpenEdit = (doc) => {
     setEditingDoc(doc);
     setIsModalOpen(true);
+  };
+
+  const handleOpenView = (doc) => {
+    setViewingDoc(doc);
+    setIsDetailModalOpen(true);
   };
 
   const handleDelete = async (id) => {
@@ -114,16 +151,22 @@ export default function DocumentPage() {
   return (
     <AdminLayout>
       <div className="flex items-center gap-4 mb-6">
-        <button
-          onClick={() => navigate("/admin/folders")}
-          className="p-2 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-600 transition"
-        >
-          <ArrowLeft size={20} />
-        </button>
+        {folderId && (
+          <button
+            onClick={() => navigate("/admin/folders")}
+            className="p-2 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-600 transition"
+          >
+            <ArrowLeft size={20} />
+          </button>
+        )}
         <div>
-          <h1 className="text-xl font-bold text-gray-800">Tài liệu thư mục</h1>
+          <h1 className="text-xl font-bold text-gray-800">
+            {folderId ? "Tài liệu thư mục" : "Tất cả tài liệu"}
+          </h1>
           <p className="text-sm text-gray-500">
-            Quản lý tài liệu thuộc thư mục này.
+            {folderId
+              ? "Quản lý tài liệu thuộc thư mục này."
+              : "Quản lý toàn bộ tài liệu lưu trữ."}
           </p>
         </div>
       </div>
@@ -143,21 +186,18 @@ export default function DocumentPage() {
         </button>
       </div>
 
-      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex gap-4 mb-4">
-        <div className="relative flex-1 max-w-md">
-          <Search
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-            size={18}
-          />
-          <input
-            type="text"
-            placeholder="Tìm kiếm tài liệu..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-      </div>
+      <AdvancedSearchFilter
+        onSearch={(payload) => setSearchPayload(payload)}
+        filterFields={[
+          { label: "Tên tài liệu", value: "name" },
+          { label: "Định dạng (1=File, 2=Text)", value: "type" },
+        ]}
+        searchFields={["name"]}
+        sortFields={[
+          { label: "Tên tài liệu", value: "name" },
+          { label: "Ngày tạo", value: "createdOn" },
+        ]}
+      />
 
       {isLoading ? (
         <div className="flex justify-center items-center py-20 text-gray-500">
@@ -168,6 +208,7 @@ export default function DocumentPage() {
           documents={documents}
           onEdit={handleOpenEdit}
           onDelete={handleDelete}
+          onView={handleOpenView}
         />
       )}
 
@@ -178,6 +219,12 @@ export default function DocumentPage() {
         initialData={editingDoc}
         isUploading={isUploading}
         uploadProgress={uploadProgress}
+      />
+
+      <DocumentDetailModal
+        isOpen={isDetailModalOpen}
+        onClose={() => setIsDetailModalOpen(false)}
+        document={viewingDoc}
       />
     </AdminLayout>
   );

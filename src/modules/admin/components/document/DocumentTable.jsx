@@ -1,6 +1,6 @@
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, Trash2, Eye } from "lucide-react";
 
-export default function DocumentTable({ documents, onEdit, onDelete }) {
+export default function DocumentTable({ documents, onEdit, onDelete, onView }) {
   if (!documents || documents.length === 0) {
     return (
       <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 text-center text-gray-500">
@@ -39,6 +39,13 @@ export default function DocumentTable({ documents, onEdit, onDelete }) {
               </td>
               <td className="px-6 py-4 border-l border-gray-100">
                 <div className="flex justify-center gap-3">
+                  <button
+                    onClick={() => onView?.(doc)}
+                    className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition"
+                    title="Xem chi tiết"
+                  >
+                    <Eye size={16} />
+                  </button>
                   <button
                     onClick={() => onEdit(doc)}
                     className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition"

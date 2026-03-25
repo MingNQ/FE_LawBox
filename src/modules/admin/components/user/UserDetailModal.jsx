@@ -1,8 +1,33 @@
 import { X, User, Mail, Shield, Calendar } from "lucide-react";
 import { ROLES } from "@shared/constants/appConst";
+import { useState, useEffect } from "react";
+import { getUserById } from "@admin/api/userApi";
 
 export default function UserDetailModal({ isOpen, onClose, user }) {
-  if (!isOpen || !user) return null;
+  const [detailedUser, setDetailedUser] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (isOpen && user?.id) {
+      setLoading(true);
+      getUserById(user.id)
+        .then((data) => {
+          if (data.success) {
+            setDetailedUser(data.result);
+          } else {
+            setDetailedUser(user);
+          }
+        })
+        .catch(() => setDetailedUser(user))
+        .finally(() => setLoading(false));
+    } else {
+      setDetailedUser(null);
+    }
+  }, [isOpen, user]);
+
+  const displayUser = detailedUser || user;
+
+  if (!isOpen || !displayUser) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
@@ -25,21 +50,21 @@ export default function UserDetailModal({ isOpen, onClose, user }) {
 
           <div className="text-center mb-6">
             <h2 className="text-xl font-bold text-gray-900">
-              {user.fullName || "Người dùng ẩn danh"}
+              {displayUser.fullName || "Người dùng ẩn danh"}
             </h2>
-            <p className="text-sm text-gray-500">{user.email}</p>
+            <p className="text-sm text-gray-500">{displayUser.email}</p>
 
             <div className="flex justify-center gap-2 mt-3">
               <span
                 className={`px-3 py-1 text-xs font-semibold rounded-full border ${
-                  user.userRoles.find(
+                  displayUser.userRoles?.find(
                     (userRole) => userRole.role.name === ROLES.Admin,
                   )
                     ? "bg-purple-50 text-purple-700 border-purple-200"
                     : "bg-blue-50 text-blue-700 border-blue-200"
                 }`}
               >
-                {user.userRoles.find(
+                {displayUser.userRoles?.find(
                   (userRole) => userRole.role.name === ROLES.Admin,
                 )
                   ? "Super Admin"
@@ -47,17 +72,20 @@ export default function UserDetailModal({ isOpen, onClose, user }) {
               </span>
               <span
                 className={`px-3 py-1 text-xs font-semibold rounded-full border ${
-                  user.isActive !== false
+                  displayUser.isActive !== false
                     ? "bg-green-50 text-green-700 border-green-200"
                     : "bg-red-50 text-red-700 border-red-200"
                 }`}
               >
-                {user.isActive !== false ? "Đang hoạt động" : "Bị khóa"}
+                {displayUser.isActive !== false ? "Đang hoạt động" : "Bị khóa"}
               </span>
             </div>
           </div>
 
           <div className="space-y-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
+            {loading && (
+              <div className="text-sm text-blue-600 mb-2 animate-pulse">Đang tải thông tin chi tiết...</div>
+            )}
             <div className="flex items-center gap-3">
               <div className="p-2 bg-white rounded-lg shadow-sm text-gray-500">
                 <Mail size={16} />
@@ -65,7 +93,7 @@ export default function UserDetailModal({ isOpen, onClose, user }) {
               <div>
                 <p className="text-xs text-gray-500">Email liên hệ</p>
                 <p className="text-sm font-medium text-gray-800">
-                  {user.email}
+                  {displayUser.email}
                 </p>
               </div>
             </div>
@@ -77,7 +105,7 @@ export default function UserDetailModal({ isOpen, onClose, user }) {
               <div>
                 <p className="text-xs text-gray-500">Phân quyền</p>
                 <p className="text-sm font-medium text-gray-800">
-                  {user.userRoles.find(
+                  {displayUser.userRoles?.find(
                     (userRole) => userRole.role.name === ROLES.Admin,
                   )
                     ? "Quản trị viên hệ thống"
@@ -93,8 +121,8 @@ export default function UserDetailModal({ isOpen, onClose, user }) {
               <div>
                 <p className="text-xs text-gray-500">Ngày tham gia</p>
                 <p className="text-sm font-medium text-gray-800">
-                  {user.joinDate
-                    ? new Date(user.joinDate).toLocaleDateString("vi-VN")
+                  {displayUser.joinDate
+                    ? new Date(displayUser.joinDate).toLocaleDateString("vi-VN")
                     : "Không xác định"}
                 </p>
               </div>
