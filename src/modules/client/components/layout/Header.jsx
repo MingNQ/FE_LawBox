@@ -15,7 +15,7 @@ export function Header({ user }) {
           </h2>
         </div>
         <nav className="hidden md:flex flex-1 justify-center gap-10">
-          <Link className="text-blue-700 dark:text-slate-200 text-sm font-semibold hover:underline hover:decoration-blue-700">
+          <Link to={ROUTES.LEGAL_SEARCH} className="text-blue-700 dark:text-slate-200 text-sm font-semibold hover:underline hover:decoration-blue-700">
             Tra cứu
           </Link>
           <Link

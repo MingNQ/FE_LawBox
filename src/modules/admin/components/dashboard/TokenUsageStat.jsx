@@ -13,20 +13,19 @@ import {
   Legend,
 } from "recharts";
 
-export default function SearchTrendCard() {
+export default function TokenUsageStat() {
   const [tokenUsages, setTokenUsages] = useState([]);
-  const [documentStat, setDocumentStat] = useState([]);
-  const [userStat, setUserStat] = useState([]);
+  const [days, setDays] = useState(7);
   const { user } = useAuth();
 
   useEffect(() => {
     if (!user) return;
-    fetchTokenUsageStat();
-  }, [user]);
+    fetchTokenUsageStat(days);
+  }, [user, days]);
 
-  const fetchTokenUsageStat = async () => {
+  const fetchTokenUsageStat = async (d) => {
     try {
-      const data = await getTokenUsageStat(6);
+      const data = await getTokenUsageStat(d - 1);
       if (data.success) {
         setTokenUsages(data.result);
       }
@@ -34,8 +33,6 @@ export default function SearchTrendCard() {
       setTokenUsages([]);
     }
   };
-
-  const fetchDocuments = () => {};
 
   const chartData = tokenUsages.map((x) => ({
     ...x,
@@ -46,8 +43,18 @@ export default function SearchTrendCard() {
   }));
 
   return (
-    <div className="bg-white p-6 rounded-xl border border-gray-200 h-80">
-      <h3 className="font-semibold mb-4">Số lượng Token (7 ngày)</h3>
+    <div className="bg-white p-6 rounded-xl border border-gray-200 h-80 flex flex-col">
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="font-semibold text-gray-800">Cường độ sử dụng LLM Token</h3>
+        <select 
+          value={days} 
+          onChange={(e) => setDays(Number(e.target.value))}
+          className="text-sm border border-gray-200 rounded-md px-3 py-1 bg-gray-50 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer text-gray-700"
+        >
+          <option value={7}>7 ngày qua</option>
+          <option value={30}>30 ngày qua</option>
+        </select>
+      </div>
 
       <ResponsiveContainer width="100%" height="80%">
         <BarChart data={chartData}>

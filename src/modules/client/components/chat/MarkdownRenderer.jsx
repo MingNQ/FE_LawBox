@@ -1,5 +1,6 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 
 const markdownComponents = {
   h1: ({ children }) => <h1 className="markdown-h1">{children}</h1>,
@@ -43,9 +44,10 @@ export default function MarkdownRenderer({ content }) {
     <div className="markdown-body">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeRaw]}
         components={markdownComponents}
       >
-        {content}
+        {content || ""}
       </ReactMarkdown>
     </div>
   );

@@ -1,4 +1,4 @@
-import { Paperclip, Smile, Send } from "lucide-react";
+import { Paperclip, Send } from "lucide-react";
 import { useState } from "react";
 
 export function ChatInput({ onSendMessage, disabled }) {
@@ -8,7 +8,25 @@ export function ChatInput({ onSendMessage, disabled }) {
     if (message.trim() && !disabled) {
       onSendMessage?.(message);
       setMessage("");
+      const textarea = document.getElementById("chat-input-textarea");
+      if (textarea) textarea.style.height = "auto";
     }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  const handleChange = (e) => {
+    const textarea = e.target;
+    setMessage(textarea.value);
+    
+    textarea.style.height = "auto";
+    const newHeight = Math.min(textarea.scrollHeight, 128); 
+    textarea.style.height = `${newHeight}px`;
   };
 
   return (
@@ -18,25 +36,19 @@ export function ChatInput({ onSendMessage, disabled }) {
           <button className="p-2 text-slate-400 hover:text-blue-700 transition-colors">
             <Paperclip className="w-5 h-5" />
           </button>
-          <input
-            className="no-focus-outline flex-1 bg-transparent border-none focus:outline-none focus:ring-0 text-sm py-2 px-1 resize-none overflow-hidden max-h-32 placeholder:text-slate-400"
+          <textarea
+            id="chat-input-textarea"
+            className="no-focus-outline flex-1 bg-transparent border-none focus:outline-none focus:ring-0 text-sm py-2 px-1 resize-none overflow-y-auto max-h-32 placeholder:text-slate-400 min-h-[40px]"
             placeholder="Nhập câu hỏi tại đây..."
-            type="text"
+            rows={1}
             value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleSend();
-              }
-            }}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
           />
-          <button className="p-2 text-slate-400 hover:text-blue-700 transition-colors">
-            <Smile className="w-5 h-5" />
-          </button>
         </div>
         <button
           onClick={handleSend}
-          className="bg-blue-700 text-white size-12 rounded-2xl flex items-center justify-center shadow-lg hover:shadow-blue-700/30 transition-all shrink-0"
+          className="bg-blue-700 text-white size-12 rounded-2xl flex items-center justify-center shadow-lg hover:shadow-blue-700/30 transition-all shrink-0 mb-1"
         >
           <Send className="w-5 h-5" />
         </button>

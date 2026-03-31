@@ -1,6 +1,4 @@
 import { Blend, FileText, Search, Users } from "lucide-react";
-import CategoryChartCard from "@admin/components/dashboard/CategoryChartCard";
-import SearchTrendCard from "@admin/components/dashboard/SearchTrendCard";
 import StatCard from "@admin/components/dashboard/StatCard";
 import AdminLayout from "@admin/components/layout/AdminLayout";
 import { useAuth } from "@shared/hooks/useAuth";
@@ -8,6 +6,7 @@ import { useEffect, useState } from "react";
 import { getTokenUsageStat } from "../api/tokenUsageApi";
 import { getDocumentStat } from "../api/documentApi";
 import { getUserStat } from "../api/userApi";
+import TokenUsageStat from "../components/dashboard/TokenUsageStat";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -85,7 +84,7 @@ export default function Dashboard() {
       </div>
 
       <div className="grid gap-6">
-        <SearchTrendCard />
+        <TokenUsageStat />
         {/* <CategoryChartCard /> */}
       </div>
     </AdminLayout>
