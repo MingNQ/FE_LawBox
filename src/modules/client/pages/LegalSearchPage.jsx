@@ -12,10 +12,8 @@ import {
 
 const FILTER_TAGS = [
   { label: "Tất cả", value: "all" },
-  { label: "Bộ luật", value: "bo-luat" },
   { label: "Luật", value: "luat" },
   { label: "Nghị định", value: "nghi-dinh" },
-  { label: "Thông tư", value: "thong-tu" },
   { label: "Quyết định", value: "quyet-dinh" },
 ];
 

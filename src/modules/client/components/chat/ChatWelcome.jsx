@@ -40,7 +40,7 @@ export function ChatWelcome() {
         {suggestions.map((item) => (
           <div
             key={item.title}
-            className="flex items-center gap-3 px-5 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800/40 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-md hover:shadow-blue-700/5 transition-all cursor-pointer group"
+            className="flex items-center gap-3 px-5 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800/40 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-md hover:shadow-blue-700/5 transition-all group"
           >
             <div className="size-9 rounded-xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-700 dark:text-blue-400 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/50 transition-colors">
               <item.icon className="w-4.5 h-4.5" />

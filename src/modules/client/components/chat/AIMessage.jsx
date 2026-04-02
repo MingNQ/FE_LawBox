@@ -16,8 +16,8 @@ export function AIMessage({ children, message, onMessageReaction, onMessageComme
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
 
   const handleCopy = () => {
-    if (!content) return;
-    navigator.clipboard.writeText(content);
+    if (!message.content) return;
+    navigator.clipboard.writeText(message.content);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
