@@ -9,8 +9,10 @@ import {
   updateFolder,
   deleteFolder,
 } from "@admin/api/folderApi";
+import { useToast } from "@shared/hooks/useToast";
 
 export default function FolderPage() {
+  const { toast } = useToast();
   const [folders, setFolders] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,7 +34,7 @@ export default function FolderPage() {
         setFolders(data.result || []);
       }
     } catch (error) {
-      console.error("Lỗi khi tải danh sách thư mục:", error);
+      toast.error("Lỗi khi tải danh sách thư mục");
     } finally {
       setIsLoading(false);
     }

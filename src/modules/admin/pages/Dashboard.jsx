@@ -7,9 +7,11 @@ import { getTokenUsageStat } from "../api/tokenUsageApi";
 import { getDocumentStat } from "../api/documentApi";
 import { getUserStat } from "../api/userApi";
 import TokenUsageStat from "../components/dashboard/TokenUsageStat";
+import { useToast } from "@shared/hooks/useToast";
 
 export default function Dashboard() {
   const { user } = useAuth();
+  const { toast } = useToast();
   const [tokenStat, setTokenStat] = useState(null);
   const [documentStat, setDocumentStat] = useState(null);
   const [userStat, setUserStat] = useState(null);
@@ -37,7 +39,7 @@ export default function Dashboard() {
         setUserStat(userData.result);
       }
     } catch {
-      console.log("Error fetching Stat");
+      toast.error("Lỗi khi tải thống kê");
     }
   };
 

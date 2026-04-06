@@ -1,4 +1,11 @@
-import { LayoutDashboard, FileText, Folder, Upload, Users } from "lucide-react";
+import {
+  LayoutDashboard,
+  FileText,
+  Folder,
+  Users,
+  Settings,
+  BotIcon,
+} from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { ROUTES } from "@shared/constants/routes";
 
@@ -44,6 +51,20 @@ export default function Sidebar() {
             active={location.pathname === ROUTES.ADMIN.USERS}
           >
             Người dùng
+          </SidebarItem>
+          <SidebarItem
+            to={ROUTES.ADMIN.AI_AGENTS}
+            icon={<BotIcon size={18} />}
+            active={location.pathname === ROUTES.ADMIN.AI_AGENTS}
+          >
+            Agents
+          </SidebarItem>
+          <SidebarItem
+            to={ROUTES.ADMIN.AI_SETTINGS}
+            icon={<Settings size={18} />}
+            active={location.pathname === ROUTES.ADMIN.AI_SETTINGS}
+          >
+            Cấu hình AI
           </SidebarItem>
         </nav>
       </div>

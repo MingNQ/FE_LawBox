@@ -6,6 +6,7 @@ export async function sendMessage(request) {
     const result = await http.post(baseUrl, {
         conversationId: request.conversationId,
         question: request.message,
+        ...(request.agentId ? { agentId: request.agentId } : {}),
     });
     return result.data;
 }

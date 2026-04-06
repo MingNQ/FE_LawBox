@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Plus, Search, Edit, Trash2, Eye, Shield, User } from "lucide-react";
+import { Plus, Edit, Eye, Shield, User } from "lucide-react";
 import AdminLayout from "@admin/components/layout/AdminLayout";
 import UserFormModal from "@admin/components/user/UserFormModal";
 import UserDetailModal from "@admin/components/user/UserDetailModal";
@@ -13,8 +13,10 @@ import {
   updateUserStatus,
   resetPasswordUser,
 } from "@admin/api/userApi";
+import { useToast } from "@shared/hooks/useToast";
 
 export default function UserPage() {
+  const { toast } = useToast();
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
@@ -47,7 +49,7 @@ export default function UserPage() {
         setUsers(data.result?.data || data.result || []);
       }
     } catch (error) {
-      console.error("Lỗi khi tải danh sách người dùng:", error);
+      toast.error("Lỗi khi tải danh sách người dùng");
     } finally {
       setIsLoading(false);
     }

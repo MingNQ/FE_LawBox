@@ -83,7 +83,7 @@ export default function ConversationPage() {
     navigate(ROUTES.CHAT);
   };
 
-  const handleSendMessage = async (message) => {
+  const handleSendMessage = async (message, agentId) => {
     setPendingMessage(message);
     setIsThinking(true);
 
@@ -91,6 +91,7 @@ export default function ConversationPage() {
       const data = await sendMessage({
         conversationId: currentConversation?.id,
         message: message,
+        agentId: agentId,
       });
 
       if (data.success) {
