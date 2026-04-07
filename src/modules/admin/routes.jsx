@@ -5,7 +5,6 @@ import Dashboard from "./pages/Dashboard";
 import DocumentPage from "./pages/DocumentPage";
 import FolderPage from "./pages/FolderPage";
 import UserPage from "./pages/UserPage";
-import AISettingsPage from "./pages/AISettingsPage";
 import AgentManagePage from "./pages/AgentManagePage";
 import RoleGuard from "@shared/components/auth/RoleGuard";
 import { ROLES } from "@shared/constants/appConst";
@@ -50,14 +49,6 @@ export const adminRoutes = (
       element={
         <RoleGuard roles={[ROLES.Admin]}>
           <DocumentPage />
-        </RoleGuard>
-      }
-    />
-    <Route
-      path={ROUTES.ADMIN.AI_SETTINGS}
-      element={
-        <RoleGuard roles={[ROLES.Admin]}>
-          <AISettingsPage />
         </RoleGuard>
       }
     />

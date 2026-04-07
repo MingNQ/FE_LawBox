@@ -7,6 +7,8 @@ export default function AgentFormModal({ isOpen, onClose, onSubmit, initialData 
     description: "",
     systemPrompt: "",
     providerName: "",
+    providerEndpoint: "",
+    providerApiKey: "",
     modelName: "",
     temperature: 0.7,
     isDefault: false,
@@ -20,6 +22,8 @@ export default function AgentFormModal({ isOpen, onClose, onSubmit, initialData 
         description: initialData.description || "",
         systemPrompt: initialData.systemPrompt || "",
         providerName: initialData.providerName || "",
+        providerEndpoint: initialData.providerEndpoint || "",
+        providerApiKey: initialData.providerApiKey || "",
         modelName: initialData.modelName || "",
         temperature: initialData.temperature ?? 0.7,
         isDefault: initialData.isDefault || false,
@@ -31,6 +35,8 @@ export default function AgentFormModal({ isOpen, onClose, onSubmit, initialData 
         description: "",
         systemPrompt: "",
         providerName: "",
+        providerEndpoint: "",
+        providerApiKey: "",
         modelName: "",
         temperature: 0.7,
         isDefault: false,
@@ -75,25 +81,35 @@ export default function AgentFormModal({ isOpen, onClose, onSubmit, initialData 
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">System Prompt</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Lời chú dẫn cho agent</label>
             <textarea name="systemPrompt" value={formData.systemPrompt} onChange={handleChange} className="w-full px-4 py-2 border border-gray-200 rounded-lg" rows={4} />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Provider</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Provider (Github Model, OpenAI, Ollama,...)</label>
               <input name="providerName" value={formData.providerName} onChange={handleChange} className="w-full px-4 py-2 border border-gray-200 rounded-lg" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Model</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Model (gpt-o4, gpt-oss,...)</label>
               <input name="modelName" value={formData.modelName} onChange={handleChange} className="w-full px-4 py-2 border border-gray-200 rounded-lg" />
             </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Provider Endpoint (https://your-endpoint.example)</label>
+            <input name="providerEndpoint" value={formData.providerEndpoint} onChange={handleChange} className="w-full px-4 py-2 border border-gray-200 rounded-lg" />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">ApiKey</label>
+            <input name="providerApiKey" value={formData.providerApiKey} onChange={handleChange} className="w-full px-4 py-2 border border-gray-200 rounded-lg" />
           </div>
 
           <div className="flex items-center gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Temperature</label>
-              <input type="number" step="0.1" min="0" max="2" name="temperature" value={formData.temperature} onChange={handleChange} className="w-32 px-3 py-2 border border-gray-200 rounded-lg" />
+              <input type="number" step="0.01" min="0" max="2" name="temperature" value={formData.temperature} onChange={handleChange} className="w-32 px-3 py-2 border border-gray-200 rounded-lg" />
             </div>
 
             <div className="flex items-center">
