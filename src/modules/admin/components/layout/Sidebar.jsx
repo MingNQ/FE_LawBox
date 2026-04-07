@@ -59,13 +59,6 @@ export default function Sidebar() {
           >
             Agents
           </SidebarItem>
-          <SidebarItem
-            to={ROUTES.ADMIN.AI_SETTINGS}
-            icon={<Settings size={18} />}
-            active={location.pathname === ROUTES.ADMIN.AI_SETTINGS}
-          >
-            Cấu hình AI
-          </SidebarItem>
         </nav>
       </div>
 

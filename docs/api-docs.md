@@ -80,13 +80,6 @@ Các API dành cho Admin, prefix `api/v1/admin/`, yêu cầu quyền `SuperAdmin
 | `PUT`  | `/ai-agents/{id}` | `{ Id, Name, ... }` | Cập nhật Agent |
 | `DELETE` | `/ai-agents/{id}` | - | Xóa Agent |
 
-### System AI Settings
-| Method | Endpoint | Request Body / Params | Description |
-|--------|----------|-----------------------|-------------|
-| `GET`  | `/ai-settings` | - | Lấy cấu hình AI mặc định hiện tại |
-| `PUT`  | `/ai-settings` | `{ ActiveEmbeddingProvider, EmbeddingEndpoint, EmbeddingModel, EmbeddingApiKey?, ActiveLlmProvider, LlmEndpoint, LlmModel, LlmApiKey? }` | Cập nhật cấu hình AI mặc định |
-| `GET`  | `/ai-settings/providers` | - | **Discovery**: Lấy danh sách các Provider (Ollama, OpenAI, GitHub) hỗ trợ |
-
 ### User Management
 _(Base User Props: Email, FirstName, LastName, AvatarId, Active, LockoutEnabled, RoleIds)_
 

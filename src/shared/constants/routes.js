@@ -17,7 +17,6 @@ export const ROUTES = {
     ALL_DOCUMENTS: "/admin/documents",
     DOCUMENTS: "/admin/folders/:folderId/documents",
     USERS: "/admin/users",
-    AI_SETTINGS: "/admin/ai-settings",
     AI_AGENTS: "/admin/ai-agents",
   },
 };
