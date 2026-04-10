@@ -1,6 +1,5 @@
 import { X } from "lucide-react";
 import { useState, useEffect } from "react";
-import { ROLES } from "@shared/constants/appConst";
 
 export default function UserFormModal({
   isOpen,
@@ -13,7 +12,7 @@ export default function UserFormModal({
     lastName: "",
     email: "",
     password: "",
-    role: ROLES.User,
+    roleIds: [2],
     active: true,
   });
 
@@ -23,10 +22,10 @@ export default function UserFormModal({
         firstName: initialData.firstName || "",
         lastName: initialData.lastName || "",
         email: initialData.email || "",
-        password: "", // Empty for update unless user wants to change
-        role: initialData.userRoles?.find((ur) => ur.role.name === ROLES.Admin)
-          ? ROLES.Admin
-          : ROLES.User,
+        password: "",
+        roleIds: initialData.userRoles?.find((ur) => ur.role.id === 1)
+          ? [1]
+          : [2],
         active: initialData.active !== undefined ? initialData.active : true,
       });
     } else {
@@ -44,13 +43,17 @@ export default function UserFormModal({
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]:
+        type === "checkbox"
+          ? checked
+          : name === "roleIds"
+          ? [Number(value)]
+          : value,
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // For update, if password is empty, don't submit it
     const submitData = { ...formData };
     if (initialData && !submitData.password) {
       delete submitData.password;
@@ -147,14 +150,14 @@ export default function UserFormModal({
               Vai trò <span className="text-red-500">*</span>
             </label>
             <select
-              name="role"
-              value={formData.role}
+              name="roleIds"
+              value={formData.roleIds}
               onChange={handleChange}
               required
               className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
             >
-              <option value={ROLES.User}>Người dùng (NormalUser)</option>
-              <option value={ROLES.Admin}>Quản trị viên (SuperAdmin)</option>
+              <option value={2}>Người dùng (NormalUser)</option>
+              <option value={1}>Quản trị viên (SuperAdmin)</option>
             </select>
           </div>
 
