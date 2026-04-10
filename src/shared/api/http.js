@@ -84,6 +84,16 @@ http.interceptors.response.use(
       }
     }
 
+    if (error.response?.status === 429) {
+      const message = error.response.data?.message || "Bạn đã đạt giới hạn sử dụng.";
+      window.dispatchEvent(
+        new CustomEvent("app:usage-limit-exceeded", {
+          detail: { message },
+        }),
+      );
+      return Promise.reject(error);
+    }
+
     return Promise.reject(error);
   },
 );

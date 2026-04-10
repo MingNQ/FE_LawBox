@@ -1,4 +1,5 @@
 import { Edit, Trash2, Eye } from "lucide-react";
+import { DOCUMENT_TYPES } from "../../../../shared/constants/appConst";
 
 export default function DocumentTable({ documents, onEdit, onDelete, onView }) {
   if (!documents || documents.length === 0) {
@@ -15,7 +16,7 @@ export default function DocumentTable({ documents, onEdit, onDelete, onView }) {
         <thead className="bg-gray-50 text-gray-700 font-medium border-b border-gray-100">
           <tr>
             <th className="px-6 py-4">Tên tài liệu</th>
-            <th className="px-6 py-4">Định Dạng</th>
+            <th className="px-6 py-4">Danh mục</th>
             <th className="px-6 py-4">Ngày tải lên</th>
             <th className="px-6 py-4 border-l border-gray-100 text-center">
               Hành động
@@ -31,7 +32,7 @@ export default function DocumentTable({ documents, onEdit, onDelete, onView }) {
               <td className="px-6 py-4 font-medium text-gray-900">
                 {doc.name || "Không có tiêu đề"}
               </td>
-              <td className="px-6 py-4">{doc.type == 1 ? "File" : "Text"}</td>
+              <td className="px-6 py-4">{DOCUMENT_TYPES[doc.type]}</td>
               <td className="px-6 py-4">
                 {doc.createdOn
                   ? new Date(doc.createdOn).toLocaleDateString("vi-VN")

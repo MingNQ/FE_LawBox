@@ -1,6 +1,7 @@
 import { X, FileText, Calendar, HardDrive, Info } from "lucide-react";
 import { useState, useEffect } from "react";
 import { getDocumentById } from "@admin/api/documentApi";
+import { DOCUMENT_TYPES } from "../../../../shared/constants/appConst";
 
 export default function DocumentDetailModal({ isOpen, onClose, document: initialDoc }) {
   const [detailedDoc, setDetailedDoc] = useState(null);
@@ -54,7 +55,7 @@ export default function DocumentDetailModal({ isOpen, onClose, document: initial
             
             <div className="flex justify-center mt-3">
               <span className="px-3 py-1 text-xs font-semibold rounded-full border bg-blue-50 text-blue-700 border-blue-200 uppercase">
-                {displayDoc.type == 1 ? "FILE" : "TXT"}
+                {DOCUMENT_TYPES[displayDoc.type]}
               </span>
             </div>
           </div>
@@ -86,7 +87,7 @@ export default function DocumentDetailModal({ isOpen, onClose, document: initial
                 <div>
                   <p className="text-xs text-gray-500">Kích thước</p>
                   <p className="text-sm font-medium text-gray-800">
-                    {displayDoc.size ? (displayDoc.size / 1024).toFixed(2) + " KB" : "Không rõ"}
+                    {displayDoc.fileStorage.size ? (displayDoc.fileStorage.size / 1024).toFixed(2) + " KB" : "Không rõ"}
                   </p>
                 </div>
               </div>

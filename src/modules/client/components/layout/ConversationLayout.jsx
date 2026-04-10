@@ -1,4 +1,5 @@
 import { ChatSidebar } from "../chat/ChatSidebar";
+import UsageLimitNotice from "@shared/components/toast/UsageLimitNotice";
 
 export function ConversationLayout({
   children,
@@ -23,6 +24,7 @@ export function ConversationLayout({
           onRenameConversation={onRenameConversation}
         />
         <main className="flex-1 flex flex-col bg-background-light dark:bg-background-dark relative">
+          <UsageLimitNotice />
           {children}
         </main>
       </div>

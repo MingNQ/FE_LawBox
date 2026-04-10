@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import AdminLayout from "@admin/components/layout/AdminLayout";
-import AgentTable from "@admin/components/ai/AgentTable";
+import AgentCardList from "@admin/components/ai/AgentCardList";
 import AgentFormModal from "@admin/components/ai/AgentFormModal";
 import { getAiAgents, createAiAgent, updateAiAgent, deleteAiAgent } from "@admin/api/aiAgentApi";
 import { useToast } from "@shared/hooks/useToast";
@@ -92,7 +92,7 @@ export default function AgentManagePage() {
         {loading ? (
           <div className="p-6 bg-white rounded-xl">Đang tải...</div>
         ) : (
-          <AgentTable agents={agents} onEdit={handleEdit} onDelete={handleDelete} onToggle={handleToggle} />
+          <AgentCardList agents={agents} onEdit={handleEdit} onDelete={handleDelete} onToggle={handleToggle} />
         )}
       </div>
 
