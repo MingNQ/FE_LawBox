@@ -1,16 +1,18 @@
 import { useState, useEffect } from "react";
-import { Plus, Search, ArrowLeft } from "lucide-react";
+import { Plus, ArrowLeft } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
 import AdminLayout from "@admin/components/layout/AdminLayout";
 import DocumentTable from "@admin/components/document/DocumentTable";
 import DocumentFormModal from "@admin/components/document/DocumentFormModal";
 import DocumentDetailModal from "@admin/components/document/DocumentDetailModal";
 import AdvancedSearchFilter from "@shared/components/filters/AdvancedSearchFilter";
+import { BackgroundTaskIndicator } from "@shared/components/ui/BackgroundTaskIndicator";
 import {
   uploadDocument,
   updateDocument,
   deleteDocument,
   searchDocuments,
+  embeddingDocument,
 } from "@admin/api/documentApi";
 import { useToast } from "@shared/hooks/useToast";
 
@@ -30,6 +32,7 @@ export default function DocumentPage() {
   const [editingDoc, setEditingDoc] = useState(null);
   const [viewingDoc, setViewingDoc] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isReindexing, setIsReindexing] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
@@ -102,6 +105,22 @@ export default function DocumentPage() {
       } catch (error) {
         toast.error("Lỗi khi xóa tài liệu!");
       }
+    }
+  };
+
+  const handleEmbedding = async (id) => {
+    try {
+      setIsReindexing(true);
+      const data = await embeddingDocument(id);
+      if (data.success) {
+        toast.success("Đã kích hoạt re-index tài liệu thành công!");
+      } else {
+        toast.error(data.message || "Không thể re-index tài liệu này!");
+      }
+    } catch (error) {
+      toast.error("Lỗi khi thực hiện re-index tài liệu!");
+    } finally {
+      setIsReindexing(false);
     }
   };
 
@@ -190,7 +209,10 @@ export default function DocumentPage() {
         onSearch={(payload) => setSearchPayload(payload)}
         filterFields={[
           { label: "Tên tài liệu", value: "name" },
-          { label: "Định dạng (1=File, 2=Text)", value: "type" },
+          {
+            label: "Danh mục (1=Luật, 2=Nghị định, 3=Thông tư, 4=Quyết định)",
+            value: "type",
+          },
         ]}
         searchFields={["name"]}
         sortFields={[
@@ -209,6 +231,7 @@ export default function DocumentPage() {
           onEdit={handleOpenEdit}
           onDelete={handleDelete}
           onView={handleOpenView}
+          onEmbedding={handleEmbedding}
         />
       )}
 
@@ -225,6 +248,11 @@ export default function DocumentPage() {
         isOpen={isDetailModalOpen}
         onClose={() => setIsDetailModalOpen(false)}
         document={viewingDoc}
+      />
+
+      <BackgroundTaskIndicator 
+        isOpen={isReindexing} 
+        message="Hệ thống đang thực hiện re-index tài liệu, vui lòng đợi..." 
       />
     </AdminLayout>
   );
