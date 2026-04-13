@@ -1,47 +1,52 @@
-import { Search } from "lucide-react";
+import { Sparkles, ShieldCheck, Scale } from "lucide-react";
 
 export function HeroSection() {
   return (
-    <section className="w-full bg-white dark:bg-background-dark py-16 md:py-24 border-b border-[#e7ebf3] dark:border-slate-800">
-      <div className="max-w-[1200px] mx-auto px-6 text-center">
-        <div className="mb-8 @container">
-          <h1 className="text-[#0d121b] dark:text-white text-4xl font-black leading-tight tracking-[-0.033em] md:text-6xl mb-4">
-            Hệ thống hỏi đáp, tra cứu <br className="hidden md:block" /> Luật
-            lao động Việt Nam
-          </h1>
-          <p className="text-[#4c669a] dark:text-slate-400 text-base md:text-lg mx-auto">
-            Truy cập kho dữ liệu văn bản pháp luật chính thống, cập nhật hàng
-            ngày với công cụ tìm kiếm thông minh và tư vấn AI.
+    <section className="w-full bg-slate-50 py-20 md:py-32 relative overflow-hidden border-b border-slate-200">
+      <div className="absolute top-0 right-0 w-1/3 h-full bg-blue-600/5 -skew-x-12 translate-x-1/2" />
+      <div className="absolute bottom-0 left-0 w-1/4 h-1/2 bg-blue-500/5 skew-x-12 -translate-x-1/4" />
+
+      <div className="max-w-[1200px] mx-auto px-6 relative z-10 text-center">
+        <h1 className="text-slate-900 text-4xl md:text-7xl font-black leading-[1.1] tracking-tight mb-8 max-w-4xl mx-auto">
+          Tra cứu văn bản
+          <br />
+          <span className="text-blue-600">Luật Lao động</span>
+        </h1>
+
+        <div className="max-w-2xl mx-auto">
+          <p className="text-slate-600 text-lg md:text-xl mb-12 leading-relaxed font-medium">
+            Hệ thống lưu trữ và tra cứu văn bản quy phạm pháp luật. Hỗ trợ bóc
+            tách nội dung bằng AI và cập nhật dữ liệu thời gian thực.
           </p>
         </div>
-        <div className="max-w-[800px] mx-auto">
-          <div className="flex items-center bg-background-light dark:bg-slate-800 rounded-xl p-2 shadow-xl border border-slate-200 dark:border-slate-700">
-            <div className="flex items-center pl-4 text-slate-400">
-              <Search className="w-5 h-5" />
+
+        <div className="flex flex-wrap justify-center gap-6 md:gap-12 pt-12 border-t border-slate-200">
+          <div className="flex items-center gap-4 bg-white p-4 rounded-2xl shadow-sm border border-slate-100 min-w-[200px] transition-transform hover:scale-105 duration-300">
+            <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
+              <ShieldCheck className="w-6 h-6" />
             </div>
-            <input
-              className="no-focus-outline flex-1 border-none bg-transparent text-[#0d121b] dark:text-white text-base md:text-lg placeholder:text-slate-400 px-4 py-3 focus:outline-none focus:ring-0"
-              placeholder="Tìm kiếm văn bản pháp luật, nghị định, thông tư..."
-              type="text"
-              defaultValue=""
-            />
-            <button className="bg-primary bg-blue-700 hover:bg-blue-800 text-white px-8 py-3 rounded-lg font-bold text-base transition-colors flex items-center gap-2">
-              <span>Tìm kiếm</span>
-            </button>
+            <div className="text-left">
+              <div className="text-slate-900 font-bold text-lg">
+                Chính thống
+              </div>
+              <div className="text-slate-500 text-xs font-medium">
+                Dữ liệu từ Cổng Chính Phủ
+              </div>
+            </div>
           </div>
-          <div className="mt-4 flex flex-wrap justify-center gap-3">
-            <span className="text-sm text-slate-500 font-medium py-1">
-              Xu hướng:
-            </span>
-            <a className="text-sm text-primary hover:underline py-1" href="#">
-              Nghị định 123
-            </a>
-            <a className="text-sm text-primary hover:underline py-1" href="#">
-              Luật Đất đai 2024
-            </a>
-            <a className="text-sm text-primary hover:underline py-1" href="#">
-              Thông tư BHXH
-            </a>
+
+          <div className="flex items-center gap-4 bg-white p-4 rounded-2xl shadow-sm border border-slate-100 min-w-[200px] transition-transform hover:scale-105 duration-300">
+            <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
+              <Sparkles className="w-6 h-6" />
+            </div>
+            <div className="text-left">
+              <div className="text-slate-900 font-bold text-lg">
+                AI Phân tích
+              </div>
+              <div className="text-slate-500 text-xs font-medium">
+                Hiểu sâu từng văn bản
+              </div>
+            </div>
           </div>
         </div>
       </div>

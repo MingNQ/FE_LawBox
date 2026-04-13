@@ -1,7 +1,13 @@
-import { Edit, Trash2, Eye } from "lucide-react";
+import { Edit, Trash2, Eye, RefreshCcw } from "lucide-react";
 import { DOCUMENT_TYPES } from "../../../../shared/constants/appConst";
 
-export default function DocumentTable({ documents, onEdit, onDelete, onView }) {
+export default function DocumentTable({
+  documents,
+  onEdit,
+  onDelete,
+  onView,
+  onEmbedding,
+}) {
   if (!documents || documents.length === 0) {
     return (
       <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 text-center text-gray-500">
@@ -46,6 +52,13 @@ export default function DocumentTable({ documents, onEdit, onDelete, onView }) {
                     title="Xem chi tiết"
                   >
                     <Eye size={16} />
+                  </button>
+                  <button
+                    onClick={() => onEmbedding(doc.id)}
+                    className="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-lg transition"
+                    title="Re-index (Embedding)"
+                  >
+                    <RefreshCcw size={16} />
                   </button>
                   <button
                     onClick={() => onEdit(doc)}

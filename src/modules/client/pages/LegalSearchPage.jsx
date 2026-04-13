@@ -3,12 +3,12 @@ import { ClientLayout } from "@client/components/layout/ClientLayout";
 import { legalSearch } from "@client/api/legalSearchApi";
 import {
   Search,
-  Scale,
   BookOpen,
-  FileCheck,
   AlertCircle,
   Loader2,
 } from "lucide-react";
+import { DocumentCard } from "@shared/components/documents/DocumentCard";
+import { DocumentSkeleton } from "@shared/components/documents/DocumentSkeleton";
 
 const FILTER_TAGS = [
   { label: "Tất cả", value: "all" },
@@ -16,49 +16,6 @@ const FILTER_TAGS = [
   { label: "Nghị định", value: "nghi-dinh" },
   { label: "Quyết định", value: "quyet-dinh" },
 ];
-
-function SkeletonCard() {
-  return (
-    <div className="bg-white dark:bg-slate-800/60 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 animate-pulse">
-      <div className="flex items-start gap-4">
-        <div className="w-12 h-12 rounded-xl bg-slate-200 dark:bg-slate-700" />
-        <div className="flex-1 space-y-3">
-          <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4" />
-          <div className="h-3 bg-slate-100 dark:bg-slate-700/60 rounded w-1/3" />
-          <div className="space-y-2 mt-4">
-            <div className="h-3 bg-slate-100 dark:bg-slate-700/60 rounded w-full" />
-            <div className="h-3 bg-slate-100 dark:bg-slate-700/60 rounded w-5/6" />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function ResultCard({ result }) {
-  return (
-    <div className="group bg-white dark:bg-slate-800/60 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-lg hover:shadow-blue-50 dark:hover:shadow-blue-900/10 transition-all duration-300 cursor-pointer">
-      <div className="flex items-start gap-4">
-        <div className="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0 group-hover:scale-110 transition-transform duration-300">
-          <FileCheck className="w-6 h-6" />
-        </div>
-        <div className="flex-1 min-w-0">
-          <h3 className="font-bold text-slate-800 dark:text-white text-base group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
-            {result.title || "Tài liệu pháp luật"}
-          </h3>
-          <span className="inline-block mt-1 text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2.5 py-0.5 rounded-full uppercase tracking-wide">
-            {result.code || "N/A"}
-          </span>
-          {result.content && (
-            <p className="mt-3 text-sm text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-3">
-              {result.content}
-            </p>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default function LegalSearchPage() {
   const [results, setResults] = useState(null);
@@ -74,7 +31,7 @@ export default function LegalSearchPage() {
     setIsSearching(true);
     setKeyword(query);
     try {
-      const data = await legalSearch({ query });
+      const data = await legalSearch({ keyword: query });
       if (data.success) {
         setResults(data.result);
       } else {
@@ -107,18 +64,17 @@ export default function LegalSearchPage() {
         </div>
 
         <div className="relative max-w-[900px] mx-auto px-6 text-center">
-          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-blue-100 text-xs font-semibold px-4 py-2 rounded-full mb-6 border border-white/10">
-            <Scale className="w-4 h-4" />
-            Cơ sở dữ liệu pháp luật Việt Nam
-          </div>
           <h1 className="text-white text-3xl md:text-5xl font-black leading-tight tracking-tight mb-4">
             Tra cứu văn bản
             <br className="hidden md:block" />
             <span className="text-blue-200">Pháp luật</span>
           </h1>
-          <p className="text-blue-200/80 text-base md:text-lg max-w-[600px] mx-auto mb-10">
-            Tìm kiếm bộ luật, nghị định, thông tư và các văn bản pháp luật. Nhập từ khóa, số hiệu hoặc nội dung liên quan.
-          </p>
+          <div className="max-w-xl mx-auto">
+            <p className="text-blue-200/80 text-base md:text-lg mb-10">
+              Tìm kiếm bộ luật, nghị định, thông tư và các văn bản pháp luật.
+              Nhập từ khóa, số hiệu hoặc nội dung liên quan.
+            </p>
+          </div>
 
           <form onSubmit={handleSearch} className="max-w-[750px] mx-auto">
             <div className="flex items-center bg-white dark:bg-slate-800 rounded-2xl p-2 shadow-2xl shadow-blue-900/30 border border-white/20">
@@ -171,11 +127,14 @@ export default function LegalSearchPage() {
             <div className="space-y-4 animate-fade-in">
               <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 mb-6">
                 <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
-                <span>Đang tìm kiếm "<strong className="text-blue-600">{keyword}</strong>"...</span>
+                <span>
+                  Đang tìm kiếm "
+                  <strong className="text-blue-600">{keyword}</strong>"...
+                </span>
               </div>
-              <SkeletonCard />
-              <SkeletonCard />
-              <SkeletonCard />
+              <DocumentSkeleton />
+              <DocumentSkeleton />
+              <DocumentSkeleton />
             </div>
           )}
 
@@ -193,7 +152,10 @@ export default function LegalSearchPage() {
               {resultCount > 0 ? (
                 <div className="grid gap-4">
                   {results.map((result, index) => (
-                    <ResultCard key={index} result={result} />
+                    <DocumentCard 
+                      key={index} 
+                      document={result} 
+                    />
                   ))}
                 </div>
               ) : (
@@ -218,34 +180,11 @@ export default function LegalSearchPage() {
               <h3 className="text-lg font-bold text-slate-700 dark:text-slate-300 mb-2">
                 Bắt đầu tra cứu
               </h3>
-              <p className="text-sm text-slate-400 dark:text-slate-500 max-w-md mx-auto">
-                Nhập từ khóa vào ô tìm kiếm phía trên để tra cứu văn bản pháp luật, nghị định, thông tư và các văn bản liên quan.
-              </p>
-
-              <div className="flex flex-wrap justify-center gap-2 mt-8">
-                {["Luật Lao động", "Nghị định 145", "Bảo hiểm xã hội", "Hợp đồng lao động"].map(
-                  (suggestion) => (
-                    <button
-                      key={suggestion}
-                      onClick={() => {
-                        setSearchInput(suggestion);
-                        setIsSearching(true);
-                        setKeyword(suggestion);
-                        legalSearch({ query: suggestion })
-                          .then((data) => {
-                            if (data.success) setResults(data.result);
-                            else setResults([]);
-                          })
-                          .catch(() => setResults([]))
-                          .finally(() => setIsSearching(false));
-                      }}
-                      className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-2 rounded-full hover:border-blue-300 dark:hover:border-blue-600 hover:text-blue-700 dark:hover:text-blue-400 transition-all"
-                    >
-                      <Search className="w-3.5 h-3.5" />
-                      {suggestion}
-                    </button>
-                  )
-                )}
+              <div className="max-w-md mx-auto">
+                <p className="text-sm text-slate-400 dark:text-slate-500">
+                  Nhập từ khóa vào ô tìm kiếm phía trên để tra cứu văn bản pháp
+                  luật, nghị định, thông tư và các văn bản liên quan.
+                </p>
               </div>
             </div>
           )}

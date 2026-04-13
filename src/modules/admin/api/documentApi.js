@@ -17,6 +17,11 @@ export async function uploadDocument(data, onUploadProgress) {
   return result.data;
 }
 
+export async function embeddingDocument(id) {
+  const result = await http.post(`${baseUrl}/${id}/embedding`, {});
+  return result.data;
+}
+
 export async function updateDocument(id, data) {
   const result = await http.put(`${baseUrl}/${id}`, data);
   return result.data;
