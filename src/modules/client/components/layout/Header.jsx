@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { ROUTES } from "@shared/constants/routes";
 import { useState, useRef, useEffect } from "react";
 import { useLanguage } from "@shared/hooks/useLanguage";
-import SettingsModal from "@shared/components/settings/SettingsModal";
-import { SettingsMenu } from "@shared/components/settings/SettingsMenu";
+import SettingsModal from "@client/components/settings/SettingsModal";
+import { SettingsMenu } from "@client/components/settings/SettingsMenu";
 
 export function Header({ user }) {
   const { t } = useLanguage();

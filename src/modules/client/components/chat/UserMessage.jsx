@@ -7,13 +7,6 @@ export function UserMessage({ content, time }) {
         </div>
         <span className="text-[10px] text-slate-400 font-medium">{time}</span>
       </div>
-      <div className="size-8 rounded-full bg-slate-300 overflow-hidden shrink-0">
-        <img
-          src="../images/default-avatar.jpg"
-          alt="Avatar"
-          className="w-full h-full object-cover"
-        />
-      </div>
     </div>
   );
 }
