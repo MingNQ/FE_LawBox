@@ -1,4 +1,6 @@
 import { Gavel, Globe, Mail } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ROUTES } from "@shared/constants/routes";
 
 export function Footer() {
   return (
@@ -7,7 +9,7 @@ export function Footer() {
         <div className="col-span-1 md:col-span-1">
           <div className="flex items-center gap-3 mb-6">
             <div className="text-primary">
-              <Gavel className="w-6 h-6"/>
+              <Gavel className="w-6 h-6" />
             </div>
             <h2 className="text-[#0d121b] dark:text-white text-lg font-bold">
               LawBox
@@ -24,36 +26,20 @@ export function Footer() {
           </h4>
           <ul className="flex flex-col gap-3">
             <li>
-              <a
+              <Link
                 className="text-sm text-slate-500 hover:text-blue-700"
-                href="#"
+                to={ROUTES.LEGAL_SEARCH}
               >
                 Tra cứu văn bản
-              </a>
+              </Link>
             </li>
             <li>
-              <a
+              <Link
                 className="text-sm text-slate-500 hover:text-blue-700"
-                href="#"
+                to={ROUTES.CHAT}
               >
                 Hỏi đáp AI
-              </a>
-            </li>
-            <li>
-              <a
-                className="text-sm text-slate-500 hover:text-blue-700"
-                href="#"
-              >
-                Công báo pháp luật
-              </a>
-            </li>
-            <li>
-              <a
-                className="text-sm text-slate-500 hover:text-blue-700"
-                href="#"
-              >
-                Điểm tin tuần
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
@@ -63,28 +49,28 @@ export function Footer() {
           </h4>
           <ul className="flex flex-col gap-3">
             <li>
-              <a
+              <Link
                 className="text-sm text-slate-500 hover:text-blue-700"
-                href="#"
+                to={ROUTES.ABOUT_US}
               >
                 Về chúng tôi
-              </a>
+              </Link>
             </li>
             <li>
-              <a
+              <Link
                 className="text-sm text-slate-500 hover:text-blue-700"
-                href="#"
+                to={ROUTES.TERMS_OF_USE}
               >
                 Điều khoản sử dụng
-              </a>
+              </Link>
             </li>
             <li>
-              <a
+              <Link
                 className="text-sm text-slate-500 hover:text-blue-700"
-                href="#"
+                to={ROUTES.PRIVACY_POLICY}
               >
                 Chính sách bảo mật
-              </a>
+              </Link>
             </li>
             <li>
               <a

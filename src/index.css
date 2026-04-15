@@ -1,10 +1,18 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark *));
+
 body {
-  font-family: Roboto, Arial;
+  font-family: 'Public Sans', sans-serif;
   color: rgb(33, 33, 33);
   margin: 0;
-  font-family: 'Public Sans', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dark body,
+body:where(.dark *) {
+  color: #e2e8f0;
+  background-color: #0b0f19;
 }
 
 p {
@@ -54,6 +62,13 @@ select {
   font-size: 15px;
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(200, 200, 200, 0.2);
+}
+
+:where(.dark *) select {
+  color: #e2e8f0;
+  background-color: #1e293b;
+  border-color: #334155;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 select:focus,
@@ -371,6 +386,11 @@ input:focus:not(.no-focus-outline) {
   border-bottom: 2px solid #e2e8f0;
 }
 
+.dark .markdown-thead {
+  background: #1e293b;
+  border-bottom-color: #334155;
+}
+
 .markdown-th {
   padding: 0.75rem 1rem;
   text-align: left;
@@ -381,6 +401,10 @@ input:focus:not(.no-focus-outline) {
   letter-spacing: 0.025em;
 }
 
+.dark .markdown-th {
+  color: #e2e8f0;
+}
+
 .markdown-td {
   padding: 0.75rem 1rem;
   border-bottom: 1px solid #f1f5f9;
@@ -388,8 +412,17 @@ input:focus:not(.no-focus-outline) {
   vertical-align: top;
 }
 
+.dark .markdown-td {
+  border-bottom-color: #1e293b;
+  color: #94a3b8;
+}
+
 .markdown-table tr:nth-child(even) {
   background-color: #fcfdfe;
+}
+
+.dark .markdown-table tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.02);
 }
 
 .markdown-table tr:last-child .markdown-td {
@@ -401,7 +434,12 @@ input:focus:not(.no-focus-outline) {
 }
 
 .dark .markdown-table tr:hover .markdown-td {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.dark .markdown-table-wrapper {
+  border-color: #334155;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
 }
 
 .markdown-link {

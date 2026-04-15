@@ -178,7 +178,7 @@ export default function SignUpPage() {
                         name="firstName"
                         placeholder="Tên"
                         onChange={handleChange}
-                        className="border px-3 py-2 rounded mr-2"
+                        className="border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#161b22] text-slate-800 dark:text-slate-200 px-3 py-2 rounded mr-2 placeholder:text-slate-400"
                       />
                     </div>
                     <div className="w-1/2 flex flex-col gap-2">
@@ -189,7 +189,7 @@ export default function SignUpPage() {
                         name="lastName"
                         placeholder="Họ"
                         onChange={handleChange}
-                        className="border px-3 py-2 rounded"
+                        className="border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#161b22] text-slate-800 dark:text-slate-200 px-3 py-2 rounded placeholder:text-slate-400"
                       />
                     </div>
                   </div>
