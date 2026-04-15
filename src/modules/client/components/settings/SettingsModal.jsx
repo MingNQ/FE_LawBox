@@ -1,11 +1,13 @@
-import { X, Zap, Settings as SettingsIcon } from "lucide-react";
+import { X, Zap, Settings as SettingsIcon, User } from "lucide-react";
 import { useLanguage } from "@shared/hooks/useLanguage";
 import { useEffect, useRef, useState } from "react";
 import GeneralTab from "./GeneralTab";
 import QuotaTab from "./QuotaTab";
+import ProfileTab from "./ProfileTab";
 
 const TABS = [
   { id: "general", icon: SettingsIcon, labelKey: "settings.tab.general" },
+  { id: "account", icon: User, labelKey: "settings.tab.account" },
   { id: "quota", icon: Zap, labelKey: "settings.tab.quota" },
 ];
 
@@ -14,12 +16,10 @@ export default function SettingsModal({ isOpen, onClose }) {
   const overlayRef = useRef(null);
   const [activeTab, setActiveTab] = useState("general");
 
-  // Reset tab on open
   useEffect(() => {
     if (isOpen) setActiveTab("general");
   }, [isOpen]);
 
-  // Close on Escape key
   useEffect(() => {
     if (!isOpen) return;
     const handler = (e) => {
@@ -29,7 +29,6 @@ export default function SettingsModal({ isOpen, onClose }) {
     return () => document.removeEventListener("keydown", handler);
   }, [isOpen, onClose]);
 
-  // Prevent body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -54,15 +53,12 @@ export default function SettingsModal({ isOpen, onClose }) {
       className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
       style={{ animation: "settingsOverlayIn 0.2s ease-out" }}
     >
-      {/* Backdrop */}
       <div className="absolute inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm" />
 
-      {/* Modal */}
       <div
         className="relative w-full max-w-lg bg-white dark:bg-[#1a2233] rounded-2xl shadow-2xl dark:shadow-black/40 overflow-hidden border border-slate-200 dark:border-slate-700/50"
         style={{ animation: "settingsModalIn 0.25s ease-out" }}
       >
-        {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-700/50">
           <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
             {t("settings.title")}
@@ -75,7 +71,6 @@ export default function SettingsModal({ isOpen, onClose }) {
           </button>
         </div>
 
-        {/* Tabs */}
         <div className="flex border-b border-slate-100 dark:border-slate-700/50 px-6">
           {TABS.map((tab) => {
             const isActive = activeTab === tab.id;
@@ -100,13 +95,12 @@ export default function SettingsModal({ isOpen, onClose }) {
           })}
         </div>
 
-        {/* Content */}
         <div className="px-6 py-6 max-h-[60vh] overflow-y-auto">
+          {activeTab === "account" && <ProfileTab />}
           {activeTab === "general" && <GeneralTab />}
           {activeTab === "quota" && <QuotaTab />}
         </div>
 
-        {/* Footer */}
         <div className="px-6 py-4 border-t border-slate-100 dark:border-slate-700/50 bg-slate-50/50 dark:bg-slate-800/30">
           <button
             onClick={onClose}
@@ -117,7 +111,6 @@ export default function SettingsModal({ isOpen, onClose }) {
         </div>
       </div>
 
-      {/* Keyframe animations */}
       <style>{`
         @keyframes settingsOverlayIn {
           from { opacity: 0; }

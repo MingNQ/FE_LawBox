@@ -5,8 +5,8 @@ import { ROUTES } from "@shared/constants/routes";
 import { useAuth } from "@shared/hooks/useAuth";
 import { useState, useRef, useEffect } from "react";
 import { useLanguage } from "@shared/hooks/useLanguage";
-import SettingsModal from "@shared/components/settings/SettingsModal";
-import { SettingsMenu } from "@shared/components/settings/SettingsMenu";
+import SettingsModal from "@client/components/settings/SettingsModal";
+import { SettingsMenu } from "@client/components/settings/SettingsMenu";
 
 export function ChatSidebar({
   conversations,
@@ -97,7 +97,7 @@ export function ChatSidebar({
           >
             <div className="size-8 rounded-full bg-slate-300 overflow-hidden shrink-0">
               <img
-                src="../images/default-avatar.jpg"
+                src={user?.avatar?.fullPathUrl || "/images/default-avatar.jpg"}
                 alt="Avatar"
                 className="w-full h-full object-cover"
               />

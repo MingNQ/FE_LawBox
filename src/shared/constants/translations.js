@@ -23,6 +23,18 @@ export const translations = {
     "settings.quota.days": "ngày",
     "settings.quota.tip": "Token được đặt lại vào đầu mỗi ngày và mỗi tháng. Nâng cấp gói để có thêm hạn mức sử dụng.",
 
+    // Profile
+    "settings.tab.account": "Tài khoản",
+    "settings.profile.title": "Thông tin cá nhân",
+    "settings.profile.firstName": "Họ",
+    "settings.profile.lastName": "Tên",
+    "settings.profile.username": "Tên đăng nhập",
+    "settings.profile.avatar": "Ảnh đại diện",
+    "settings.profile.save": "Lưu thay đổi",
+    "settings.profile.updating": "Đang cập nhật...",
+    "settings.profile.success": "Cập nhật thành công!",
+    "settings.profile.error": "Lỗi cập nhật hồ sơ",
+
     // Header
     "header.search": "Tra cứu",
     "header.chat": "Hỏi đáp AI",
@@ -64,6 +76,18 @@ export const translations = {
     "settings.quota.rateLimit": "Rate limit",
     "settings.quota.days": "days",
     "settings.quota.tip": "Tokens reset at the start of each day and month. Upgrade your plan for higher limits.",
+
+    // Profile
+    "settings.tab.account": "Account",
+    "settings.profile.title": "Profile Information",
+    "settings.profile.firstName": "First Name",
+    "settings.profile.lastName": "Last Name",
+    "settings.profile.username": "Username",
+    "settings.profile.avatar": "Avatar",
+    "settings.profile.save": "Save Changes",
+    "settings.profile.updating": "Updating...",
+    "settings.profile.success": "Profile updated successfully!",
+    "settings.profile.error": "Failed to update profile",
 
     // Header
     "header.search": "Search",
