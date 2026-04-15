@@ -1,12 +1,7 @@
 import { useState } from "react";
 import { ClientLayout } from "@client/components/layout/ClientLayout";
 import { legalSearch } from "@client/api/legalSearchApi";
-import {
-  Search,
-  BookOpen,
-  AlertCircle,
-  Loader2,
-} from "lucide-react";
+import { Search, BookOpen, AlertCircle, Loader2 } from "lucide-react";
 import { DocumentCard } from "@shared/components/documents/DocumentCard";
 import { DocumentSkeleton } from "@shared/components/documents/DocumentSkeleton";
 
@@ -152,10 +147,7 @@ export default function LegalSearchPage() {
               {resultCount > 0 ? (
                 <div className="grid gap-4">
                   {results.map((result, index) => (
-                    <DocumentCard 
-                      key={index} 
-                      document={result} 
-                    />
+                    <DocumentCard key={index} document={result} />
                   ))}
                 </div>
               ) : (

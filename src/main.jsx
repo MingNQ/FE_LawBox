@@ -6,17 +6,23 @@ import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "@shared/contexts/AuthProvider";
 import { initAuth } from "@shared/api/http";
 import { ToastProvider } from "@shared/contexts/ToastProvider.jsx";
+import { ThemeProvider } from "@shared/contexts/ThemeProvider.jsx";
+import { LanguageProvider } from "@shared/contexts/LanguageProvider.jsx";
 
 initAuth();
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <AuthProvider>
-        <ToastProvider>
-          <App />
-        </ToastProvider>
-      </AuthProvider>
+      <ThemeProvider>
+        <LanguageProvider>
+          <AuthProvider>
+            <ToastProvider>
+              <App />
+            </ToastProvider>
+          </AuthProvider>
+        </LanguageProvider>
+      </ThemeProvider>
     </BrowserRouter>
   </StrictMode>,
 );

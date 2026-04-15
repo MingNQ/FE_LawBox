@@ -4,13 +4,13 @@ import { ROUTES } from "@shared/constants/routes";
 export function AIPromptSection() {
   return (
     <section className="max-w-[1200px] mx-auto px-6 mb-12">
-      <div className="relative overflow-hidden rounded-2xl bg-primary p-8 md:p-12">
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600 to-blue-800 dark:from-blue-700 dark:to-indigo-900 p-8 md:p-12">
         <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="text-center md:text-left max-w-[500px]">
-            <h2 className="text-2xl md:text-3xl font-black mb-4">
+            <h2 className="text-2xl md:text-3xl font-black mb-4 text-white">
               Bạn có câu hỏi pháp lý khó?
             </h2>
-            <p className="text-lg">
+            <p className="text-lg text-blue-100">
               Thử ngay trợ lý AI chuyên nghiệp của chúng tôi để được giải đáp
               tức thì dựa trên cơ sở pháp luật hiện hành.
             </p>
@@ -19,7 +19,7 @@ export function AIPromptSection() {
             onClick={() => {
               window.location.href = ROUTES.CHAT;
             }}
-            className="flex min-w-[200px] items-center justify-center gap-2 rounded-xl h-14 px-8 bg-white text-primary text-base font-black shadow-xl hover:bg-slate-100 transition-all"
+            className="flex min-w-[200px] items-center justify-center gap-2 rounded-xl h-14 px-8 bg-white text-blue-700 text-base font-black shadow-xl hover:bg-slate-100 transition-all"
           >
             <Bot className="w-5 h-5" />
             Hỏi đáp AI ngay

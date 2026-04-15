@@ -39,7 +39,7 @@ export function OtpInput({ length = 4, value, onChange }) {
           value={value[i] || ""}
           onChange={(e) => handleChange(e, i)}
           onKeyDown={(e) => handleKeyDown(e, i)}
-          className="w-12 h-12 text-center text-lg font-semibold border rounded"
+          className="w-12 h-12 text-center text-lg font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#161b22] text-slate-800 dark:text-slate-200 rounded"
         />
       ))}
     </div>

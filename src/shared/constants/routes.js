@@ -10,6 +10,10 @@ export const ROUTES = {
   CHAT_DETAIL: "/chat/:conversationId",
   LEGAL_SEARCH: "/legal-search",
 
+  ABOUT_US: "/about-us",
+  TERMS_OF_USE: "/terms-of-use",
+  PRIVACY_POLICY: "/privacy-policy",
+
   ADMIN: {
     AUTH: "/admin/auth",
     DASHBOARD: "/admin/dashboard",
