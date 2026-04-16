@@ -1,17 +1,21 @@
 import { X, Zap, Settings as SettingsIcon, User } from "lucide-react";
 import { useLanguage } from "@shared/hooks/useLanguage";
 import { useEffect, useRef, useState } from "react";
-import GeneralTab from "./GeneralTab";
-import QuotaTab from "./QuotaTab";
-import ProfileTab from "./ProfileTab";
+import GeneralTab from "@client/components/settings/GeneralTab";
+import QuotaTab from "@client/components/settings/QuotaTab";
+import ProfileTab from "@client/components/settings/ProfileTab";
 
 const TABS = [
   { id: "general", icon: SettingsIcon, labelKey: "settings.tab.general" },
-  { id: "account", icon: User, labelKey: "settings.tab.account" },
   { id: "quota", icon: Zap, labelKey: "settings.tab.quota" },
+  { id: "account", icon: User, labelKey: "settings.tab.account" },
 ];
 
-export default function SettingsModal({ isOpen, onClose }) {
+const ADMIN_TABS = [
+  { id: "account", icon: User, labelKey: "settings.tab.account" },
+];
+
+export default function SettingsModal({ isOpen, onClose, isAdmin = false }) {
   const { t } = useLanguage();
   const overlayRef = useRef(null);
   const [activeTab, setActiveTab] = useState("general");
@@ -72,14 +76,15 @@ export default function SettingsModal({ isOpen, onClose }) {
         </div>
 
         <div className="flex border-b border-slate-100 dark:border-slate-700/50 px-6">
-          {TABS.map((tab) => {
-            const isActive = activeTab === tab.id;
-            const Icon = tab.icon;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`
+          {isAdmin
+            ? ADMIN_TABS.map((tab) => {
+                const isActive = activeTab === tab.id;
+                const Icon = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`
                   flex items-center gap-2 px-4 py-3 text-sm font-semibold border-b-2 transition-all duration-200 -mb-px
                   ${
                     isActive
@@ -87,12 +92,33 @@ export default function SettingsModal({ isOpen, onClose }) {
                       : "border-transparent text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:border-slate-300 dark:hover:border-slate-600"
                   }
                 `}
-              >
-                <Icon className="w-4 h-4" />
-                {t(tab.labelKey)}
-              </button>
-            );
-          })}
+                  >
+                    <Icon className="w-4 h-4" />
+                    {t(tab.labelKey)}
+                  </button>
+                );
+              })
+            : TABS.map((tab) => {
+                const isActive = activeTab === tab.id;
+                const Icon = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`
+                  flex items-center gap-2 px-4 py-3 text-sm font-semibold border-b-2 transition-all duration-200 -mb-px
+                  ${
+                    isActive
+                      ? "border-blue-500 text-blue-600 dark:text-blue-400"
+                      : "border-transparent text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:border-slate-300 dark:hover:border-slate-600"
+                  }
+                `}
+                  >
+                    <Icon className="w-4 h-4" />
+                    {t(tab.labelKey)}
+                  </button>
+                );
+              })}
         </div>
 
         <div className="px-6 py-6 max-h-[60vh] overflow-y-auto">

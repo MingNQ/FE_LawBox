@@ -208,7 +208,7 @@ export default function ConversationPage() {
         {isNewChat ? (
           <>
             <ChatWelcome />
-            <ChatInput onSendMessage={handleSendMessage} />
+            <ChatInput onSendMessage={handleSendMessage} user={user} />
           </>
         ) : (
           <>

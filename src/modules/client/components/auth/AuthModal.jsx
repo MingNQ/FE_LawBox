@@ -21,7 +21,7 @@ export default function AuthModal({ open }) {
             Yêu cầu Đăng nhập
           </h2>
           <p className="text-[#4c669a] dark:text-gray-400 text-sm leading-relaxed px-4">
-            Vui lòng Đăng nhập hoặc Đăng ký tài khoản để sử dụng ChatBot.
+            Vui lòng Đăng nhập hoặc Đăng ký tài khoản để sử dụng chức năng.
           </p>
         </div>
         <div className="w-full flex flex-col gap-3 mt-4">

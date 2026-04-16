@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { getAvailableAgents } from "@client/api/agentsApi";
 import { useToast } from "@shared/hooks/useToast";
 
-export function ChatInput({ onSendMessage, disabled }) {
+export function ChatInput({ onSendMessage, disabled, user }) {
   const { toast } = useToast();
   const [message, setMessage] = useState("");
   const [agents, setAgents] = useState([]);
@@ -25,8 +25,9 @@ export function ChatInput({ onSendMessage, disabled }) {
         toast.error("Lỗi load AI Agents");
       }
     };
+    if (!user) return;
     fetchAgents();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {

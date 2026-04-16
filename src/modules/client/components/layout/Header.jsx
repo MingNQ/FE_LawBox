@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 import { ROUTES } from "@shared/constants/routes";
 import { useState, useRef, useEffect } from "react";
 import { useLanguage } from "@shared/hooks/useLanguage";
-import SettingsModal from "@client/components/settings/SettingsModal";
-import { SettingsMenu } from "@client/components/settings/SettingsMenu";
+import SettingsModal from "@shared/components/ui/SettingsModal";
+import { SettingsMenu } from "@shared/components/ui/SettingsMenu";
 
 export function Header({ user }) {
   const { t } = useLanguage();
-  const [showSettings, setShowSettings] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -52,28 +52,30 @@ export function Header({ user }) {
             {!user ? (
               <></>
             ) : (
-              <p className="text-slate-700 dark:text-slate-100 font-medium">
-                {t("header.greeting")} {user.fullName}
-              </p>
+              <>
+                <p className="text-slate-700 dark:text-slate-100 font-medium">
+                  {t("header.greeting")} {user.fullName}
+                </p>
+
+                <div className="relative" ref={dropdownRef}>
+                  <button
+                    onClick={() => setShowDropdown((prev) => !prev)}
+                    className="size-9 rounded-xl flex items-center justify-center text-slate-500 dark:text-slate-300 hover:text-blue-700 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-all"
+                    title={t("header.settings")}
+                  >
+                    <ChevronDown className="w-5 h-5" />
+                  </button>
+
+                  {showDropdown && (
+                    <SettingsMenu
+                      className="right-0 mt-2 w-48"
+                      onSettingsClick={() => setShowSettings(true)}
+                      onClose={() => setShowDropdown(false)}
+                    />
+                  )}
+                </div>
+              </>
             )}
-
-            <div className="relative" ref={dropdownRef}>
-              <button
-                onClick={() => setShowDropdown((prev) => !prev)}
-                className="size-9 rounded-xl flex items-center justify-center text-slate-500 dark:text-slate-300 hover:text-blue-700 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-all"
-                title={t("header.settings")}
-              >
-                <ChevronDown className="w-5 h-5" />
-              </button>
-
-              {showDropdown && (
-                <SettingsMenu
-                  className="right-0 mt-2 w-48"
-                  onSettingsClick={() => setShowSettings(true)}
-                  onClose={() => setShowDropdown(false)}
-                />
-              )}
-            </div>
           </div>
         </div>
       </header>

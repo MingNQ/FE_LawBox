@@ -11,6 +11,7 @@ import {
 import OtpVerificationStep from "@client/components/auth/OtpVerificationStep";
 import { useAuth } from "@shared/hooks/useAuth";
 import { ROUTES } from "@shared/constants/routes";
+import { getErrorMessage } from "@shared/utils/errorUtils";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
@@ -45,7 +46,7 @@ export default function SignInPage() {
       }
       setError("");
     } catch (e) {
-      setError(e.message);
+      setError(getErrorMessage(e));
     } finally {
       setIsLoading(false);
     }
@@ -73,7 +74,7 @@ export default function SignInPage() {
       }
       setError("");
     } catch (e) {
-      setError(e.message);
+      setError(getErrorMessage(e));
     } finally {
       setIsLoading(false);
     }
@@ -94,7 +95,7 @@ export default function SignInPage() {
 
       setError("");
     } catch (e) {
-      setError(e.message);
+      setError(getErrorMessage(e));
     }
   };
 
@@ -119,18 +120,10 @@ export default function SignInPage() {
                 Tra cứu Luật Lao động Việt Nam nhanh chóng &amp; chính xác
               </h1>
               <p className="text-lg text-white/80 leading-relaxed mb-8">
-                Hệ thống tìm kiếm văn bản pháp luật và giải đáp pháp lý thông
-                minh bằng công nghệ AI hàng đầu.
+                Hệ thống tìm kiếm văn bản Luật Lao động và giải đáp pháp lý thông
+                minh bằng công nghệ AI.
               </p>
               <div className="flex flex-col gap-4">
-                <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-blue-700 bg-white rounded-full p-1 text-sm">
-                    check
-                  </span>
-                  <span className="text-sm font-medium">
-                    Hơn 500.000+ văn bản pháp luật
-                  </span>
-                </div>
                 <div className="flex items-center gap-3">
                   <span className="material-symbols-outlined text-blue-700 bg-white rounded-full p-1 text-sm">
                     check
@@ -194,6 +187,7 @@ export default function SignInPage() {
                           placeholder={"Nhập email"}
                           value={email}
                           onEmailChange={(e) => setEmail(e.target.value)}
+                          required
                         />
                         <User className="material-symbols-outlined absolute right-4 text-[#94a3b8]" />
                       </div>
@@ -206,6 +200,7 @@ export default function SignInPage() {
                         placeholder={"Mật khẩu"}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        required
                       />
                       {error && (
                         <p className="text-red-500 text-sm text-center">

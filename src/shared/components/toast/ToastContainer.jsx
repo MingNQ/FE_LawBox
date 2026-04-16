@@ -1,6 +1,6 @@
 export function ToastContainer({ toasts, onClose }) {
   return (
-    <div className="fixed top-20 right-6 z-50 space-y-3">
+    <div className="fixed top-20 right-6 z-[10000] space-y-3">
       {toasts.map((toast) => (
         <div
           key={toast.id}

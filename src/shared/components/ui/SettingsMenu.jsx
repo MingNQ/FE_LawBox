@@ -8,6 +8,7 @@ export function SettingsMenu({
   onClose,
   className = "",
   showHelp = false,
+  isAdmin = false,
 }) {
   const { t } = useLanguage();
   const { logout } = useAuth();
@@ -47,7 +48,7 @@ export function SettingsMenu({
       <button
         onClick={() => {
           onClose();
-          logout();
+          logout(isAdmin);
         }}
         className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors cursor-pointer"
       >
