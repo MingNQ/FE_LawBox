@@ -1,6 +1,6 @@
 import { http } from "@shared/api/http";
 
-const baseUrl = "/client/documents";
+const baseUrl = "/documents";
 
 export async function legalSearch(data) {
   const result = await http.post(baseUrl, data);

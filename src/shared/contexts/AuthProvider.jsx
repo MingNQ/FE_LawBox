@@ -24,8 +24,8 @@ export function AuthProvider({ children }) {
     });
   };
 
-  const logout = () => {
-    window.location.href = ROUTES.AUTH.SIGN_IN;
+  const logout = (isAdmin = false) => {
+    window.location.href = isAdmin ? ROUTES.ADMIN.AUTH : ROUTES.AUTH.SIGN_IN;
     clearAuth();
     setUser(null);
     setTokenState(null);

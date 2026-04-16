@@ -5,8 +5,8 @@ import { ROUTES } from "@shared/constants/routes";
 import { useAuth } from "@shared/hooks/useAuth";
 import { useState, useRef, useEffect } from "react";
 import { useLanguage } from "@shared/hooks/useLanguage";
-import SettingsModal from "@client/components/settings/SettingsModal";
-import { SettingsMenu } from "@client/components/settings/SettingsMenu";
+import SettingsModal from "@shared/components/ui/SettingsModal";
+import { SettingsMenu } from "@shared/components/ui/SettingsMenu";
 
 export function ChatSidebar({
   conversations,

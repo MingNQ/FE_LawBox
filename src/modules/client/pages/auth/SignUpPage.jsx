@@ -10,6 +10,7 @@ import {
   resendSignUpOtp,
 } from "@shared/api/authApi";
 import OtpVerificationStep from "@client/components/auth/OtpVerificationStep";
+import { getErrorMessage } from "@shared/utils/errorUtils";
 
 export default function SignUpPage() {
   const [form, setForm] = useState({});
@@ -18,6 +19,7 @@ export default function SignUpPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [verificationId, setVerificationId] = useState(0);
+  const [agreed, setAgreed] = useState(false);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const redirectUrl = searchParams.get("redirect") || ROUTES.AUTH.SIGN_IN;
@@ -48,7 +50,7 @@ export default function SignUpPage() {
 
       setError("");
     } catch (e) {
-      setError(e.message);
+      setError(getErrorMessage(e));
     } finally {
       setIsLoading(false);
     }
@@ -70,7 +72,7 @@ export default function SignUpPage() {
       }
       setError("");
     } catch (e) {
-      setError(e.message);
+      setError(getErrorMessage(e));
     } finally {
       setIsLoading(false);
     }
@@ -88,7 +90,7 @@ export default function SignUpPage() {
       }
       setError("");
     } catch (e) {
-      setError(e.message);
+      setError(getErrorMessage(e));
     }
   };
 
@@ -179,6 +181,7 @@ export default function SignUpPage() {
                         placeholder="Tên"
                         onChange={handleChange}
                         className="border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#161b22] text-slate-800 dark:text-slate-200 px-3 py-2 rounded mr-2 placeholder:text-slate-400"
+                        required
                       />
                     </div>
                     <div className="w-1/2 flex flex-col gap-2">
@@ -190,6 +193,7 @@ export default function SignUpPage() {
                         placeholder="Họ"
                         onChange={handleChange}
                         className="border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#161b22] text-slate-800 dark:text-slate-200 px-3 py-2 rounded placeholder:text-slate-400"
+                        required
                       />
                     </div>
                   </div>
@@ -203,6 +207,7 @@ export default function SignUpPage() {
                         value={form.email || ""}
                         placeholder={"Email"}
                         onEmailChange={handleChange}
+                        required
                       />
                       <User className="material-symbols-outlined absolute right-4 text-[#94a3b8]" />
                     </div>
@@ -217,6 +222,7 @@ export default function SignUpPage() {
                       value={form.password || ""}
                       placeholder={"Mật khẩu"}
                       onChange={handleChange}
+                      required
                     />
                   </div>
                   <div className="flex flex-col gap-2">
@@ -229,6 +235,7 @@ export default function SignUpPage() {
                       value={form.confirmPassword || ""}
                       placeholder={"Nhập lại mật khẩu"}
                       onChange={handleChange}
+                      required
                     />
                     {error && (
                       <p className="text-red-500 text-sm text-center">
@@ -241,31 +248,38 @@ export default function SignUpPage() {
                       <input
                         className="w-4 h-4 rounded border-[#cfd7e7] text-blue-700 focus:ring-blue-700/20 transition-all cursor-pointer"
                         type="checkbox"
+                        checked={agreed}
+                        onChange={(e) => setAgreed(e.target.checked)}
                       />
                       <span className="text-sm text-slate-600 dark:text-slate-400 font-medium group-hover:text-blue-700 transition-colors">
                         Tôi đồng ý với{" "}
-                        <a
+                        <Link
                           className="font-semibold text-blue-700 hover:underline"
-                          href="#"
+                          to={ROUTES.TERMS_OF_USE}
                         >
                           Điều khoản
-                        </a>{" "}
+                        </Link>{" "}
                         và{" "}
-                        <a
+                        <Link
                           className="font-semibold text-blue-700 hover:underline"
-                          href="#"
+                          to={ROUTES.PRIVACY_POLICY}
                         >
                           Chính sách bảo mật
-                        </a>
+                        </Link>
                         .
                       </span>
                     </label>
                   </div>
                   <button
-                    className="w-full bg-blue-700 hover:bg-blue-700/90 text-white font-bold py-3.5 rounded-lg shadow-lg shadow-blue-700/20 transition-all active:scale-[0.98]"
+                    className={`w-full font-bold py-3.5 rounded-lg shadow-lg transition-all active:scale-[0.98] ${
+                      !agreed || isLoading
+                        ? "bg-slate-300 text-slate-500 cursor-not-allowed shadow-none"
+                        : "bg-blue-700 hover:bg-blue-700/90 text-white shadow-blue-700/20"
+                    }`}
                     type="submit"
+                    disabled={!agreed || isLoading}
                   >
-                    Đăng ký
+                    {isLoading ? "Đang xử lý..." : "Đăng ký"}
                   </button>
                 </form>
                 <div className="relative my-8">

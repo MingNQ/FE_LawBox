@@ -7,7 +7,7 @@ import { updateProfile } from "@client/api/userApi";
 import { uploadSingleFile } from "@shared/api/fileStorageApi";
 
 export default function ProfileTab() {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const { t } = useLanguage();
   const { toast } = useContext(ToastContext);
   const fileInputRef = useRef(null);
@@ -16,7 +16,7 @@ export default function ProfileTab() {
     firstName: user?.firstName || "",
     lastName: user?.lastName || "",
     userName: user?.userName || "",
-    avatarId: user?.avatar || "",
+    avatarId: user?.avatar?.id || 0,
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -54,6 +54,7 @@ export default function ProfileTab() {
 
     try {
       const updatedUser = await updateProfile(formData);
+      updateUser(updatedUser.result);
 
       toast.success(t("settings.profile.success"));
     } catch (error) {
