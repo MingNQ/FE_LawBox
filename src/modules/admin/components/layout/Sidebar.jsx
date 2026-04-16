@@ -13,7 +13,7 @@ export default function Sidebar() {
   const location = useLocation();
 
   return (
-    <aside className="w-64 bg-white border-r border-r-gray-200 flex flex-col justify-between">
+    <aside className="w-64 bg-white border-r border-r-gray-200 flex flex-col justify-between sticky top-0 h-screen">
       <div>
         <div className="p-6">
           <h1 className="text-lg font-bold text-blue-600">LawBox</h1>
@@ -60,12 +60,6 @@ export default function Sidebar() {
             Agents
           </SidebarItem>
         </nav>
-      </div>
-
-      <div className="p-4 space-y-4">
-        <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
-          + Tải lên mới
-        </button>
       </div>
     </aside>
   );

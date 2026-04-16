@@ -18,10 +18,10 @@ const ADMIN_TABS = [
 export default function SettingsModal({ isOpen, onClose, isAdmin = false }) {
   const { t } = useLanguage();
   const overlayRef = useRef(null);
-  const [activeTab, setActiveTab] = useState("general");
+  const [activeTab, setActiveTab] = useState("account");
 
   useEffect(() => {
-    if (isOpen) setActiveTab("general");
+    if (isOpen) setActiveTab("account");
   }, [isOpen]);
 
   useEffect(() => {

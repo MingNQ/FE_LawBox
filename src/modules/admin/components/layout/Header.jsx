@@ -24,11 +24,11 @@ export default function Header() {
 
   return (
     <>
-      <header className="h-16 bg-white border-b border-b-gray-200 flex items-center justify-between px-6">
+      <header className="sticky top-0 z-50 h-16 bg-white border-b border-b-gray-200 flex items-center justify-between px-6">  
         <h2 className="font-semibold text-gray-700">Tổng quan hệ thống</h2>
 
         <div className="flex items-center gap-6">
-          <Bell size={20} className="text-gray-600 cursor-pointer" />
+          {/* <Bell size={20} className="text-gray-600 cursor-pointer" /> */}
 
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
