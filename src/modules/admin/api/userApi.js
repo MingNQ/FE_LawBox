@@ -7,6 +7,11 @@ export async function getUserStat() {
   return result.data;
 }
 
+export async function getUserGrowth(days) {
+  const result = await http.get(`${baseUrl}/stat/growth/${days}`);
+  return result.data;
+}
+
 export async function getUsers(params = {}) {
   const result = await http.post(baseUrl + "/search", {
     pageNumber: 0,

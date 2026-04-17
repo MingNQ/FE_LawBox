@@ -18,12 +18,16 @@ import {
 import ChatContent from "@client/components/chat/ChatContent";
 import { sendMessage } from "@client/api/chatApi";
 import { ROUTES } from "@shared/constants/routes";
+import { useToast } from "@shared/hooks/useToast";
+import { getAvailableAgents } from "@client/api/agentsApi";
 
 export default function ConversationPage() {
   const { user } = useAuth();
   const { conversationId } = useParams();
   const navigate = useNavigate();
-
+  const { toast } = useToast();
+  const [agents, setAgents] = useState([]);
+  const [selectedAgent, setSelectedAgent] = useState(null);
   const [conversations, setConversations] = useState(null);
   const [currentConversation, setCurrentConversation] = useState(null);
   const [pendingMessage, setPendingMessage] = useState(null);
@@ -32,6 +36,7 @@ export default function ConversationPage() {
   useEffect(() => {
     if (!user) return;
     fetchConversations();
+    fetchAgents();
   }, [user]);
 
   useEffect(() => {
@@ -55,6 +60,21 @@ export default function ConversationPage() {
 
     fetchCurrentConversation();
   }, [user, conversationId]);
+
+  const fetchAgents = async () => {
+    try {
+      const data = await getAvailableAgents();
+      if (data.success) {
+        setAgents(data.result);
+        if (!selectedAgent) {
+          const defaultAgent = data.result.find((a) => a.isDefault) || data.result[0];
+          setSelectedAgent(defaultAgent);
+        }
+      }
+    } catch (error) {
+      toast.error("Lỗi load AI Agents");
+    }
+  };
 
   const fetchConversations = async () => {
     try {
@@ -208,7 +228,12 @@ export default function ConversationPage() {
         {isNewChat ? (
           <>
             <ChatWelcome />
-            <ChatInput onSendMessage={handleSendMessage} user={user} />
+            <ChatInput
+              agents={agents}
+              selectedAgent={selectedAgent}
+              onAgentChange={setSelectedAgent}
+              onSendMessage={handleSendMessage}
+            />
           </>
         ) : (
           <>
@@ -223,6 +248,9 @@ export default function ConversationPage() {
               onMessageComment={handleMessageComment}
             />
             <ChatInput
+              agents={agents}
+              selectedAgent={selectedAgent}
+              onAgentChange={setSelectedAgent}
               onSendMessage={handleSendMessage}
               disabled={isThinking}
             />

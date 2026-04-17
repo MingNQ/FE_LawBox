@@ -11,7 +11,12 @@ import {
 import { useState } from "react";
 import MessageCommentModal from "./MessageCommentModal";
 
-export function AIMessage({ children, message, onMessageReaction, onMessageComment }) {
+export function AIMessage({
+  children,
+  message,
+  onMessageReaction,
+  onMessageComment,
+}) {
   const [copied, setCopied] = useState(false);
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
 
@@ -59,12 +64,17 @@ export function AIMessage({ children, message, onMessageReaction, onMessageComme
             </button>
             <button
               onClick={() => {
-                onMessageReaction(message?.conversationId, message?.id, 2);
+                onMessageReaction(
+                  message?.conversationId,
+                  message?.id,
+                  isLike ? 1 : 2,
+                );
               }}
-              className={`flex items-center gap-1.5 text-xs transition-colors 
+              className={`flex items-center gap-1.5 text-xs transition-all duration-200
+                ${isDislike ? "hidden" : ""}
                 ${
                   isLike
-                    ? "text-blue-700"
+                    ? "text-blue-700 scale-110"
                     : "text-slate-400 hover:text-blue-700"
                 }`}
             >
@@ -72,13 +82,18 @@ export function AIMessage({ children, message, onMessageReaction, onMessageComme
             </button>
             <button
               onClick={() => {
-                onMessageReaction(message?.conversationId, message?.id, 3);
+                onMessageReaction(
+                  message?.conversationId,
+                  message?.id,
+                  isDislike ? 1 : 3,
+                );
               }}
-              className={`flex items-center gap-1.5 text-xs transition-colors 
+              className={`flex items-center gap-1.5 text-xs transition-all duration-200
+                ${isLike ? "hidden" : ""}
                 ${
                   isDislike
-                    ? "text-blue-700"
-                    : "text-slate-400 hover:text-blue-700"
+                    ? "text-red-500 scale-110"
+                    : "text-slate-400 hover:text-red-500"
                 }`}
             >
               <ThumbsDown className="w-3.5 h-3.5" />
@@ -95,8 +110,8 @@ export function AIMessage({ children, message, onMessageReaction, onMessageComme
           {message?.time}
         </span>
       </div>
-      
-      <MessageCommentModal 
+
+      <MessageCommentModal
         isOpen={isCommentModalOpen}
         onClose={() => setIsCommentModalOpen(false)}
         onSubmit={(comment) => {

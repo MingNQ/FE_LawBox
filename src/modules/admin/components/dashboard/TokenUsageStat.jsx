@@ -45,9 +45,9 @@ export default function TokenUsageStat() {
   return (
     <div className="bg-white p-6 rounded-xl border border-gray-200 h-80 flex flex-col">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="font-semibold text-gray-800">Cường độ sử dụng LLM Token</h3>
-        <select 
-          value={days} 
+        <h3 className="font-semibold text-gray-800">Cường độ sử dụng Token</h3>
+        <select
+          value={days}
           onChange={(e) => setDays(Number(e.target.value))}
           className="text-sm border border-gray-200 rounded-md px-3 py-1 bg-gray-50 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer text-gray-700"
         >
@@ -56,7 +56,7 @@ export default function TokenUsageStat() {
         </select>
       </div>
 
-      <ResponsiveContainer width="100%" height="80%">
+      <ResponsiveContainer width="100%" height="100%">
         <BarChart data={chartData}>
           <CartesianGrid strokeDasharray="3 3" />
 

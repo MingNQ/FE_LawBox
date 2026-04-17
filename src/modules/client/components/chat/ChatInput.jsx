@@ -1,33 +1,10 @@
-import { Paperclip, Send, Bot, Sparkles, ChevronDown } from "lucide-react";
+import { Paperclip, Send, Bot, ChevronDown } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
-import { getAvailableAgents } from "@client/api/agentsApi";
-import { useToast } from "@shared/hooks/useToast";
 
-export function ChatInput({ onSendMessage, disabled, user }) {
-  const { toast } = useToast();
+export function ChatInput({ onSendMessage, disabled, agents, selectedAgent, onAgentChange }) {
   const [message, setMessage] = useState("");
-  const [agents, setAgents] = useState([]);
-  const [selectedAgent, setSelectedAgent] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
-
-  useEffect(() => {
-    const fetchAgents = async () => {
-      try {
-        const data = await getAvailableAgents();
-        if (data.success) {
-          setAgents(data.result);
-          const defaultAgent =
-            data.result.find((a) => a.isDefault) || data.result[0];
-          setSelectedAgent(defaultAgent);
-        }
-      } catch (error) {
-        toast.error("Lỗi load AI Agents");
-      }
-    };
-    if (!user) return;
-    fetchAgents();
-  }, [user]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -113,11 +90,11 @@ export function ChatInput({ onSendMessage, disabled, user }) {
                       </h3>
                     </div>
                     <div className="max-h-64 overflow-y-auto p-1.5 space-y-0.5 custom-scrollbar">
-                      {agents.map((agent) => (
+                      {agents?.map((agent) => (
                         <button
                           key={agent.id}
                           onClick={() => {
-                            setSelectedAgent(agent);
+                            onAgentChange(agent);
                             setIsMenuOpen(false);
                           }}
                           className={`w-full flex items-start gap-2.5 p-2 rounded-xl transition-all text-left ${
