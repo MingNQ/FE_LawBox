@@ -11,6 +11,7 @@ import {
 } from "@shared/api/authApi";
 import OtpVerificationStep from "@client/components/auth/OtpVerificationStep";
 import { getErrorMessage } from "@shared/utils/errorUtils";
+import { useAuth } from "@shared/hooks/useAuth";
 
 export default function SignUpPage() {
   const [form, setForm] = useState({});
@@ -22,7 +23,8 @@ export default function SignUpPage() {
   const [agreed, setAgreed] = useState(false);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const redirectUrl = searchParams.get("redirect") || ROUTES.AUTH.SIGN_IN;
+  const redirectUrl = searchParams.get("redirect") || ROUTES.HOME;
+  const { login } = useAuth();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -66,6 +68,7 @@ export default function SignUpPage() {
       });
 
       if (data.success == true) {
+        await login(data.result.accessToken, data.result.refreshToken, false);
         navigate(redirectUrl);
       } else {
         setError(data.result.message);

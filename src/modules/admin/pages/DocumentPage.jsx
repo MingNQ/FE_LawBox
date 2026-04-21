@@ -134,7 +134,9 @@ export default function DocumentPage() {
       setIsUploading(true);
       setUploadProgress(0);
       const apiData = new FormData();
-      apiData.append("folderId", folderId);
+      if (folderId) {
+        apiData.append("folderId", folderId);
+      }
       apiData.append("name", formData.name);
       apiData.append("type", formData.type);
       if (formData.file) {
@@ -250,9 +252,9 @@ export default function DocumentPage() {
         document={viewingDoc}
       />
 
-      <BackgroundTaskIndicator 
-        isOpen={isReindexing} 
-        message="Hệ thống đang thực hiện re-index tài liệu, vui lòng đợi..." 
+      <BackgroundTaskIndicator
+        isOpen={isReindexing}
+        message="Hệ thống đang thực hiện re-index tài liệu, vui lòng đợi..."
       />
     </AdminLayout>
   );

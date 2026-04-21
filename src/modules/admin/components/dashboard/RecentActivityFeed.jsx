@@ -1,21 +1,66 @@
-import { UserPlus, FileText, MessageSquare, Clock } from "lucide-react";
+import { useState, useEffect } from "react";
+import {
+  UserPlus,
+  FileText,
+  MessageSquare,
+  Clock,
+  Shield,
+  Bot,
+  Loader2,
+} from "lucide-react";
+import { getRecentActivities } from "../../api/activityApi";
 
-const getRelativeTime = (minutes) => {
+const getRelativeTime = (performedAt) => {
+  const diffInMs = new Date() - new Date(performedAt);
+  const minutes = Math.max(0, Math.floor(diffInMs / 60000));
+
+  if (minutes < 1) return `Vừa xong`;
   if (minutes < 60) return `${minutes} phút trước`;
   if (minutes < 1440) return `${Math.floor(minutes / 60)} giờ trước`;
   return `${Math.floor(minutes / 1440)} ngày trước`;
 };
 
-// Mock data
-const mockActivities = [
-  { id: 1, type: "user", user: "Nguyễn Văn A", action: "đã đăng ký tài khoản mới", minutesAgo: 5 },
-  { id: 2, type: "document", user: "Admin", action: "đã tải lên tài liệu 'Luật Lao động 2019'", minutesAgo: 45 },
-  { id: 3, type: "chat", user: "Trần Thị B", action: "bắt đầu một cuộc hội thoại mới", minutesAgo: 120 },
-  { id: 4, type: "document", user: "Admin", action: "đã cập nhật tài liệu 'Nghị định 145/2020/NĐ-CP'", minutesAgo: 300 },
-  { id: 5, type: "user", user: "Lê Văn C", action: "đã đăng ký tài khoản mới", minutesAgo: 1400 },
-];
+const getEntityConfig = (entityType) => {
+  switch (entityType) {
+    case 1: // Authentication
+      return { icon: Shield, bg: "bg-blue-100", text: "text-blue-600" };
+    case 2: // Document
+      return { icon: FileText, bg: "bg-amber-100", text: "text-amber-600" };
+    case 3: // Conversation
+      return {
+        icon: MessageSquare,
+        bg: "bg-emerald-100",
+        text: "text-emerald-600",
+      };
+    case 4: // Agent
+      return { icon: Bot, bg: "bg-purple-100", text: "text-purple-600" };
+    case 5: // User
+    default:
+      return { icon: UserPlus, bg: "bg-indigo-100", text: "text-indigo-600" };
+  }
+};
 
 export default function RecentActivityFeed() {
+  const [activities, setActivities] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchActivities = async () => {
+      try {
+        setLoading(true);
+        const data = await getRecentActivities();
+        const items = data.result || [];
+        setActivities(items);
+      } catch (error) {
+        console.error("Failed to fetch activities:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchActivities();
+  }, []);
+
   return (
     <div className="bg-white p-6 rounded-xl border border-gray-200">
       <div className="flex items-center justify-between mb-6">
@@ -23,40 +68,64 @@ export default function RecentActivityFeed() {
           <Clock className="w-5 h-5 text-blue-600" />
           Hoạt động gần đây
         </h3>
-        <button className="text-sm text-blue-600 hover:underline">Xem tất cả</button>
+        {/* <button className="text-sm text-blue-600 hover:underline">
+          Xem tất cả
+        </button> */}
       </div>
 
-      <div className="space-y-6">
-        {mockActivities.map((activity, index) => (
-          <div key={activity.id} className="flex gap-4 relative">
-            {/* Timeline line */}
-            {index !== mockActivities.length - 1 && (
-              <div className="absolute left-4 top-10 bottom-[-24px] w-px bg-gray-200"></div>
-            )}
-            
-            {/* Icon icon */}
-            <div className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center shrink-0 border-2 border-white shadow-sm ${
-              activity.type === 'user' ? 'bg-indigo-100 text-indigo-600' :
-              activity.type === 'document' ? 'bg-amber-100 text-amber-600' :
-              'bg-emerald-100 text-emerald-600'
-            }`}>
-              {activity.type === 'user' && <UserPlus className="w-4 h-4" />}
-              {activity.type === 'document' && <FileText className="w-4 h-4" />}
-              {activity.type === 'chat' && <MessageSquare className="w-4 h-4" />}
-            </div>
+      {loading ? (
+        <div className="flex justify-center items-center py-6">
+          <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
+        </div>
+      ) : activities.length === 0 ? (
+        <div className="text-center py-6 text-sm text-gray-500">
+          Chưa có hoạt động nào gần đây.
+        </div>
+      ) : (
+        <div className="space-y-6">
+          {activities?.map((activity, index) => {
+            const config = getEntityConfig(activity.entityType);
+            const IconComponent = config.icon;
 
-            {/* Content */}
-            <div className="flex-1 pt-1.5">
-              <p className="text-sm text-gray-800">
-                <span className="font-semibold">{activity.user}</span> {activity.action}
-              </p>
-              <p className="text-xs text-gray-500 mt-1">
-                {getRelativeTime(activity.minutesAgo)}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
+            const userName =
+              activity.user?.fullName || activity.user?.userName || "";
+            let description = activity.description || "";
+            let actionText = description;
+            let userSpan = null;
+
+            if (userName && description.startsWith(userName)) {
+              userSpan = <span className="font-semibold">{userName}</span>;
+              actionText = description.substring(userName.length);
+            }
+
+            return (
+              <div key={activity.id} className="flex gap-4 relative">
+                {/* Timeline line */}
+                {index !== activities.length - 1 && (
+                  <div className="absolute left-4 top-10 bottom-[-24px] w-px bg-gray-200"></div>
+                )}
+
+                {/* Icon */}
+                <div
+                  className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center shrink-0 border-2 border-white shadow-sm ${config.bg} ${config.text}`}
+                >
+                  <IconComponent className="w-4 h-4" />
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 pt-1.5">
+                  <p className="text-sm text-gray-800">
+                    {userSpan} {actionText}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {getRelativeTime(activity.performedAt)}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

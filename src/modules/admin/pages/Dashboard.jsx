@@ -79,8 +79,6 @@ export default function Dashboard() {
         <StatCard
           title="Tổng số tài liệu"
           value={documentStat?.totalDocuments}
-          percent="5.2%"
-          trendType="up"
           loading={isLoading}
           formatter={(v) => v?.toLocaleString("vi-VN")}
           subtitle="So với 30 ngày trước"
@@ -89,8 +87,6 @@ export default function Dashboard() {
         <StatCard
           title="Số lượng truy vấn"
           value={totalRequests}
-          percent="12.4%"
-          trendType="up"
           loading={isLoading}
           formatter={(v) => v?.toLocaleString("vi-VN")}
           subtitle="So với 30 ngày trước"
@@ -99,8 +95,6 @@ export default function Dashboard() {
         <StatCard
           title="Số lượng tokens"
           value={totalTokens}
-          percent="2.1%"
-          trendType="down"
           loading={isLoading}
           formatter={(v) => v ? (v / 1000).toFixed(1) + 'k' : '0'}
           subtitle="So với 30 ngày trước"
@@ -109,8 +103,6 @@ export default function Dashboard() {
         <StatCard
           title="Người dùng hoạt động"
           value={userStat?.totalUsers}
-          percent="3.1%"
-          trendType="up"
           loading={isLoading}
           formatter={(v) => v?.toLocaleString("vi-VN")}
           subtitle="So với 30 ngày trước"
