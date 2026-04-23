@@ -9,6 +9,7 @@ export default function ChatContent({
   messages,
   pendingMessage,
   isThinking,
+  streamingMessage,
   onMessageReaction,
   onMessageComment,
 }) {
@@ -16,10 +17,13 @@ export default function ChatContent({
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, pendingMessage, isThinking]);
+  }, [messages, pendingMessage, isThinking, streamingMessage]);
 
   const hasContent =
-    (messages && messages.length > 0) || pendingMessage || isThinking;
+    (messages && messages.length > 0) ||
+    pendingMessage ||
+    isThinking ||
+    streamingMessage;
 
   if (!hasContent) {
     return (
@@ -58,6 +62,19 @@ export default function ChatContent({
       )}
 
       {isThinking && <AIThinking />}
+
+      {streamingMessage && (
+        <AIMessage
+          message={{
+            content: streamingMessage,
+            role: 2,
+            id: "streaming",
+            time: "Đang trả lời...",
+          }}
+        >
+          <MarkdownRenderer content={streamingMessage} />
+        </AIMessage>
+      )}
 
       <div ref={bottomRef} />
     </div>
