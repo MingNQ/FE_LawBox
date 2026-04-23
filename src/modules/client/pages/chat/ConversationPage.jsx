@@ -4,7 +4,7 @@ import { ChatInput } from "@client/components/chat/ChatInput";
 import { ChatWelcome } from "@client/components/chat/ChatWelcome";
 import { useAuth } from "@shared/hooks/useAuth";
 import AuthModal from "@client/components/auth/AuthModal";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate, data } from "react-router-dom";
 import {
   getMyConversation,
@@ -16,7 +16,7 @@ import {
   commentMessage,
 } from "@client/api/conversationApi";
 import ChatContent from "@client/components/chat/ChatContent";
-import { sendMessage } from "@client/api/chatApi";
+import { fetchChatStream } from "@client/api/chatApi";
 import { ROUTES } from "@shared/constants/routes";
 import { useToast } from "@shared/hooks/useToast";
 import { getAvailableAgents } from "@client/api/agentsApi";
@@ -32,6 +32,8 @@ export default function ConversationPage() {
   const [currentConversation, setCurrentConversation] = useState(null);
   const [pendingMessage, setPendingMessage] = useState(null);
   const [isThinking, setIsThinking] = useState(false);
+  const [streamingMessage, setStreamingMessage] = useState("");
+  const abortControllerRef = useRef(null);
 
   useEffect(() => {
     if (!user) return;
@@ -67,7 +69,8 @@ export default function ConversationPage() {
       if (data.success) {
         setAgents(data.result);
         if (!selectedAgent) {
-          const defaultAgent = data.result.find((a) => a.isDefault) || data.result[0];
+          const defaultAgent =
+            data.result.find((a) => a.isDefault) || data.result[0];
           setSelectedAgent(defaultAgent);
         }
       }
@@ -104,37 +107,76 @@ export default function ConversationPage() {
   };
 
   const handleSendMessage = async (message, agentId) => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    abortControllerRef.current = new AbortController();
+
     setPendingMessage(message);
     setIsThinking(true);
+    setStreamingMessage("");
 
-    try {
-      const data = await sendMessage({
+    let newConvId = null;
+
+    await fetchChatStream(
+      {
         conversationId: currentConversation?.id,
         message: message,
         agentId: agentId,
-      });
+      },
+      (startEvent) => {
+        if (startEvent.conversationId) {
+          newConvId = startEvent.conversationId;
+        }
+      },
+      (chunkContent) => {
+        setIsThinking(false);
+        setStreamingMessage(chunkContent);
+      },
+      async (doneEvent) => {
+        setIsThinking(false);
+        setPendingMessage(null);
+        setStreamingMessage("");
+        const convIdToFetch = currentConversation?.id || newConvId;
 
-      if (data.success) {
-        if (data.result?.id != currentConversation?.id) {
-          setConversations((prev) =>
-            prev ? [data.result, ...prev] : [data.result],
+        if (convIdToFetch) {
+          try {
+            const data = await getConversationById(convIdToFetch);
+            if (data.success) {
+              setCurrentConversation(data.result);
+
+              if (!currentConversation?.id) {
+                const listData = await getMyConversation();
+                if (listData.success) {
+                  setConversations(listData.result);
+                }
+                navigate(`${ROUTES.CHAT}/${convIdToFetch}`, { replace: true });
+              }
+            } else {
+              console.log(data.result.message);
+            }
+          } catch (e) {
+            console.log(e.message);
+          }
+        }
+      },
+      (error) => {
+        setIsThinking(false);
+        setPendingMessage(null);
+        setStreamingMessage("");
+        if (error.message === "429") {
+          const limitMsg = "Bạn đã đạt giới hạn sử dụng.";
+          window.dispatchEvent(
+            new CustomEvent("app:usage-limit-exceeded", {
+              detail: { message: limitMsg },
+            }),
           );
         } else {
-          setCurrentConversation(data.result);
+          console.error("Stream error:", error);
         }
-
-        if (data.result?.id) {
-          navigate(`${ROUTES.CHAT}/${data.result.id}`, { replace: true });
-        }
-      } else {
-        console.log(data.result.message);
-      }
-    } catch (e) {
-      console.log(e.message);
-    } finally {
-      setPendingMessage(null);
-      setIsThinking(false);
-    }
+      },
+      abortControllerRef.current.signal,
+    );
   };
 
   const handleDeleteConversation = async (id) => {
@@ -244,6 +286,7 @@ export default function ConversationPage() {
               messages={currentConversation?.messages}
               pendingMessage={pendingMessage}
               isThinking={isThinking}
+              streamingMessage={streamingMessage}
               onMessageReaction={handleMessageReaction}
               onMessageComment={handleMessageComment}
             />
