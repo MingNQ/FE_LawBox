@@ -87,8 +87,7 @@ export default function RecentActivityFeed() {
             const config = getEntityConfig(activity.entityType);
             const IconComponent = config.icon;
 
-            const userName =
-              activity.user?.fullName || activity.user?.userName || "";
+            const userName = activity.user?.fullName || "";
             let description = activity.description || "";
             let actionText = description;
             let userSpan = null;
