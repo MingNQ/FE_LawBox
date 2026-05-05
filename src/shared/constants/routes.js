@@ -24,5 +24,6 @@ export const ROUTES = {
     DOCUMENTS: "/admin/folders/:folderId/documents",
     USERS: "/admin/users",
     AI_AGENTS: "/admin/ai-agents",
+    PAYMENT: "/admin/payment-management",
   },
 };

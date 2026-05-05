@@ -6,6 +6,7 @@ import DocumentPage from "./pages/DocumentPage";
 import FolderPage from "./pages/FolderPage";
 import UserPage from "./pages/UserPage";
 import AgentManagePage from "./pages/AgentManagePage";
+import PaymentManagementPage from "./pages/PaymentManagementPage";
 import RoleGuard from "@shared/components/auth/RoleGuard";
 import { ROLES } from "@shared/constants/appConst";
 
@@ -57,6 +58,14 @@ export const adminRoutes = (
       element={
         <RoleGuard roles={[ROLES.Admin]}>
           <AgentManagePage />
+        </RoleGuard>
+      }
+    />
+    <Route
+      path={ROUTES.ADMIN.PAYMENT}
+      element={
+        <RoleGuard roles={[ROLES.Admin]}>
+          <PaymentManagementPage />
         </RoleGuard>
       }
     />
