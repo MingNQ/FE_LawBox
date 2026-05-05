@@ -1,14 +1,14 @@
-import { X, Zap, Settings as SettingsIcon, User } from "lucide-react";
+import { X, Zap, Settings as SettingsIcon, User, Crown } from "lucide-react";
 import { useLanguage } from "@shared/hooks/useLanguage";
 import { useEffect, useRef, useState } from "react";
 import GeneralTab from "@client/components/settings/GeneralTab";
-import QuotaTab from "@client/components/settings/QuotaTab";
 import ProfileTab from "@client/components/settings/ProfileTab";
+import SubscriptionTab from "@client/components/settings/SubscriptionTab";
 
 const TABS = [
-  { id: "general", icon: SettingsIcon, labelKey: "settings.tab.general" },
-  { id: "quota", icon: Zap, labelKey: "settings.tab.quota" },
   { id: "account", icon: User, labelKey: "settings.tab.account" },
+  { id: "subscription", icon: Crown, labelKey: "settings.tab.subscription" },
+  { id: "general", icon: SettingsIcon, labelKey: "settings.tab.general" },
 ];
 
 const ADMIN_TABS = [
@@ -123,8 +123,8 @@ export default function SettingsModal({ isOpen, onClose, isAdmin = false }) {
 
         <div className="px-6 py-6 max-h-[60vh] overflow-y-auto">
           {activeTab === "account" && <ProfileTab />}
+          {activeTab === "subscription" && <SubscriptionTab onCloseModal={onClose} />}
           {activeTab === "general" && <GeneralTab />}
-          {activeTab === "quota" && <QuotaTab />}
         </div>
 
         <div className="px-6 py-4 border-t border-slate-100 dark:border-slate-700/50 bg-slate-50/50 dark:bg-slate-800/30">

@@ -41,6 +41,45 @@ export const translations = {
     "header.news": "Tin tức pháp luật",
     "header.greeting": "Chào,",
     "header.settings": "Cài đặt",
+    "header.pricing": "Bảng giá",
+
+    // Pricing Page
+    "pricing.title": "Nâng cấp trải nghiệm LawBox",
+    "pricing.subtitle": "Chọn gói subscription phù hợp để tối ưu hiệu quả công việc và quyền lợi truy cập AI",
+    "pricing.free": "Miễn phí",
+    "pricing.currentPlan": "Gói hiện tại",
+    "pricing.default": "Mặc định",
+    "pricing.subscribe": "Đăng ký ngay",
+    "pricing.processing": "Đang xử lý...",
+    "pricing.tokenDaily": "Token hàng ngày",
+    "pricing.tokenMonthly": "Token hàng tháng",
+    "pricing.requestsPerMinute": "Yêu cầu/phút",
+    "pricing.concurrentChats": "Cuộc hội thoại đồng thời",
+    "pricing.days": "ngày",
+    "pricing.recommended": "Khuyên dùng",
+
+    // Payment Result
+    "payment.success.title": "Thanh toán thành công!",
+    "payment.success.desc": "Cảm ơn bạn đã tin dùng LawBox. Gói subscription của bạn đã được kích hoạt và sẵn sàng sử dụng.",
+    "payment.success.orderId": "Mã đơn hàng",
+    "payment.success.home": "Về trang chủ",
+    "payment.success.quota": "Xem hạn mức",
+    "payment.failed.title": "Thanh toán thất bại",
+    "payment.failed.desc": "Đã có lỗi xảy ra trong quá trình thanh toán. Vui lòng kiểm tra lại thông tin hoặc thử lại sau.",
+    "payment.failed.reason": "Lý do",
+    "payment.failed.code": "Mã lỗi",
+    "payment.failed.retry": "Thử lại",
+
+    // Subscription Tab
+    "settings.tab.subscription": "Gói đăng ký",
+    "settings.subscription.title": "Thông tin gói của bạn",
+    "settings.subscription.status": "Trạng thái",
+    "settings.subscription.startDate": "Ngày bắt đầu",
+    "settings.subscription.endDate": "Ngày kết thúc",
+    "settings.subscription.remaining": "Còn lại",
+    "settings.subscription.active": "Đang hoạt động",
+    "settings.subscription.expired": "Đã hết hạn",
+    "settings.subscription.upgrade": "Nâng cấp gói",
 
     // Chat Sidebar
     "sidebar.newChat": "Cuộc trò chuyện mới",
@@ -95,6 +134,45 @@ export const translations = {
     "header.news": "Legal News",
     "header.greeting": "Hi,",
     "header.settings": "Settings",
+    "header.pricing": "Pricing",
+
+    // Pricing Page
+    "pricing.title": "Upgrade your LawBox experience",
+    "pricing.subtitle": "Choose the right subscription plan to optimize your productivity and AI access",
+    "pricing.free": "Free",
+    "pricing.currentPlan": "Current Plan",
+    "pricing.default": "Default",
+    "pricing.subscribe": "Subscribe Now",
+    "pricing.processing": "Processing...",
+    "pricing.tokenDaily": "Daily tokens",
+    "pricing.tokenMonthly": "Monthly tokens",
+    "pricing.requestsPerMinute": "Requests/min",
+    "pricing.concurrentChats": "Concurrent chats",
+    "pricing.days": "days",
+    "pricing.recommended": "Recommended",
+
+    // Payment Result
+    "payment.success.title": "Payment Successful!",
+    "payment.success.desc": "Thank you for using LawBox. Your subscription has been activated and is ready to use.",
+    "payment.success.orderId": "Order ID",
+    "payment.success.home": "Go Home",
+    "payment.success.quota": "View Quota",
+    "payment.failed.title": "Payment Failed",
+    "payment.failed.desc": "An error occurred during the payment process. Please check your information or try again later.",
+    "payment.failed.reason": "Reason",
+    "payment.failed.code": "Error code",
+    "payment.failed.retry": "Try Again",
+
+    // Subscription Tab
+    "settings.tab.subscription": "Subscription",
+    "settings.subscription.title": "Your Plan Information",
+    "settings.subscription.status": "Status",
+    "settings.subscription.startDate": "Start Date",
+    "settings.subscription.endDate": "End Date",
+    "settings.subscription.remaining": "Remaining",
+    "settings.subscription.active": "Active",
+    "settings.subscription.expired": "Expired",
+    "settings.subscription.upgrade": "Upgrade Plan",
 
     // Chat Sidebar
     "sidebar.newChat": "New conversation",

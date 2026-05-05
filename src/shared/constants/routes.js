@@ -9,6 +9,8 @@ export const ROUTES = {
   CHAT: "/chat",
   CHAT_DETAIL: "/chat/:conversationId",
   LEGAL_SEARCH: "/legal-search",
+  PRICING: "/pricing",
+  PAYMENT_RESULT: "/payment/result",
 
   ABOUT_US: "/about-us",
   TERMS_OF_USE: "/terms-of-use",
