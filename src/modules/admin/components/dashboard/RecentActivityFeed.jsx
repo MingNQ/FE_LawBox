@@ -8,6 +8,7 @@ import {
   Bot,
   Loader2,
   Crown,
+  CreditCard,
 } from "lucide-react";
 import { getRecentActivities } from "../../api/activityApi";
 
@@ -37,6 +38,8 @@ const getEntityConfig = (entityType) => {
       return { icon: Bot, bg: "bg-purple-100", text: "text-purple-600" };
     case 6: // Subscription
       return { icon: Crown, bg: "bg-blue-100", text: "text-blue-600" };
+    case 7: // Payment
+      return { icon: CreditCard, bg: "bg-red-100", text: "text-red-600" };
     case 5: // User
     default:
       return { icon: UserPlus, bg: "bg-indigo-100", text: "text-indigo-600" };

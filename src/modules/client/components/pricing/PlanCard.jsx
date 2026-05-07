@@ -26,8 +26,8 @@ export function PlanCard({ plan, isCurrentPlan, remainingDays, onSubscribe, load
       }`}
     >
       {isRecommended && (
-        <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-          <Badge variant="primary" className="px-4 py-1.5 rounded-full font-bold uppercase tracking-wider text-[10px]">
+        <div className="absolute -top-5 left-1/2 -translate-x-1/2 ">
+          <Badge variant="primary" className="px-4 py-1.5 dark:bg-slate-900 rounded-full font-bold uppercase tracking-wider text-[10px]">
             {t("pricing.recommended")}
           </Badge>
         </div>
