@@ -7,6 +7,8 @@ import {
   Shield,
   Bot,
   Loader2,
+  Crown,
+  CreditCard,
 } from "lucide-react";
 import { getRecentActivities } from "../../api/activityApi";
 
@@ -34,6 +36,10 @@ const getEntityConfig = (entityType) => {
       };
     case 4: // Agent
       return { icon: Bot, bg: "bg-purple-100", text: "text-purple-600" };
+    case 6: // Subscription
+      return { icon: Crown, bg: "bg-blue-100", text: "text-blue-600" };
+    case 7: // Payment
+      return { icon: CreditCard, bg: "bg-red-100", text: "text-red-600" };
     case 5: // User
     default:
       return { icon: UserPlus, bg: "bg-indigo-100", text: "text-indigo-600" };
@@ -43,6 +49,9 @@ const getEntityConfig = (entityType) => {
 export default function RecentActivityFeed() {
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
+  
+  const LIMIT = 5;
 
   useEffect(() => {
     const fetchActivities = async () => {
@@ -68,9 +77,14 @@ export default function RecentActivityFeed() {
           <Clock className="w-5 h-5 text-blue-600" />
           Hoạt động gần đây
         </h3>
-        {/* <button className="text-sm text-blue-600 hover:underline">
-          Xem tất cả
-        </button> */}
+        {activities.length > LIMIT && (
+          <button 
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="text-sm text-blue-600 hover:underline font-medium"
+          >
+            {isExpanded ? "Thu gọn" : "Xem tất cả"}
+          </button>
+        )}
       </div>
 
       {loading ? (
@@ -83,7 +97,7 @@ export default function RecentActivityFeed() {
         </div>
       ) : (
         <div className="space-y-6">
-          {activities?.map((activity, index) => {
+          {(isExpanded ? activities : activities.slice(0, LIMIT))?.map((activity, index, currentArray) => {
             const config = getEntityConfig(activity.entityType);
             const IconComponent = config.icon;
 
@@ -100,7 +114,7 @@ export default function RecentActivityFeed() {
             return (
               <div key={activity.id} className="flex gap-4 relative">
                 {/* Timeline line */}
-                {index !== activities.length - 1 && (
+                {index !== currentArray.length - 1 && (
                   <div className="absolute left-4 top-10 bottom-[-24px] w-px bg-gray-200"></div>
                 )}
 

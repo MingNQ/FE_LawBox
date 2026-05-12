@@ -1,4 +1,4 @@
-import { Blend, FileText, Search, Users, RefreshCw } from "lucide-react";
+import { Blend, FileText, Search, Users, RefreshCw, DollarSign, CreditCard } from "lucide-react";
 import StatCard from "@admin/components/dashboard/StatCard";
 import AdminLayout from "@admin/components/layout/AdminLayout";
 import { useAuth } from "@shared/hooks/useAuth";
@@ -6,11 +6,13 @@ import { useEffect, useState } from "react";
 import { getTokenUsageStat } from "../api/tokenUsageApi";
 import { getDocumentStat } from "../api/documentApi";
 import { getUserStat } from "../api/userApi";
+import { getPaymentStats } from "../api/paymentApi";
 import TokenUsageStat from "../components/dashboard/TokenUsageStat";
 import UserGrowthChart from "../components/dashboard/UserGrowthChart";
 import ConversationStats from "../components/dashboard/ConversationStats";
 import DocumentDistributionChart from "../components/dashboard/DocumentDistributionChart";
 import RecentActivityFeed from "../components/dashboard/RecentActivityFeed";
+import PaymentStats from "../components/dashboard/PaymentStats";
 import { useToast } from "@shared/hooks/useToast";
 
 export default function Dashboard() {
@@ -19,6 +21,7 @@ export default function Dashboard() {
   const [tokenStat, setTokenStat] = useState(null);
   const [documentStat, setDocumentStat] = useState(null);
   const [userStat, setUserStat] = useState(null);
+  const [paymentStat, setPaymentStat] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -32,6 +35,7 @@ export default function Dashboard() {
       const tokenData = await getTokenUsageStat(29);
       const documentData = await getDocumentStat();
       const userData = await getUserStat();
+      const paymentData = await getPaymentStats();
 
       if (tokenData.success) {
         setTokenStat(tokenData.result);
@@ -43,6 +47,10 @@ export default function Dashboard() {
 
       if (userData.success) {
         setUserStat(userData.result);
+      }
+
+      if (paymentData.success) {
+        setPaymentStat(paymentData.result);
       }
     } catch {
       toast.error("Lỗi khi tải thống kê");
@@ -75,7 +83,7 @@ export default function Dashboard() {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         <StatCard
           title="Tổng số tài liệu"
           value={documentStat?.totalDocuments}
@@ -108,6 +116,26 @@ export default function Dashboard() {
           subtitle="So với 30 ngày trước"
           icon={<Users size={20} />}
         />
+        <StatCard
+          title="Tổng doanh thu"
+          value={paymentStat?.totalRevenue}
+          loading={isLoading}
+          formatter={(v) => v ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(v) : '0 ₫'}
+          subtitle="Tất cả thời gian"
+          icon={<DollarSign size={20} className="text-emerald-500" />}
+        />
+        <StatCard
+          title="Tổng giao dịch"
+          value={paymentStat?.totalTransactions}
+          loading={isLoading}
+          formatter={(v) => v?.toLocaleString("vi-VN")}
+          subtitle="Tất cả thời gian"
+          icon={<CreditCard size={20} className="text-blue-500" />}
+        />
+      </div>
+
+      <div className="grid grid-cols-1 gap-6">
+        <PaymentStats />
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">

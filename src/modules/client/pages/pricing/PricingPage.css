@@ -1,0 +1,25 @@
+.pricing-page-container {
+  transition: background-color 0.3s ease;
+}
+
+.pricing-grid {
+  padding-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .pricing-grid {
+    padding-top: 1rem;
+    gap: 2rem;
+  }
+}
+
+.pricing-grid > div {
+  height: 100%;
+}
+.shadow-blue-500\/10 {
+  box-shadow: 0 20px 40px -15px rgba(59, 130, 246, 0.15);
+}
+
+.dark .shadow-blue-500\/10 {
+  box-shadow: 0 20px 40px -15px rgba(59, 130, 246, 0.3);
+}

@@ -5,6 +5,7 @@ import {
   Users,
   Settings,
   BotIcon,
+  CreditCard,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { ROUTES } from "@shared/constants/routes";
@@ -58,6 +59,13 @@ export default function Sidebar() {
             active={location.pathname === ROUTES.ADMIN.AI_AGENTS}
           >
             Agents
+          </SidebarItem>
+          <SidebarItem
+            to={ROUTES.ADMIN.PAYMENT}
+            icon={<CreditCard size={18} />}
+            active={location.pathname === ROUTES.ADMIN.PAYMENT}
+          >
+            Giao dịch
           </SidebarItem>
         </nav>
       </div>

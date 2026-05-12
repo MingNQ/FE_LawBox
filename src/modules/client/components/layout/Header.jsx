@@ -47,6 +47,12 @@ export function Header({ user }) {
             >
               {t("header.chat")}
             </Link>
+            <Link
+              to={ROUTES.PRICING}
+              className="text-blue-700 dark:text-white text-sm font-semibold hover:underline hover:decoration-blue-400 dark:hover:decoration-blue-400"
+            >
+              {t("header.pricing")}
+            </Link>
           </nav>
           <div className="flex items-center gap-1">
             {!user ? (
