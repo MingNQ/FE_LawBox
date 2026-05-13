@@ -52,9 +52,9 @@ export default function AdvancedSearchFilter({ onSearch, filterFields = [], sort
       } : undefined,
       advancedFilter,
       orderBy: sortOrderBy.length > 0 ? sortOrderBy : undefined,
-      pageNumber: 0,
-      pageSize: 50,
-      ignorePagination: true
+      pageNumber: 1, // Reset to first page on search
+      pageSize: 10,  // Default page size
+      ignorePagination: false
     };
 
     onSearch(payload);

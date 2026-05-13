@@ -15,6 +15,7 @@ import {
   embeddingDocument,
 } from "@admin/api/documentApi";
 import { useToast } from "@shared/hooks/useToast";
+import Pagination from "@shared/components/ui/Pagination";
 
 export default function DocumentPage() {
   const { toast } = useToast();
@@ -22,10 +23,11 @@ export default function DocumentPage() {
   const navigate = useNavigate();
 
   const [documents, setDocuments] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [searchPayload, setSearchPayload] = useState({
-    pageNumber: 0,
-    pageSize: 50,
-    ignorePagination: true,
+    pageNumber: 1,
+    pageSize: 5,
+    ignorePagination: false,
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
@@ -68,12 +70,13 @@ export default function DocumentPage() {
       data = await searchDocuments(currentPayload);
 
       if (data && data.success) {
-        const fetchedDocs = Array.isArray(data.result)
-          ? data.result
-          : data.result?.data || [];
+        const fetchedDocs = data.result?.data || (Array.isArray(data.result) ? data.result : []);
         setDocuments(fetchedDocs);
+        setTotalCount(data.result?.totalCount || fetchedDocs.length);
       } else {
-        setDocuments(data.result?.data || data.result || []);
+        const fetchedDocs = data.result?.data || data.result || [];
+        setDocuments(fetchedDocs);
+        setTotalCount(data.result?.totalCount || fetchedDocs.length);
       }
     } catch (error) {
       toast.error("Lỗi khi tải danh sách tài liệu!");
@@ -208,7 +211,11 @@ export default function DocumentPage() {
       </div>
 
       <AdvancedSearchFilter
-        onSearch={(payload) => setSearchPayload(payload)}
+        onSearch={(payload) => setSearchPayload({
+          ...searchPayload,
+          ...payload,
+          pageNumber: 1 // Reset to page 1 on search
+        })}
         filterFields={[
           { label: "Tên tài liệu", value: "name" },
           {
@@ -236,6 +243,16 @@ export default function DocumentPage() {
           onEmbedding={handleEmbedding}
         />
       )}
+
+      <div className="mt-4">
+        <Pagination
+          currentPage={searchPayload.pageNumber}
+          totalCount={totalCount}
+          pageSize={searchPayload.pageSize}
+          onPageChange={(page) => setSearchPayload({ ...searchPayload, pageNumber: page })}
+          isLoading={isLoading}
+        />
+      </div>
 
       <DocumentFormModal
         isOpen={isModalOpen}

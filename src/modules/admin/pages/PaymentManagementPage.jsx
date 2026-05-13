@@ -3,12 +3,15 @@ import { CreditCard, Search, Calendar, User, ArrowUpRight, CheckCircle2, XCircle
 import AdminLayout from "@admin/components/layout/AdminLayout";
 import { getAllTransactions } from "@admin/api/paymentApi";
 import { useToast } from "@shared/hooks/useToast";
+import Pagination from "@shared/components/ui/Pagination";
 
 export default function PaymentManagementPage() {
   const { toast } = useToast();
   const [transactions, setTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
 
   useEffect(() => {
     fetchTransactions();
@@ -99,7 +102,10 @@ export default function PaymentManagementPage() {
             placeholder="Tìm kiếm theo mã đơn hàng, người dùng, gói cước..."
             className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1); // Reset to page 1 on search
+            }}
           />
         </div>
         <button 
@@ -137,7 +143,9 @@ export default function PaymentManagementPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {filteredTransactions.map((transaction) => (
+                {filteredTransactions
+                  .slice((currentPage - 1) * pageSize, currentPage * pageSize)
+                  .map((transaction) => (
                   <tr key={transaction.id} className="hover:bg-gray-50/50 transition">
                     <td className="px-6 py-4">
                       <span className="font-mono text-xs font-bold text-gray-900 bg-gray-100 px-2 py-1 rounded">
@@ -170,6 +178,16 @@ export default function PaymentManagementPage() {
             </table>
           </div>
         )}
+
+        <div className="mt-4">
+          <Pagination
+            currentPage={currentPage}
+            totalCount={filteredTransactions.length}
+            pageSize={pageSize}
+            onPageChange={(page) => setCurrentPage(page)}
+            isLoading={isLoading}
+          />
+        </div>
       </div>
     </AdminLayout>
   );

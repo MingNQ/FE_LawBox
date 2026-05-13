@@ -14,6 +14,7 @@ import {
   resetPasswordUser,
 } from "@admin/api/userApi";
 import { useToast } from "@shared/hooks/useToast";
+import Pagination from "@shared/components/ui/Pagination";
 
 export default function UserPage() {
   const { toast } = useToast();
@@ -25,11 +26,12 @@ export default function UserPage() {
   const [viewingUser, setViewingUser] = useState(null);
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
   const [passwordUser, setPasswordUser] = useState(null);
+  const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [searchPayload, setSearchPayload] = useState({
-    pageNumber: 0,
-    pageSize: 50,
-    ignorePagination: true,
+    pageNumber: 1,
+    pageSize: 5,
+    ignorePagination: false,
   });
 
   useEffect(() => {
@@ -41,12 +43,13 @@ export default function UserPage() {
       setIsLoading(true);
       const data = await getUsers(searchPayload);
       if (data && data.success) {
-        const fetchedUsers = Array.isArray(data.result)
-          ? data.result
-          : data.result?.data || [];
+        const fetchedUsers = data.result?.data || (Array.isArray(data.result) ? data.result : []);
         setUsers(fetchedUsers);
+        setTotalCount(data.result?.totalCount || fetchedUsers.length);
       } else {
-        setUsers(data.result?.data || data.result || []);
+        const fetchedUsers = data.result?.data || data.result || [];
+        setUsers(fetchedUsers);
+        setTotalCount(data.result?.totalCount || fetchedUsers.length);
       }
     } catch (error) {
       toast.error("Lỗi khi tải danh sách người dùng");
@@ -138,7 +141,11 @@ export default function UserPage() {
         </button>
       </div>
       <AdvancedSearchFilter
-        onSearch={(payload) => setSearchPayload(payload)}
+        onSearch={(payload) => setSearchPayload({
+          ...searchPayload,
+          ...payload,
+          pageNumber: 1 // Reset to page 1 on search
+        })}
         filterFields={[
           { label: "Email", value: "email" },
           { label: "Họ", value: "lastName" },
@@ -307,6 +314,16 @@ export default function UserPage() {
             </table>
           </div>
         )}
+
+        <div className="mt-4">
+          <Pagination
+            currentPage={searchPayload.pageNumber}
+            totalCount={totalCount}
+            pageSize={searchPayload.pageSize}
+            onPageChange={(page) => setSearchPayload({ ...searchPayload, pageNumber: page })}
+            isLoading={isLoading}
+          />
+        </div>
       </div>
 
       <UserFormModal

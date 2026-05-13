@@ -15,7 +15,7 @@ export function NewDocumentsSection() {
       try {
         const response = await legalSearch({ keyword: "" });
         if (response.success && response.result) {
-          setDocuments(response.result.slice(0, 6));
+          setDocuments(response.result.slice(0, 2));
         }
       } catch (error) {
         console.error("Failed to fetch new documents", error);

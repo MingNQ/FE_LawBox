@@ -4,12 +4,14 @@ import { legalSearch } from "@client/api/legalSearchApi";
 import { Search, BookOpen, AlertCircle, Loader2 } from "lucide-react";
 import { DocumentCard } from "@shared/components/documents/DocumentCard";
 import { DocumentSkeleton } from "@shared/components/documents/DocumentSkeleton";
+import Pagination from "@shared/components/ui/Pagination";
 
 const FILTER_TAGS = [
-  { label: "Tất cả", value: "all" },
-  { label: "Luật", value: "luat" },
-  { label: "Nghị định", value: "nghi-dinh" },
-  { label: "Quyết định", value: "quyet-dinh" },
+  { label: "Tất cả", value: 0 },
+  { label: "Luật", value: 1 },
+  { label: "Nghị định", value: 2 },
+  { label: "Thông tư", value: 3 },
+  { label: "Quyết định", value: 4 },
 ];
 
 export default function LegalSearchPage() {
@@ -17,33 +19,43 @@ export default function LegalSearchPage() {
   const [isSearching, setIsSearching] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [searchInput, setSearchInput] = useState("");
-  const [activeFilter, setActiveFilter] = useState("all");
+  const [activeFilter, setActiveFilter] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const pageSize = 3;
 
-  const handleSearch = async (e) => {
+  const performSearch = async (e, page = 1, typeOverride = null) => {
     e?.preventDefault();
     const query = searchInput.trim();
     if (!query) return;
     setIsSearching(true);
     setKeyword(query);
+    setCurrentPage(page);
     try {
-      const data = await legalSearch({ keyword: query });
+      const data = await legalSearch({ 
+        keyword: query,
+        type: typeOverride !== null ? typeOverride : activeFilter
+      });
       if (data.success) {
-        setResults(data.result);
+        setResults(data.result || []);
+        setTotalCount(data.result?.length || 0);
       } else {
         setResults([]);
+        setTotalCount(0);
       }
     } catch (err) {
       console.error(err);
       setResults([]);
+      setTotalCount(0);
     } finally {
       setIsSearching(false);
     }
   };
 
-  const handleTagClick = (tag) => {
-    setActiveFilter(tag);
-    if (tag !== "all" && searchInput.trim()) {
-      // Could add filter logic here when API supports it
+  const handleTagClick = (tagValue) => {
+    setActiveFilter(tagValue);
+    if (keyword) {
+      performSearch(null, 1, tagValue);
     }
   };
 
@@ -71,7 +83,7 @@ export default function LegalSearchPage() {
             </p>
           </div>
 
-          <form onSubmit={handleSearch} className="max-w-[750px] mx-auto">
+          <form onSubmit={(e) => performSearch(e, 1)} className="max-w-[750px] mx-auto">
             <div className="flex items-center bg-white dark:bg-slate-800 rounded-2xl p-2 shadow-2xl shadow-blue-900/30 border border-white/20">
               <div className="flex items-center pl-4 text-slate-400">
                 <Search className="w-5 h-5" />
@@ -140,15 +152,17 @@ export default function LegalSearchPage() {
                   Kết quả cho "<span className="text-blue-600">{keyword}</span>"
                 </h2>
                 <span className="text-sm text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full font-medium">
-                  {resultCount} kết quả
+                  {totalCount} kết quả
                 </span>
               </div>
 
               {resultCount > 0 ? (
                 <div className="grid gap-4">
-                  {results.map((result, index) => (
-                    <DocumentCard key={index} document={result} />
-                  ))}
+                  {results
+                    .slice((currentPage - 1) * pageSize, currentPage * pageSize)
+                    .map((result, index) => (
+                      <DocumentCard key={index} document={result} />
+                    ))}
                 </div>
               ) : (
                 <div className="text-center py-16 bg-white dark:bg-slate-800/40 rounded-2xl border border-slate-200 dark:border-slate-700">
@@ -161,6 +175,19 @@ export default function LegalSearchPage() {
                   </p>
                 </div>
               )}
+
+              <div className="mt-8">
+                <Pagination
+                  currentPage={currentPage}
+                  totalCount={totalCount}
+                  pageSize={pageSize}
+                  onPageChange={(page) => {
+                    setCurrentPage(page);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  isLoading={isSearching}
+                />
+              </div>
             </div>
           )}
 

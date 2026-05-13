@@ -42,6 +42,8 @@ export const translations = {
     "header.greeting": "Chào,",
     "header.settings": "Cài đặt",
     "header.pricing": "Bảng giá",
+    "header.about_us": "Giới thiệu",
+    "header.contact": "Liên hệ",
 
     // Pricing Page
     "pricing.title": "Nâng cấp trải nghiệm LawBox",
@@ -135,6 +137,8 @@ export const translations = {
     "header.greeting": "Hi,",
     "header.settings": "Settings",
     "header.pricing": "Pricing",
+    "header.about_us": "About Us",
+    "header.contact": "Contact",
 
     // Pricing Page
     "pricing.title": "Upgrade your LawBox experience",
