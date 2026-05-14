@@ -145,11 +145,27 @@ export default function DocumentPage() {
       if (formData.file) {
         apiData.append("file", formData.file);
       }
+      if (formData.effectiveDate) {
+        apiData.append("effectiveDate", formData.effectiveDate);
+      }
+      if (formData.issuedDate) {
+        apiData.append("issuedDate", formData.issuedDate);
+      }
+      if (formData.officialNumber) {
+        apiData.append("officialNumber", formData.officialNumber);
+      }
+      if (formData.effectivenessStatus) {
+        apiData.append("effectivenessStatus", formData.effectivenessStatus);
+      }
 
       if (editingDoc) {
         await updateDocument(editingDoc.id, {
           name: formData.name,
           type: formData.type,
+          effectiveDate: formData.effectiveDate || null,
+          issuedDate: formData.issuedDate || null,
+          officialNumber: formData.officialNumber || "",
+          effectivenessStatus: parseInt(formData.effectivenessStatus, 10) || 1,
         });
       } else {
         await uploadDocument(apiData, (progressEvent) => {

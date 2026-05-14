@@ -12,6 +12,10 @@ export default function DocumentFormModal({
   const [formData, setFormData] = useState({
     name: "",
     type: 1,
+    officialNumber: "",
+    effectivenessStatus: 1,
+    effectiveDate: "",
+    issuedDate: "",
     file: null,
   });
 
@@ -20,12 +24,20 @@ export default function DocumentFormModal({
       setFormData({
         name: initialData.name || "",
         type: initialData.type || "",
+        officialNumber: initialData.officialNumber || "",
+        effectivenessStatus: initialData.effectivenessStatus || 1,
+        effectiveDate: initialData.effectiveDate ? new Date(initialData.effectiveDate).toISOString().split('T')[0] : "",
+        issuedDate: initialData.issuedDate ? new Date(initialData.issuedDate).toISOString().split('T')[0] : "",
         file: null,
       });
     } else {
       setFormData({
         name: "",
         type: 1,
+        officialNumber: "",
+        effectivenessStatus: 1,
+        effectiveDate: "",
+        issuedDate: "",
         file: null,
       });
     }
@@ -42,7 +54,19 @@ export default function DocumentFormModal({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData);
+
+    const payload = {
+        ...formData,
+        issuedDate: formData.issuedDate
+          ? new Date(formData.issuedDate).toISOString()
+          : null,
+
+        effectiveDate: formData.effectiveDate
+          ? new Date(formData.effectiveDate).toISOString()
+          : null,
+      };
+
+    onSubmit(payload);
   };
 
   if (!isOpen) return null;
@@ -89,21 +113,83 @@ export default function DocumentFormModal({
             />
           </div>
 
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Số hiệu
+              </label>
+              <input
+                type="text"
+                name="officialNumber"
+                value={formData.officialNumber}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Nhập số hiệu văn bản"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Danh mục
+              </label>
+              <select
+                name="type"
+                value={formData.type}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+              >
+                <option value="">Chọn danh mục</option>
+                <option value="1">Luật</option>
+                <option value="2">Nghị định</option>
+                <option value="3">Thông tư</option>
+                <option value="4">Quyết định</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Ngày ban hành
+              </label>
+              <input
+                type="date"
+                name="issuedDate"
+                value={formData.issuedDate}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Ngày có hiệu lực
+              </label>
+              <input
+                type="date"
+                name="effectiveDate"
+                value={formData.effectiveDate}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Danh mục
+              Tình trạng hiệu lực
             </label>
             <select
-              name="type"
-              value={formData.type}
+              name="effectivenessStatus"
+              value={formData.effectivenessStatus}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
             >
-              <option value="">Chọn danh mục</option>
-              <option value="1">Luật</option>
-              <option value="2">Nghị định</option>
-              <option value="3">Thông tư</option>
-              <option value="4">Quyết định</option>
+              <option value="1">Không xác định</option>
+              <option value="2">Còn hiệu lực</option>
+              <option value="3">Hết hiệu lực</option>
+              <option value="4">Hết hiệu lực một phần</option>
+              <option value="5">Sắp có hiệu lực</option>
             </select>
           </div>
 

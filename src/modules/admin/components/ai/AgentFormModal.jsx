@@ -124,12 +124,18 @@ export default function AgentFormModal({
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Provider (Github Model, OpenAI, Ollama,...)
               </label>
-              <input
+              <select
                 name="providerName"
                 value={formData.providerName}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg"
-              />
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg bg-white"
+              >
+                <option value="">Chọn Provider</option>
+                <option value="GithubModel">GithubModel</option>
+                <option value="Ollama">Ollama</option>
+                <option value="GoogleAI">GoogleAI</option>
+                <option value="OpenAI">OpenAI</option>
+              </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">

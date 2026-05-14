@@ -1,7 +1,7 @@
 import { X, FileText, Calendar, HardDrive, Info } from "lucide-react";
 import { useState, useEffect } from "react";
 import { getDocumentById } from "@admin/api/documentApi";
-import { DOCUMENT_TYPES } from "../../../../shared/constants/appConst";
+import { DOCUMENT_TYPES, EFFECTIVENESS_STATUS } from "../../../../shared/constants/appConst";
 
 export default function DocumentDetailModal({ isOpen, onClose, document: initialDoc }) {
   const [detailedDoc, setDetailedDoc] = useState(null);
@@ -49,13 +49,16 @@ export default function DocumentDetailModal({ isOpen, onClose, document: initial
           </div>
 
           <div className="text-center mb-6">
-            <h2 className="text-xl font-bold text-gray-900 line-clamp-2">
+            <h2 className="text-xl font-bold text-gray-900 line-clamp-3">
               {displayDoc.name || "Tài liệu chưa có tên"}
             </h2>
             
-            <div className="flex justify-center mt-3">
+            <div className="flex justify-center mt-3 gap-2">
               <span className="px-3 py-1 text-xs font-semibold rounded-full border bg-blue-50 text-blue-700 border-blue-200 uppercase">
-                {DOCUMENT_TYPES[displayDoc.type]}
+                {DOCUMENT_TYPES[displayDoc.type] || "Không rõ danh mục"}
+              </span>
+              <span className="px-3 py-1 text-xs font-semibold rounded-full border bg-green-50 text-green-700 border-green-200 uppercase">
+                {EFFECTIVENESS_STATUS[displayDoc.effectivenessStatus] || "Không xác định"}
               </span>
             </div>
           </div>
@@ -66,6 +69,18 @@ export default function DocumentDetailModal({ isOpen, onClose, document: initial
             )}
             
             <div className="grid grid-cols-2 gap-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-white rounded-lg shadow-sm text-gray-500">
+                  <FileText size={16} />
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">Số hiệu</p>
+                  <p className="text-sm font-medium text-gray-800">
+                    {displayDoc.officialNumber || "Chưa cập nhật"}
+                  </p>
+                </div>
+              </div>
+
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-white rounded-lg shadow-sm text-gray-500">
                   <Calendar size={16} />
@@ -82,12 +97,40 @@ export default function DocumentDetailModal({ isOpen, onClose, document: initial
 
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-white rounded-lg shadow-sm text-gray-500">
+                  <Calendar size={16} />
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">Ngày ban hành</p>
+                  <p className="text-sm font-medium text-gray-800">
+                    {displayDoc.issuedDate
+                      ? new Date(displayDoc.issuedDate).toLocaleDateString("vi-VN")
+                      : "Chưa cập nhật"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-white rounded-lg shadow-sm text-gray-500">
+                  <Calendar size={16} />
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">Ngày có hiệu lực</p>
+                  <p className="text-sm font-medium text-gray-800">
+                    {displayDoc.effectiveDate
+                      ? new Date(displayDoc.effectiveDate).toLocaleDateString("vi-VN")
+                      : "Chưa cập nhật"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-white rounded-lg shadow-sm text-gray-500">
                   <HardDrive size={16} />
                 </div>
                 <div>
                   <p className="text-xs text-gray-500">Kích thước</p>
                   <p className="text-sm font-medium text-gray-800">
-                    {displayDoc.fileStorage.size ? (displayDoc.fileStorage.size / 1024).toFixed(2) + " KB" : "Không rõ"}
+                    {displayDoc.fileStorage?.size ? (displayDoc.fileStorage.size / 1024).toFixed(2) + " KB" : "Không rõ"}
                   </p>
                 </div>
               </div>

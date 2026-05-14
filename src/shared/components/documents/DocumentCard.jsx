@@ -1,5 +1,5 @@
 import { FileText, Download } from "lucide-react";
-import { DOCUMENT_TYPES } from "@shared/constants/appConst";
+import { DOCUMENT_TYPES, EFFECTIVENESS_STATUS } from "@shared/constants/appConst";
 import { Badge } from "@shared/components/ui/Badge";
 
 export function DocumentCard({ document, onClick }) {
@@ -16,6 +16,15 @@ export function DocumentCard({ document, onClick }) {
       alert("Liên kết tải xuống không khả dụng.");
     }
   };
+  const getStatusVariant = (status) => {
+    switch(status) {
+      case 2: return "success";
+      case 3: return "danger";
+      case 4: return "warning";
+      case 5: return "primary";
+      default: return "secondary";
+    }
+  };
 
   return (
     <div
@@ -24,18 +33,34 @@ export function DocumentCard({ document, onClick }) {
     >
       <div className="absolute top-0 left-0 w-1 h-full bg-blue-500/0 group-hover:bg-blue-500 transition-all duration-300" />
 
-      <div className="flex items-center gap-2 mb-4">
+      <div className="flex flex-wrap items-center gap-2 mb-4">
         <Badge variant={document.type === 1 ? "primary" : "secondary"}>
           {DOCUMENT_TYPES[document.type] || "Văn bản"}
         </Badge>
-        <div className="flex items-center gap-1.5 text-slate-400 text-[11px] font-medium">
-          Ngày đăng: {date}
-        </div>
+        {document.effectivenessStatus && (
+          <Badge variant={getStatusVariant(document.effectivenessStatus)}>
+            {EFFECTIVENESS_STATUS[document.effectivenessStatus] || "Không xác định"}
+          </Badge>
+        )}
       </div>
 
       <h3 className="text-base font-bold text-slate-800 dark:text-slate-200 line-clamp-2 group-hover:text-blue-600 transition-colors mb-2 leading-snug">
         {document.name || "Tài liệu pháp luật"}
       </h3>
+
+      <div className="grid grid-cols-1 gap-1 mb-4 text-xs text-slate-500 dark:text-slate-400">
+        {document.officialNumber && (
+          <p><span className="font-semibold text-slate-600 dark:text-slate-300">Số hiệu:</span> {document.officialNumber}</p>
+        )}
+        <div className="flex gap-4">
+          {document.issuedDate && (
+            <p><span className="font-semibold text-slate-600 dark:text-slate-300">Ban hành:</span> {new Date(document.issuedDate).toLocaleDateString("vi-VN")}</p>
+          )}
+          {document.effectiveDate && (
+            <p><span className="font-semibold text-slate-600 dark:text-slate-300">Hiệu lực:</span> {new Date(document.effectiveDate).toLocaleDateString("vi-VN")}</p>
+          )}
+        </div>
+      </div>
 
       <div className="mt-auto pt-4 border-t border-slate-50 dark:border-slate-800 flex items-center justify-between">
         <div className="flex items-center gap-1.5 text-slate-500 text-xs font-semibold">

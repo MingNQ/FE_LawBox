@@ -1,5 +1,5 @@
 import { Edit, Trash2, Eye, RefreshCcw } from "lucide-react";
-import { DOCUMENT_TYPES } from "../../../../shared/constants/appConst";
+import { DOCUMENT_TYPES, EFFECTIVENESS_STATUS } from "../../../../shared/constants/appConst";
 
 export default function DocumentTable({
   documents,
@@ -22,7 +22,10 @@ export default function DocumentTable({
         <thead className="bg-gray-50 text-gray-700 font-medium border-b border-gray-100">
           <tr>
             <th className="px-6 py-4">Tên tài liệu</th>
+            <th className="px-6 py-4">Số hiệu</th>
             <th className="px-6 py-4">Danh mục</th>
+            <th className="px-6 py-4">Trạng thái</th>
+            <th className="px-6 py-4">Ngày ban hành</th>
             <th className="px-6 py-4">Ngày tải lên</th>
             <th className="px-6 py-4 border-l border-gray-100 text-center">
               Hành động
@@ -35,10 +38,29 @@ export default function DocumentTable({
               key={doc.id || index}
               className="border-b border-gray-50 hover:bg-gray-50 transition"
             >
-              <td className="px-6 py-4 font-medium text-gray-900">
+              <td className="px-6 py-4 font-medium text-gray-900 max-w-xl">
                 {doc.name || "Không có tiêu đề"}
               </td>
-              <td className="px-6 py-4">{DOCUMENT_TYPES[doc.type]}</td>
+              <td className="px-6 py-4 text-gray-700 font-semibold">
+                {doc.officialNumber || "-"}
+              </td>
+              <td className="px-6 py-4">{DOCUMENT_TYPES[doc.type] || "Không rõ"}</td>
+              <td className="px-6 py-4">
+                <span className={`px-2 py-1 text-xs font-medium rounded-md ${
+                  doc.effectivenessStatus === 2 ? "bg-green-50 text-green-700 border border-green-200" :
+                  doc.effectivenessStatus === 3 ? "bg-red-50 text-red-700 border border-red-200" :
+                  doc.effectivenessStatus === 4 ? "bg-yellow-50 text-yellow-700 border border-yellow-200" :
+                  doc.effectivenessStatus === 5 ? "bg-blue-50 text-blue-700 border border-blue-200" :
+                  "bg-gray-50 text-gray-700 border border-gray-200"
+                }`}>
+                  {EFFECTIVENESS_STATUS[doc.effectivenessStatus] || "Không xác định"}
+                </span>
+              </td>
+              <td className="px-6 py-4">
+                {doc.issuedDate
+                  ? new Date(doc.issuedDate).toLocaleDateString("vi-VN")
+                  : "-"}
+              </td>
               <td className="px-6 py-4">
                 {doc.createdOn
                   ? new Date(doc.createdOn).toLocaleDateString("vi-VN")
