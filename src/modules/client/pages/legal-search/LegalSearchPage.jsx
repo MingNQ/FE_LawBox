@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ClientLayout } from "@client/components/layout/ClientLayout";
 import { legalSearch } from "@client/api/legalSearchApi";
 import { Search, BookOpen, AlertCircle, Loader2 } from "lucide-react";
 import { DocumentCard } from "@shared/components/documents/DocumentCard";
 import { DocumentSkeleton } from "@shared/components/documents/DocumentSkeleton";
 import Pagination from "@shared/components/ui/Pagination";
+import { ROUTES } from "@shared/constants/routes";
 
 const FILTER_TAGS = [
   { label: "Tất cả", value: 0 },
@@ -15,6 +17,7 @@ const FILTER_TAGS = [
 ];
 
 export default function LegalSearchPage() {
+  const navigate = useNavigate();
   const [results, setResults] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
   const [keyword, setKeyword] = useState("");
@@ -161,7 +164,11 @@ export default function LegalSearchPage() {
                   {results
                     .slice((currentPage - 1) * pageSize, currentPage * pageSize)
                     .map((result, index) => (
-                      <DocumentCard key={index} document={result} />
+                      <DocumentCard 
+                        key={index} 
+                        document={result} 
+                        onClick={() => navigate(ROUTES.DOCUMENT_DETAIL.replace(":documentId", result.id))}
+                      />
                     ))}
                 </div>
               ) : (

@@ -7,8 +7,6 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import { getFolders } from "@admin/api/folderApi";
-
 const COLORS = [
   "#3b82f6",
   "#10b981",
@@ -19,45 +17,43 @@ const COLORS = [
   "#06b6d4",
 ];
 
-export default function DocumentDistributionChart() {
+const TYPE_LABELS = {
+  1: "Luật",
+  2: "Nghị định",
+  3: "Thông tư",
+  4: "Quyết định",
+};
+
+export default function DocumentDistributionChart({ documentStat }) {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (documentStat && documentStat.documents) {
+      const documents = documentStat.documents;
+      const grouped = documents.reduce((acc, doc) => {
+        const label = TYPE_LABELS[doc.type] || "Khác";
+        acc[label] = (acc[label] || 0) + 1;
+        return acc;
+      }, {});
 
-  const fetchData = async () => {
-    try {
-      const folderRes = await getFolders();
-      if (folderRes.success) {
-        const folders = folderRes.result;
-        const data = folders.map((f) => ({
-          name: f.name,
-          value: f.documentCount,
-        }));
+      const chartData = Object.keys(grouped).map((label) => ({
+        name: label,
+        value: grouped[label],
+      }));
 
-        if (data.length === 0) {
-          setData([
-            { name: "Luật", value: 45 },
-            { name: "Nghị định", value: 30 },
-            { name: "Thông tư", value: 15 },
-            { name: "Khác", value: 10 },
-          ]);
-        } else {
-          setData(data);
-        }
+      if (chartData.length === 0) {
+        setData([
+          { name: "Luật", value: 0 },
+          { name: "Nghị định", value: 0 },
+          { name: "Thông tư", value: 0 },
+        ]);
+      } else {
+        setData(chartData);
       }
-    } catch {
-      setData([
-        { name: "Luật", value: 45 },
-        { name: "Nghị định", value: 30 },
-        { name: "Thông tư", value: 15 },
-      ]);
-    } finally {
-      setLoading(false);
     }
-  };
+  }, [documentStat]);
+
+  const loading = !documentStat;
 
   return (
     <div className="bg-white p-6 rounded-xl border border-gray-200 flex flex-col min-h-[320px]">

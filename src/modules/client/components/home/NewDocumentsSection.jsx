@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { FileText, ArrowRight } from "lucide-react";
 import { legalSearch } from "@client/api/legalSearchApi";
-import { Link } from "react-router-dom";
-import { ROUTES } from "../../../../shared/constants/routes";
+import { Link, useNavigate } from "react-router-dom";
+import { ROUTES } from "@shared/constants/routes";
 import { DocumentCard } from "@shared/components/documents/DocumentCard";
 import { DocumentSkeleton } from "@shared/components/documents/DocumentSkeleton";
 
 export function NewDocumentsSection() {
+  const navigate = useNavigate();
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -15,7 +16,7 @@ export function NewDocumentsSection() {
       try {
         const response = await legalSearch({ keyword: "" });
         if (response.success && response.result) {
-          setDocuments(response.result.slice(0, 2));
+          setDocuments(response.result.slice(0, 3));
         }
       } catch (error) {
         console.error("Failed to fetch new documents", error);
@@ -61,7 +62,15 @@ export function NewDocumentsSection() {
         ) : documents.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 animate-fade-in">
             {documents.map((doc, idx) => (
-              <DocumentCard key={doc.id || idx} document={doc} />
+              <DocumentCard
+                key={doc.id || idx}
+                document={doc}
+                onClick={() =>
+                  navigate(
+                    ROUTES.DOCUMENT_DETAIL.replace(":documentId", doc.id),
+                  )
+                }
+              />
             ))}
           </div>
         ) : (

@@ -11,6 +11,7 @@ export const ROUTES = {
   LEGAL_SEARCH: "/legal-search",
   PRICING: "/pricing",
   PAYMENT_RESULT: "/payment/result",
+  DOCUMENT_DETAIL: "/documents/:documentId",
 
   ABOUT_US: "/about-us",
   TERMS_OF_USE: "/terms-of-use",
