@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "@shared/contexts/AuthProvider";
+import { FavoriteProvider } from "@shared/contexts/FavoriteProvider";
 import { initAuth } from "@shared/api/http";
 import { ToastProvider } from "@shared/contexts/ToastProvider.jsx";
 import { ThemeProvider } from "@shared/contexts/ThemeProvider.jsx";
@@ -18,7 +19,9 @@ createRoot(document.getElementById("root")).render(
         <LanguageProvider>
           <AuthProvider>
             <ToastProvider>
-              <App />
+              <FavoriteProvider>
+                <App />
+              </FavoriteProvider>
             </ToastProvider>
           </AuthProvider>
         </LanguageProvider>

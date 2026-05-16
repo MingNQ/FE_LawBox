@@ -12,6 +12,7 @@ export const ROUTES = {
   PRICING: "/pricing",
   PAYMENT_RESULT: "/payment/result",
   DOCUMENT_DETAIL: "/documents/:documentId",
+  FAVORITES: "/favorites",
 
   ABOUT_US: "/about-us",
   TERMS_OF_USE: "/terms-of-use",

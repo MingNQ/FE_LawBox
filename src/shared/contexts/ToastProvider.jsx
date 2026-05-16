@@ -9,7 +9,7 @@ export function ToastProvider({ children }) {
   };
 
   const showToast = (message, type = "info", duration = 5000) => {
-    const id = Date.now();
+    const id = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
     setToasts((prev) => [...prev, { id, message, type }]);
 

@@ -89,6 +89,7 @@ export const translations = {
     "sidebar.settings": "Cài đặt",
     "sidebar.help": "Trợ giúp",
     "sidebar.logout": "Đăng xuất",
+    "sidebar.favorites": "Văn bản yêu thích",
 
     // Language names
     "lang.vi": "Tiếng Việt",
@@ -184,6 +185,7 @@ export const translations = {
     "sidebar.settings": "Settings",
     "sidebar.help": "Help",
     "sidebar.logout": "Sign out",
+    "sidebar.favorites": "Favorite Documents",
 
     // Language names
     "lang.vi": "Tiếng Việt",

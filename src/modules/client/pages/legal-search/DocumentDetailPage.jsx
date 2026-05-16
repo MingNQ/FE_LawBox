@@ -11,21 +11,23 @@ import {
   Loader2, 
   ChevronRight,
   List,
-  ExternalLink
+  ExternalLink,
+  Heart
 } from "lucide-react";
-import { Badge } from "@shared/components/ui/Badge";
-import { DOCUMENT_TYPES, EFFECTIVENESS_STATUS } from "@shared/constants/appConst";
-import MarkdownRenderer from "@client/components/chat/MarkdownRenderer";
+import { useFavorite } from "@shared/hooks/useFavorite";
 
 export default function DocumentDetailPage() {
   const { documentId } = useParams();
   const navigate = useNavigate();
+  const { isFavorite: checkFavorite, toggleFavorite: toggleFavoriteCtx } = useFavorite();
   const [document, setDocument] = useState(null);
   const [chunks, setChunks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeArticle, setActiveArticle] = useState(null);
   const [error, setError] = useState(null);
+  const [isToggling, setIsToggling] = useState(false);
   
+  const isFavorite = checkFavorite(documentId);
   const contentRefs = useRef({});
 
   useEffect(() => {
@@ -62,6 +64,13 @@ export default function DocumentDetailPage() {
 
     fetchData();
   }, [documentId]);
+
+  const handleFavoriteToggle = async () => {
+    if (isToggling) return;
+    setIsToggling(true);
+    await toggleFavoriteCtx(documentId);
+    setIsToggling(false);
+  };
 
   const selectArticle = (articleNumber) => {
     setActiveArticle(articleNumber);
@@ -165,6 +174,19 @@ export default function DocumentDetailPage() {
               </div>
               
               <div className="flex gap-3 shrink-0">
+                <button
+                  onClick={handleFavoriteToggle}
+                  disabled={isToggling}
+                  className={`flex items-center justify-center w-11 h-11 rounded-xl border transition-all duration-300 ${
+                    isFavorite 
+                      ? "bg-red-50 border-red-200 text-red-500 shadow-sm" 
+                      : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400 hover:text-red-500 hover:border-red-200 hover:bg-red-50"
+                  }`}
+                  title={isFavorite ? "Bỏ yêu thích" : "Thêm vào yêu thích"}
+                >
+                  <Heart className={`w-5 h-5 ${isFavorite ? "fill-current" : ""}`} />
+                </button>
+
                 {document.fileStorage?.fullPathUrl && (
                   <a 
                     href={document.fileStorage.fullPathUrl}

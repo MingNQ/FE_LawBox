@@ -1,11 +1,26 @@
-import { FileText, Download } from "lucide-react";
+import { FileText, Download, Heart } from "lucide-react";
 import { DOCUMENT_TYPES, EFFECTIVENESS_STATUS } from "@shared/constants/appConst";
 import { Badge } from "@shared/components/ui/Badge";
+import { useState } from "react";
+import { useFavorite } from "@shared/hooks/useFavorite";
 
 export function DocumentCard({ document, onClick }) {
+  const { isFavorite: checkFavorite, toggleFavorite: toggleFavoriteCtx } = useFavorite();
+  const isFavorite = checkFavorite(document.id);
+  const [isToggling, setIsToggling] = useState(false);
+
   const date = document.createdOn
     ? new Date(document.createdOn).toLocaleDateString("vi-VN")
     : "N/A";
+
+  const handleFavoriteToggle = async (e) => {
+    e.stopPropagation();
+    if (isToggling) return;
+    
+    setIsToggling(true);
+    await toggleFavoriteCtx(document.id);
+    setIsToggling(false);
+  };
 
   const handleDownload = (e) => {
     e.stopPropagation();
@@ -33,15 +48,30 @@ export function DocumentCard({ document, onClick }) {
     >
       <div className="absolute top-0 left-0 w-1 h-full bg-blue-500/0 group-hover:bg-blue-500 transition-all duration-300" />
 
-      <div className="flex flex-wrap items-center gap-2 mb-4">
-        <Badge variant={document.type === 1 ? "primary" : "secondary"}>
-          {DOCUMENT_TYPES[document.type] || "Văn bản"}
-        </Badge>
-        {document.effectivenessStatus && (
-          <Badge variant={getStatusVariant(document.effectivenessStatus)}>
-            {EFFECTIVENESS_STATUS[document.effectivenessStatus] || "Không xác định"}
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge variant={document.type === 1 ? "primary" : "secondary"}>
+            {DOCUMENT_TYPES[document.type] || "Văn bản"}
           </Badge>
-        )}
+          {document.effectivenessStatus && (
+            <Badge variant={getStatusVariant(document.effectivenessStatus)}>
+              {EFFECTIVENESS_STATUS[document.effectivenessStatus] || "Không xác định"}
+            </Badge>
+          )}
+        </div>
+        
+        <button
+          onClick={handleFavoriteToggle}
+          disabled={isToggling}
+          className={`p-2 rounded-full transition-all duration-300 ${
+            isFavorite 
+              ? "text-red-500 bg-red-50 dark:bg-red-900/20" 
+              : "text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
+          }`}
+          title={isFavorite ? "Bỏ yêu thích" : "Thêm vào yêu thích"}
+        >
+          <Heart className={`w-5 h-5 ${isFavorite ? "fill-current" : ""}`} />
+        </button>
       </div>
 
       <h3 className="text-base font-bold text-slate-800 dark:text-slate-200 line-clamp-2 group-hover:text-blue-600 transition-colors mb-2 leading-snug">

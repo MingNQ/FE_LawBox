@@ -11,6 +11,7 @@ import { PrivacyPolicyPage } from "./pages/info/PrivacyPolicyPage";
 import { PricingPage } from "./pages/pricing/PricingPage";
 import { PaymentResultPage } from "./pages/payment/PaymentResultPage";
 import DocumentDetailPage from "./pages/legal-search/DocumentDetailPage";
+import FavoriteDocumentsPage from "./pages/legal-search/FavoriteDocumentsPage";
 
 export const clientRoutes = (
   <>
@@ -21,6 +22,7 @@ export const clientRoutes = (
     <Route path={ROUTES.CHAT_DETAIL} element={<ConversationPage />} />
     <Route path={ROUTES.LEGAL_SEARCH} element={<LegalSearchPage />} />
     <Route path={ROUTES.DOCUMENT_DETAIL} element={<DocumentDetailPage />} />
+    <Route path={ROUTES.FAVORITES} element={<FavoriteDocumentsPage />} />
     <Route path={ROUTES.PRICING} element={<PricingPage />} />
     <Route path={ROUTES.PAYMENT_RESULT} element={<PaymentResultPage />} />
     <Route path={ROUTES.ABOUT_US} element={<AboutUsPage />} />

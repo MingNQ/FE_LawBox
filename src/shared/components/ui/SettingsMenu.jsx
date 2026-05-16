@@ -1,6 +1,8 @@
-import { Settings, HelpCircle, LogOut } from "lucide-react";
+import { Settings, HelpCircle, LogOut, Heart } from "lucide-react";
 import { useLanguage } from "@shared/hooks/useLanguage";
 import { useAuth } from "@shared/hooks/useAuth";
+import { Link } from "react-router-dom";
+import { ROUTES } from "@shared/constants/routes";
 
 export function SettingsMenu({
   onSettingsClick,
@@ -17,6 +19,15 @@ export function SettingsMenu({
     <div
       className={`absolute bg-white dark:bg-[#1c2333] border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg overflow-hidden animate-fade-in z-50 ${className}`}
     >
+      <Link
+        to={ROUTES.FAVORITES}
+        onClick={onClose}
+        className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+      >
+        <Heart className="w-4 h-4 text-slate-400 dark:text-slate-500" />
+        {t("sidebar.favorites")}
+      </Link>
+      
       <button
         onClick={() => {
           onClose();
