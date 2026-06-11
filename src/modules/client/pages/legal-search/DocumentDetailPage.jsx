@@ -19,8 +19,8 @@ import {
   DOCUMENT_TYPES,
   EFFECTIVENESS_STATUS,
 } from "@shared/constants/appConst";
-import { Badge } from "@shared/components/ui/badge";
-import {MarkdownRenderer} from "@client/components/chat/MarkdownRenderer";
+import { Badge } from "@shared/components/ui/Badge";
+import { MarkdownRenderer } from "@client/components/chat/MarkdownRenderer";
 
 export default function DocumentDetailPage() {
   const { documentId } = useParams();
@@ -144,11 +144,55 @@ export default function DocumentDetailPage() {
 
   const currentChunk = chunks.find((c) => c.articleNumber === activeArticle);
 
+  const formatLegalContent = (text) => {
+    if (!text) return "";
+    let s = text;
+
+    // Remove bracketed markers like "[Chương ... > Mục ...]" only if at start
+    s = s.replace(/^\s*\[[^\]]+\]\s*:?\s*/g, "");
+
+    // Convert chunking markers like "]: " into paragraph breaks
+    s = s.replace(/\]\:\s*/g, "]\n\n");
+
+    // Ensure 'Điều N.' starts on its own line
+    s = s.replace(/\s*(Điều\s*\d+\.)\s*/gi, "\n\n$1 ");
+
+    // Put enumerations (1., 2., ...) on new lines
+    s = s.replace(/\s*([0-9]+)\.\s*/g, "\n\n$1. ");
+
+    // Remove accidental repeated header (if first sentence repeats twice)
+    const firstChunk = s.slice(0, 200).trim();
+    if (firstChunk.length > 40) {
+      const rest = s.slice(firstChunk.length).trim();
+      if (rest.startsWith(firstChunk.slice(0, 80))) {
+        s = rest;
+      }
+    }
+
+    // Collapse multiple blank lines to maximum two
+    s = s.replace(/\n{3,}/g, "\n\n");
+
+    // Remove standalone 'Điều' at start (no number) to avoid empty heading
+    s = s.replace(/^\s*Điều\s*[\r\n]+/i, "");
+
+    // Normalize blank lines before numbered lists: ensure single newline before numbers
+    s = s.replace(/\n{2,}(?=\s*[0-9]+\.\s)/g, "\n");
+
+    // Ensure numbering starts at beginning of line (no leading spaces)
+    s = s.replace(/^[ \t]+(?=[0-9]+\.)/gm, "");
+
+    // If a heading like '### Điều N.' is followed by extra blank line before '1.', tighten it
+    s = s.replace(/(###\s*Điều\s*\d+\.)\s*\n+\s*([0-9]+\.)/i, "$1\n$2");
+
+    // Trim edges
+    return s.trim();
+  };
+
   return (
     <ClientLayout>
       <div className="bg-slate-50 dark:bg-[#0b0f19] min-h-screen pb-20">
         {/* Header Section */}
-        <section className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-[68px] z-30 pt-4 pb-6 shadow-sm">
+        <section className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-[60px] z-30 pt-4 pb-6 shadow-sm">
           <div className="max-w-[1200px] mx-auto px-6">
             <button
               onClick={() => navigate(-1)}
@@ -299,7 +343,9 @@ export default function DocumentDetailPage() {
                   </div>
 
                   <div className="prose dark:prose-invert max-w-none">
-                    <MarkdownRenderer content={currentChunk.content} />
+                    <MarkdownRenderer
+                      content={formatLegalContent(currentChunk.content)}
+                    />
                   </div>
                 </div>
               ) : (
