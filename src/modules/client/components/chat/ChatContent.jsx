@@ -1,7 +1,7 @@
 import { UserMessage } from "./UserMessage";
 import { AIMessage } from "./AIMessage";
 import { AIThinking } from "./AIThinking";
-import MarkdownRenderer from "./MarkdownRenderer";
+import { MarkdownRenderer } from "./MarkdownRenderer";
 import { MessageSquare } from "lucide-react";
 import { useEffect, useRef } from "react";
 

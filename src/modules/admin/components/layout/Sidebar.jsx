@@ -36,7 +36,7 @@ export default function Sidebar() {
           >
             Tài liệu
           </SidebarItem>
-          <SidebarItem
+          {/* <SidebarItem
             to={ROUTES.ADMIN.FOLDERS}
             icon={<Folder size={18} />}
             active={
@@ -45,7 +45,7 @@ export default function Sidebar() {
             }
           >
             Thư mục
-          </SidebarItem>
+          </SidebarItem> */}
           <SidebarItem
             to={ROUTES.ADMIN.USERS}
             icon={<Users size={18} />}

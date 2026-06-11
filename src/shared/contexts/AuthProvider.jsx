@@ -49,7 +49,7 @@ export function AuthProvider({ children }) {
   };
 
   const logout = (isAdmin = false) => {
-    window.location.href = isAdmin ? ROUTES.ADMIN.AUTH : ROUTES.AUTH.SIGN_IN;
+    window.location.href = isAdmin ? ROUTES.ADMIN.AUTH : ROUTES.HOME;
     clearAuth();
     setUser(null);
     setTokenState(null);

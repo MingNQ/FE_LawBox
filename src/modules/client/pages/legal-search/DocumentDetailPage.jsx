@@ -14,13 +14,13 @@ import {
   ExternalLink,
   Heart,
 } from "lucide-react";
+import { useFavorite } from "@shared/hooks/useFavorite";
 import {
   DOCUMENT_TYPES,
   EFFECTIVENESS_STATUS,
 } from "@shared/constants/appConst";
-import { Badge } from "@shared/components/ui/Badge";
-import { useFavorite } from "@shared/hooks/useFavorite";
-import MarkdownRenderer from "@client/components/chat/MarkdownRenderer";
+import { Badge } from "@shared/components/ui/badge";
+import {MarkdownRenderer} from "@client/components/chat/MarkdownRenderer";
 
 export default function DocumentDetailPage() {
   const { documentId } = useParams();

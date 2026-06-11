@@ -3,7 +3,7 @@ import { http } from "@shared/api/http";
 const baseUrl = "/client/payment";
 
 export async function getPlans() {
-  const result = await http.get(`${baseUrl}/plans`);
+  const result = await http.get(`/payment/plans`);
   return result.data;
 }
 

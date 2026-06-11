@@ -231,7 +231,7 @@ export default function SignInPage() {
                       Đăng nhập
                     </button>
                   </form>
-                  <div className="relative my-8">
+                  {/* <div className="relative my-8">
                     <div className="absolute inset-0 flex items-center">
                       <div className="w-full border-t border-slate-200 dark:border-slate-800"></div>
                     </div>
@@ -247,7 +247,7 @@ export default function SignInPage() {
                         Google
                       </span>
                     </button>
-                  </div>
+                  </div> */}
                   <div className="mt-12 text-center">
                     <p className="text-slate-500 dark:text-slate-400 text-sm">
                       Bạn chưa có tài khoản?

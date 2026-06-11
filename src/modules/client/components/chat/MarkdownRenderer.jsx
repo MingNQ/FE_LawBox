@@ -39,7 +39,7 @@ const markdownComponents = {
   em: ({ children }) => <em className="markdown-em">{children}</em>,
 };
 
-export default function MarkdownRenderer({ content }) {
+export function MarkdownRenderer({ content }) {
   return (
     <div className="markdown-body">
       <ReactMarkdown

@@ -6,14 +6,15 @@ import { getPlans, createPayment } from "@client/api/paymentApi";
 import { useAuth } from "@shared/hooks/useAuth";
 import { useToast } from "@shared/hooks/useToast";
 import { Loader2 } from "lucide-react";
+import { ROUTES } from "@shared/constants/routes"
 import "./PricingPage.css";
 
 export function PricingPage() {
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [subscribingId, setSubscribingId] = useState(null);
-  const { subscription } = useAuth();
-  const { addToast } = useToast();
+  const { subscription, user } = useAuth();
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchPlans = async () => {
@@ -25,26 +26,30 @@ export function PricingPage() {
         }
       } catch (error) {
         console.error("Failed to fetch plans:", error);
-        addToast("Không thể tải danh sách gói. Vui lòng thử lại sau.", "error");
+        toast.error("Không thể tải danh sách gói. Vui lòng thử lại sau.", "error");
       } finally {
         setLoading(false);
       }
     };
     fetchPlans();
-  }, [addToast]);
+  }, [toast]);
 
   const handleSubscribe = async (tierId) => {
+    if (!user) {
+      window.location.href = ROUTES.AUTH.SIGN_IN;
+    }
+
     try {
       setSubscribingId(tierId);
       const res = await createPayment({ tierId, provider: "VnPay" });
       if (res.success && res.result.paymentUrl) {
         window.location.href = res.result.paymentUrl;
       } else {
-        addToast(res.message || "Không thể tạo thanh toán.", "error");
+        toast.error(res.message || "Không thể tạo thanh toán.", "error");
       }
     } catch (error) {
       console.error("Payment error:", error);
-      addToast("Có lỗi xảy ra khi khởi tạo thanh toán.", "error");
+      toast.error("Có lỗi xảy ra khi khởi tạo thanh toán.", "error");
     } finally {
       setSubscribingId(null);
     }

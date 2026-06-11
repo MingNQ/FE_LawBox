@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ClientLayout } from "@client/components/layout/ClientLayout";
 import { legalSearch } from "@client/api/legalSearchApi";
@@ -20,12 +20,44 @@ export default function LegalSearchPage() {
   const navigate = useNavigate();
   const [results, setResults] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [keyword, setKeyword] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [activeFilter, setActiveFilter] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const pageSize = 3;
+
+  const fetchDocuments = async (page = 1) => {
+    if (page === 1) {
+      setIsInitialLoading(true);
+    } else {
+      setIsSearching(true);
+    }
+    try {
+      const data = await legalSearch({
+        ignorePagination: true,
+      });
+
+      if (data.success) {
+        setResults(data.result || []);
+        setTotalCount(data.result?.length || 0);
+      } else {
+        setResults([]);
+        setTotalCount(0);
+      }
+    } catch (err) {
+      console.error(err);
+      setResults([]);
+      setTotalCount(0);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDocuments();
+  }, []);
 
   const performSearch = async (e, page = 1, typeOverride = null) => {
     e?.preventDefault();
@@ -35,9 +67,9 @@ export default function LegalSearchPage() {
     setKeyword(query);
     setCurrentPage(page);
     try {
-      const data = await legalSearch({ 
+      const data = await legalSearch({
         keyword: query,
-        type: typeOverride !== null ? typeOverride : activeFilter
+        type: typeOverride !== null ? typeOverride : activeFilter,
       });
       if (data.success) {
         setResults(data.result || []);
@@ -52,6 +84,7 @@ export default function LegalSearchPage() {
       setTotalCount(0);
     } finally {
       setIsSearching(false);
+      setIsInitialLoading(false);
     }
   };
 
@@ -86,7 +119,10 @@ export default function LegalSearchPage() {
             </p>
           </div>
 
-          <form onSubmit={(e) => performSearch(e, 1)} className="max-w-[750px] mx-auto">
+          <form
+            onSubmit={(e) => performSearch(e, 1)}
+            className="max-w-[750px] mx-auto"
+          >
             <div className="flex items-center bg-white dark:bg-slate-800 rounded-2xl p-2 shadow-2xl shadow-blue-900/30 border border-white/20">
               <div className="flex items-center pl-4 text-slate-400">
                 <Search className="w-5 h-5" />
@@ -151,12 +187,18 @@ export default function LegalSearchPage() {
           {!isSearching && results && (
             <div className="animate-fade-in">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-bold text-slate-800 dark:text-white">
-                  Kết quả cho "<span className="text-blue-600">{keyword}</span>"
-                </h2>
-                <span className="text-sm text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full font-medium">
-                  {totalCount} kết quả
-                </span>
+                {!isInitialLoading && (
+                  <>
+                    <h2 className="text-lg font-bold text-slate-800 dark:text-white">
+                      Kết quả cho "
+                      <span className="text-blue-600">{keyword}</span>"
+                    </h2>
+
+                    <span className="text-sm text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full font-medium">
+                      {totalCount} kết quả
+                    </span>
+                  </>
+                )}
               </div>
 
               {resultCount > 0 ? (
@@ -164,10 +206,17 @@ export default function LegalSearchPage() {
                   {results
                     .slice((currentPage - 1) * pageSize, currentPage * pageSize)
                     .map((result, index) => (
-                      <DocumentCard 
-                        key={index} 
-                        document={result} 
-                        onClick={() => navigate(ROUTES.DOCUMENT_DETAIL.replace(":documentId", result.id))}
+                      <DocumentCard
+                        key={index}
+                        document={result}
+                        onClick={() =>
+                          navigate(
+                            ROUTES.DOCUMENT_DETAIL.replace(
+                              ":documentId",
+                              result.id,
+                            ),
+                          )
+                        }
                       />
                     ))}
                 </div>
@@ -190,7 +239,7 @@ export default function LegalSearchPage() {
                   pageSize={pageSize}
                   onPageChange={(page) => {
                     setCurrentPage(page);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
                   isLoading={isSearching}
                 />

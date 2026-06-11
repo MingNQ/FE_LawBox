@@ -33,7 +33,7 @@ export function AboutUsPage() {
             Tầm nhìn
           </h2>
           <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-            Trở thành trợ lý pháp lý AI đáng tin cậy nhất tại Việt Nam, đồng
+            Trở thành trợ lý pháp lý AI đáng tin cậy tại Việt Nam, đồng
             hành cùng người dân và doanh nghiệp trong mọi vấn đề liên quan đến
             luật pháp.
           </p>
